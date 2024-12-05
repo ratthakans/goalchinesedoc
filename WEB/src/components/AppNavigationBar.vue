@@ -2,13 +2,11 @@
   <v-navigation-drawer color="info">
     <div class="py-4">
       <v-list-item>
-        <v-list-item-avatar>
-          <v-img height="100" src="@/assets/logo.png" />
-        </v-list-item-avatar>
+        <v-img height="100" src="@/assets/logo.png" />
       </v-list-item>
     </div>
 
-    <v-list :lines="false" mandatory nav variant="plain">
+    <v-list :lines="false" mandatory nav variant="">
       <template v-for="(item, i) in items" :key="i">
         <v-list-item
           v-if="!item?.children?.length"
@@ -23,9 +21,9 @@
           <v-list-item-title v-text="item.text"></v-list-item-title>
         </v-list-item>
 
-        <v-list-group v-else :value="item.text">
+        <v-list-group v-else :value="item.text" variant="plain">
           <template v-slot:activator="{ props }">
-            <v-list-item v-bind="props" :title="item.text">
+            <v-list-item v-bind="props" :title="item.text" color="black">
               <template v-slot:prepend>
                 <v-icon :icon="item.icon"></v-icon>
               </template>

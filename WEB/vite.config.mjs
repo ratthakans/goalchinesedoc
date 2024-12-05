@@ -23,7 +23,7 @@ export default defineConfig({
     Vuetify({
       autoImport: true,
       styles: {
-        configFile: "src/styles/settings.scss",
+        configFile: "src/assets/styles/styles.scss",
       },
     }),
     Components({
@@ -52,6 +52,14 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),
+      "@core": fileURLToPath(new URL("./src/@core", import.meta.url)),
+      "@styles": fileURLToPath(
+        new URL("./src/assets/styles/", import.meta.url)
+      ),
+      "@configured-variables": fileURLToPath(
+        new URL("./src/assets/styles/variables/_template.scss", import.meta.url)
+      ),
+      "@layouts": fileURLToPath(new URL("./src/@layouts", import.meta.url)),
     },
     extensions: [".js", ".json", ".jsx", ".mjs", ".ts", ".tsx", ".vue"],
   },
