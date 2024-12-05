@@ -6,7 +6,7 @@
       </v-list-item>
     </div>
 
-    <v-list :lines="false" mandatory nav variant="">
+    <v-list :lines="false" mandatory nav>
       <template v-for="(item, i) in items" :key="i">
         <v-list-item
           v-if="!item?.children?.length"
