@@ -26,10 +26,7 @@ export default defineConfig({
         configFile: "src/assets/styles/styles.scss",
       },
     }),
-    Components({
-      dirs: ["src/@core/components", "src/components"],
-      dts: true,
-    }),
+    Components(),
     Fonts({
       google: {
         families: [
@@ -52,7 +49,6 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),
-      "@core": fileURLToPath(new URL("./src/@core", import.meta.url)),
     },
     extensions: [".js", ".json", ".jsx", ".mjs", ".ts", ".tsx", ".vue"],
   },

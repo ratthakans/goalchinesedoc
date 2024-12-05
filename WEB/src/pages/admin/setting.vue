@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid>
+  <v-container>
     <v-row>
       <v-col cols="12">
         <v-sheet
@@ -25,7 +25,6 @@
 
           <v-col cols="12" md="9">
             <v-file-input
-              prepend-icon=""
               density="compact"
               variant="outlined"
               label="Choose a file..."
@@ -52,8 +51,9 @@
           </v-col>
 
           <v-col cols="12" md="9">
-            <AppTextField density="compact" hide-details="auto"> </AppTextField>
-            <v-btn color="success" depressed class="text-none mt-2">save</v-btn>
+            <v-text-field density="compact" hide-details="auto" v>
+            </v-text-field>
+            <v-btn color="success" depressed class="text-none mt-2">Save</v-btn>
           </v-col>
         </v-row>
       </v-col>

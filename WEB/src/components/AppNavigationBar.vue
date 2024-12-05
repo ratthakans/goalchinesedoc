@@ -1,5 +1,5 @@
 <template>
-  <v-navigation-drawer color="info">
+  <v-navigation-drawer color="info" v-model="drawer">
     <div class="py-4">
       <v-list-item>
         <v-img height="100" src="@/assets/logo.png" />
@@ -48,6 +48,7 @@
 export default {
   data() {
     return {
+      drawer: null,
       items: [
         { text: "Dashboard", icon: "mdi-view-dashboard" },
         {

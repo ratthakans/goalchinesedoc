@@ -14,7 +14,17 @@
       </v-col>
     </v-row>
 
-    <v-row justify="end">
+    <v-row justify="space-between ">
+      <v-col cols="4" class="d-flex ga-2">
+        <h5 class="text-h5">Materials</h5>
+        <v-btn
+          density="comfortable"
+          color="info"
+          icon="mdi-plus"
+          variant="flat"
+          to="/admin/materials/create"
+        ></v-btn>
+      </v-col>
       <v-col cols="4">
         <v-text-field
           v-model="search"
@@ -30,10 +40,11 @@
     <v-row dense>
       <v-col cols="12">
         <v-data-table
-          :headers="headers"
+          :headers="headersMaterials"
           v-model:search="search"
           :filter-keys="['title', 'category', 'type']"
-          :items="items"
+          :items="itemsMaterials"
+          show-select
         >
           <template v-slot:item.image="{ item }">
             <v-card class="my-2" elevation="2" rounded>
@@ -44,9 +55,11 @@
               ></v-img>
             </v-card>
           </template>
-
           <template v-slot:item.action="{ item }">
-            <v-btn color="info" class="text-none">view</v-btn>
+            <div class="d-flex">
+              <v-btn color="primary" variant="text" icon="mdi-pencil" slim />
+              <v-btn color="error" variant="text" icon="mdi-trash-can" slim />
+            </div>
           </template>
         </v-data-table>
       </v-col>
@@ -59,7 +72,7 @@ export default {
   data() {
     return {
       search: "",
-      headers: [
+      headersMaterials: [
         {
           align: "start",
           key: "no",
@@ -69,16 +82,24 @@ export default {
         { key: "image", title: "Photo" },
         { key: "title", title: "Title" },
         { key: "category", title: "Materials Category" },
-        { key: "type", title: "Materials for teacher/student" },
+        { key: "materialFor", title: "Materials for teacher/student" },
+        { key: "type", title: "Type" },
+        { key: "fileType", title: "File type" },
+        { key: "date", title: "Date" },
+        { key: "description", title: "Description" },
         { key: "action", title: "Action", sortable: false },
       ],
-      items: [
+      itemsMaterials: [
         {
           no: "M001",
           image: "1.png",
           title: "Book",
           category: "Class 1",
-          type: "Student",
+          materialFor: "Student",
+          type: "Study",
+          fileType: "MP4",
+          date: "2024/11/12",
+          description: "N/A",
         },
       ],
     };
