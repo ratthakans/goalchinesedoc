@@ -9,7 +9,7 @@
           height="50"
           width="100%"
         >
-          <h4 class="text-h4 text-white">Materials</h4>
+          <h4 class="text-h4 text-white font-weight-bold">Materials</h4>
         </v-sheet>
       </v-col>
     </v-row>
