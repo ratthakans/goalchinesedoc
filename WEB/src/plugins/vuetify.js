@@ -5,15 +5,34 @@
  */
 
 // Styles
-import '@mdi/font/css/materialdesignicons.css'
-import 'vuetify/styles'
+import "@mdi/font/css/materialdesignicons.css";
+import "vuetify/styles";
 
 // Composables
-import { createVuetify } from 'vuetify'
+import { createVuetify } from "vuetify";
+
+const myCustomLightTheme = {
+  dark: false,
+  colors: {
+    background: "#FFFFFF",
+    surface: "#FFFFFF",
+    primary: "#5c6add",
+    "primary-darken-1": "#3700B3",
+    secondary: "#03DAC6",
+    "secondary-darken-1": "#018786",
+    error: "#ea6f6e",
+    info: "#30aadd",
+    success: "#42bb88",
+    warning: "#f8b71b",
+  },
+};
 
 // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
 export default createVuetify({
   theme: {
-    defaultTheme: 'dark',
+    defaultTheme: "myCustomLightTheme",
+    themes: {
+      myCustomLightTheme,
+    },
   },
-})
+});

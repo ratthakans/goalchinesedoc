@@ -8,7 +8,14 @@ services:
     ports:
       - "8080:3000"
     volumes:
-      - ./WEB:/usr/src/app
+      - ./WEB/src:/app/src
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./WEB
+          target: /app
+          ignore:
+            - node_modules
     environment:
       - NODE_ENV=development
 

@@ -1,7 +1,7 @@
 # build stage
 FROM node:14-alpine AS build-stage
 
-WORKDIR /vue_app
+WORKDIR /app
 
 COPY package.json ./
 
@@ -14,7 +14,7 @@ RUN npm run build
 # production stage
 FROM nginx AS production-stage
 
-COPY --from=build-stage /vue_app/dist /usr/share/nginx/html
+COPY --from=build-stage /app/dist /usr/share/nginx/html
 
 EXPOSE 80
 
