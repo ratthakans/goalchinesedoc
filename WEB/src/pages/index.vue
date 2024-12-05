@@ -15,22 +15,24 @@
 
       <v-row justify="center">
         <v-col cols="6">
-          <AppTextField
+          <v-text-field
             label="Username"
             placeholder="John"
             density="compact"
             hide-details="auto"
+            variant="outlined"
           />
         </v-col>
       </v-row>
       <v-row justify="center">
         <v-col cols="6">
-          <AppTextField
+          <v-text-field
             label="Password"
             placeholder="xxxxxx"
             type="password"
             density="compact"
             hide-details="auto"
+            variant="outlined"
           />
         </v-col>
       </v-row>

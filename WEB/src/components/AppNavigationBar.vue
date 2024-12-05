@@ -6,13 +6,14 @@
       </v-list-item>
     </div>
 
-    <v-list :lines="false" mandatory nav>
+    <v-list :lines="false" mandatory nav exact>
       <template v-for="(item, i) in items" :key="i">
         <v-list-item
           v-if="!item?.children?.length"
           :value="item"
           active-class="bg-white"
           color="black"
+          :to="item.to"
         >
           <template v-slot:prepend>
             <v-icon :icon="item.icon"></v-icon>
@@ -77,10 +78,14 @@ export default {
             { text: "Teacher Meterial" },
           ],
         },
-        { text: "Users", icon: "mdi-account" },
-        { text: "Materials", icon: "mdi-file" },
-        { text: "Library", icon: "mdi-book-open-page-variant" },
-        { text: "Setting", icon: "mdi-cog" },
+        { text: "Users", icon: "mdi-account", to: "/admin/users" },
+        { text: "Materials", icon: "mdi-file", to: "/admin/materials" },
+        {
+          text: "Library",
+          icon: "mdi-book-open-page-variant",
+          to: "/admin/library",
+        },
+        { text: "Setting", icon: "mdi-cog", to: "/admin/setting" },
       ],
     };
   },

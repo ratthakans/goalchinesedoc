@@ -3,7 +3,7 @@
     <v-row>
       <v-col cols="12" class="d-flex ga-2 align-center">
         <v-btn variant="text" icon="mdi-arrow-left" to="/admin/materials" />
-        <h5 class="text-h5">Add Materials</h5>
+        <h5 class="text-h5">Edit Materials</h5>
       </v-col>
     </v-row>
 
@@ -21,20 +21,10 @@
 </template>
 
 <script>
-import FormMaterial from "./form/material.vue";
+import FormMaterial from "../form/material.vue";
 export default {
   components: {
     FormMaterial,
-  },
-  data() {
-    return {
-      formInput: {
-        title: "",
-        category: "",
-        type: "",
-        image: "",
-      },
-    };
   },
 };
 </script>

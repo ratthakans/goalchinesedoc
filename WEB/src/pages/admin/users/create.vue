@@ -2,12 +2,12 @@
   <v-container>
     <v-row>
       <v-col cols="12" class="d-flex ga-2 align-center">
-        <v-btn variant="text" icon="mdi-arrow-left" to="/admin/materials" />
-        <h5 class="text-h5">Add Materials</h5>
+        <v-btn variant="text" icon="mdi-arrow-left" to="/admin/users" />
+        <h5 class="text-h5">Add Users</h5>
       </v-col>
     </v-row>
 
-    <FormMaterial />
+    <FormUser />
 
     <v-row justify="end">
       <v-col cols="auto">
@@ -21,10 +21,10 @@
 </template>
 
 <script>
-import FormMaterial from "./form/material.vue";
+import FormUser from "./form/user.vue";
 export default {
   components: {
-    FormMaterial,
+    FormUser,
   },
   data() {
     return {
