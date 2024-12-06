@@ -10,7 +10,7 @@
           width="100%"
         >
           <h4 class="text-h4 text-white font-weight-bold">
-            Teachers
+            Students
           </h4>
         </v-sheet>
       </v-col>
@@ -22,14 +22,14 @@
         class="d-flex ga-2"
       >
         <h5 class="text-h5">
-          Teachers
+          Student
         </h5>
         <v-btn
           density="comfortable"
           color="info"
           icon="mdi-plus"
           variant="flat"
-          :href="'/admin/teacher/create'"
+          :href="'/admin/student/create'"
         />
       </v-col>
       <v-col cols="4">
@@ -70,9 +70,7 @@
                 <v-icon>mdi-account</v-icon>
               </v-avatar>
               <div class="d-flex flex-column ms-3">
-                <span
-                  class="d-block font-weight-medium text-high-emphasis text-truncate"
-                >{{ item.name }}</span>
+                <span class="d-block font-weight-medium text-high-emphasis text-truncate">{{ item.name }}</span>
               </div>
             </div>
           </template>
@@ -92,16 +90,14 @@
                 :lines="false"
               >
                 <v-list-item
-                  v-for="(item, i) in [{ title: 'View', to: `./${item.no}`},{ title: 'Edit', to: `./edit/${item.no}` }]"
+                  v-for="(item, i) in [{ title: 'View', to: `./${item.no}` }, { title: 'Edit', to: `./edit/${item.no}` }]"
                   :key="i"
                   link
                   :to="item.to"
                 >
                   <v-list-item-title>{{ item.title }}</v-list-item-title>
                 </v-list-item>
-                <v-list-item
-                  link
-                >
+                <v-list-item link>
                   <v-list-item-title>Delete</v-list-item-title>
                 </v-list-item>
               </v-list>
@@ -123,13 +119,13 @@ export default {
           align: "start",
           key: "no",
           sortable: false,
-          title: "Teacher No.",
+          title: "Admission No.",
         },
-        { key: "name", title: "Teacher Name" },
-        { key: "teachingDate", title: "Start teaching date" },
-        { key: "availableFor", title: "Available for" },
-        { key: "language", title: "Language" },
-        { key: "score", title: "Teacher score" },
+        { key: "name", title: "Student Name" },
+        { key: "parentsPhone", title: "Mobile No." },
+        { key: "poits", title: "Poits" },
+        { key: "studentType", title: "Student Type" },
+        { key: "classType", title: "Class Type" },
         { key: "age", title: "Age" },
         { key: "gender", title: "Gender" },
         { key: "action", title: "Action" },
@@ -137,12 +133,11 @@ export default {
       items: [
         {
           no: "M001",
-          name: "Teacher name",
-          teachingDate: "2021-09-01",
-          availableFor: "Adults",
-          language: "Thai",
-          score: "Test",
-          age: "25",
+          name: "student name",
+          parentsPhone: "+666666",
+          poits: "150",
+          classType: "Class 1",
+          age: "15",
           gender: "Male",
         },
       ],

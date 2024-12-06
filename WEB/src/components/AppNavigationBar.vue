@@ -73,7 +73,11 @@ export default {
     return {
       drawer: null,
       items: [
-        { text: "Dashboard", icon: "mdi-view-dashboard" , to: "/admin/dashboard" },
+        {
+          text: "Dashboard",
+          icon: "mdi-view-dashboard",
+          to: "/admin/dashboard",
+        },
         {
           text: "Classes",
           icon: "mdi-table-account",
@@ -86,9 +90,9 @@ export default {
           text: "Student",
           icon: "mdi-account-school",
           children: [
-            { text: "All Students" },
-            { text: "New Admission" },
-            { text: "Student Meterial" },
+            { text: "All Students", to: "/admin/student/all" },
+            { text: "New Admission", to: "/admin/student/create" },
+            { text: "Student Meterial", to: "/admin/student/materials" },
           ],
         },
         {

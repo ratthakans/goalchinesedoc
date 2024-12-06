@@ -10,7 +10,7 @@
           width="100%"
         >
           <h4 class="text-h4 text-white font-weight-bold">
-            Student Library Materials
+            Student Materials
           </h4>
         </v-sheet>
       </v-col>
@@ -19,7 +19,7 @@
     <v-row justify="space-between">
       <v-col cols="4">
         <h5 class="text-h5">
-          <span class="text-red">*</span> Select students
+          <span class="text-red">*</span> Select Students
         </h5>
       </v-col>
       <v-col cols="4">
@@ -145,7 +145,7 @@ export default {
     return {
       search: "",
       headers: [
-        {
+      {
           align: "start",
           key: "no",
           sortable: false,
@@ -160,7 +160,7 @@ export default {
         { key: "gender", title: "Gender" },
       ],
       items: [
-        {
+      {
           no: "M001",
           name: "student name",
           parentsPhone: "+666666",
