@@ -2,13 +2,24 @@
 
 <template>
   <v-container class="fill-height">
-    <v-responsive class="align-center fill-height mx-auto" max-width="900">
-      <v-img class="mb-4" height="100" src="@/assets/logo.png" />
+    <v-responsive
+      class="align-center fill-height mx-auto"
+      max-width="900"
+    >
+      <v-img
+        class="mb-4"
+        height="100"
+        src="@/assets/logo.png"
+      />
 
       <div class="text-center">
-        <div class="text-body-2 font-weight-light mb-n1">Welcome to</div>
+        <div class="text-body-2 font-weight-light mb-n1">
+          Welcome to
+        </div>
 
-        <h1 class="text-h2 font-weight-bold">Class Regiser</h1>
+        <h1 class="text-h2 font-weight-bold">
+          Class Regiser
+        </h1>
       </div>
 
       <div class="py-2" />
@@ -42,9 +53,10 @@
             block
             color="primary"
             depressed
-            @click="$router.push('/dashboard')"
-            >Sign In</v-btn
+            @click="$router.push('/admin/dashboard')"
           >
+            Sign In
+          </v-btn>
         </v-col>
       </v-row>
     </v-responsive>

@@ -8,15 +8,15 @@
         <v-btn
           variant="text"
           icon="mdi-arrow-left"
-          to="/admin/materials"
+          to="/admin/teacher/all"
         />
         <h5 class="text-h5">
-          Add Materials
+          Edit Teacher
         </h5>
       </v-col>
     </v-row>
 
-    <FormMaterial />
+    <FormTeacher />
 
     <v-row justify="end">
       <v-col cols="auto">
@@ -36,20 +36,10 @@
 </template>
 
 <script>
-import FormMaterial from "./form/material.vue";
+import FormTeacher from "../form/teacher.vue";
 export default {
   components: {
-    FormMaterial,
-  },
-  data() {
-    return {
-      formInput: {
-        title: "",
-        category: "",
-        type: "",
-        image: "",
-      },
-    };
+    FormTeacher,
   },
 };
 </script>

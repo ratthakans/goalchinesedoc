@@ -9,7 +9,9 @@
           height="50"
           width="100%"
         >
-          <h4 class="text-h4 text-white font-weight-bold">Materials</h4>
+          <h4 class="text-h4 text-white font-weight-bold">
+            Materials
+          </h4>
         </v-sheet>
       </v-col>
     </v-row>
@@ -30,23 +32,32 @@
     <v-row dense>
       <v-col cols="12">
         <v-data-table
-          :headers="headers"
           v-model:search="search"
+          :headers="headers"
           :filter-keys="['title', 'category', 'type']"
           :items="items"
         >
-          <template v-slot:item.image="{ item }">
-            <v-card class="my-2" elevation="2" rounded>
+          <template #item.image="{ item }">
+            <v-card
+              class="my-2"
+              elevation="2"
+              rounded
+            >
               <v-img
                 :src="`https://cdn.vuetifyjs.com/docs/images/graphics/gpus/${item.image}`"
                 height="64"
                 cover
-              ></v-img>
+              />
             </v-card>
           </template>
 
-          <template v-slot:item.action="{ item }">
-            <v-btn color="info" class="text-none">view</v-btn>
+          <template #item.action="{ item }">
+            <v-btn
+              color="info"
+              class="text-none"
+            >
+              view
+            </v-btn>
           </template>
         </v-data-table>
       </v-col>

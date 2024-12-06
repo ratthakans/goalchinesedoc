@@ -1,10 +1,16 @@
 <template>
   <v-app-bar flat>
-    <v-spacer></v-spacer>
+    <v-spacer />
     <v-list>
-      <v-list-item subtitle="john@google.com" title="Admin">
+      <v-list-item
+        subtitle="john@google.com"
+        title="Admin"
+      >
         <template #prepend>
-          <v-avatar size="42" color="grey">
+          <v-avatar
+            size="42"
+            color="grey"
+          >
             <v-icon>mdi-account</v-icon>
           </v-avatar>
         </template>

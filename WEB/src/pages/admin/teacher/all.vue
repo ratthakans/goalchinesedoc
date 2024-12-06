@@ -10,7 +10,7 @@
           width="100%"
         >
           <h4 class="text-h4 text-white font-weight-bold">
-            Users
+            Teachers
           </h4>
         </v-sheet>
       </v-col>
@@ -22,14 +22,14 @@
         class="d-flex ga-2"
       >
         <h5 class="text-h5">
-          Users
+          Teachers
         </h5>
         <v-btn
           density="comfortable"
           color="info"
           icon="mdi-plus"
           variant="flat"
-          to="/admin/users/create"
+          :href="'/admin/teacher/create'"
         />
       </v-col>
       <v-col cols="4">
@@ -78,20 +78,34 @@
           </template>
 
           <template #item.action="{ item }">
-            <div class="d-flex">
-              <v-btn
-                color="primary"
-                variant="text"
-                icon="mdi-pencil"
-                :to="`/admin/users/edit/${item.no}`"
-              />
-              <v-btn
-                color="error"
-                variant="text"
-                icon="mdi-trash-can"
-                slim
-              />
-            </div>
+            <v-menu>
+              <template #activator="{ props }">
+                <v-btn
+                  icon="mdi-dots-vertical"
+                  variant="text"
+                  v-bind="props"
+                />
+              </template>
+
+              <v-list
+                density="compact"
+                :lines="false"
+              >
+                <v-list-item
+                  v-for="(item, i) in [{ title: 'View', to: `./${item.no}`},{ title: 'Edit', to: `./edit/${item.no}` }]"
+                  :key="i"
+                  link
+                  :to="item.to"
+                >
+                  <v-list-item-title>{{ item.title }}</v-list-item-title>
+                </v-list-item>
+                <v-list-item
+                  link
+                >
+                  <v-list-item-title>Delete</v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
           </template>
         </v-data-table>
       </v-col>
@@ -109,13 +123,13 @@ export default {
           align: "start",
           key: "no",
           sortable: false,
-          title: "Admission No.",
+          title: "Teacher No.",
         },
-        { key: "name", title: "Student Name" },
-        { key: "parentsPhone", title: "Parents mobile No." },
-        { key: "poits", title: "Poits" },
-        { key: "studentType", title: "Student Type" },
-        { key: "classType", title: "Class Type" },
+        { key: "name", title: "Teacher Name" },
+        { key: "teachingDate", title: "Start teaching date" },
+        { key: "availableFor", title: "Available for" },
+        { key: "language", title: "Language" },
+        { key: "score", title: "Teacher score" },
         { key: "age", title: "Age" },
         { key: "gender", title: "Gender" },
         { key: "action", title: "Action" },
@@ -123,11 +137,12 @@ export default {
       itemsMaterials: [
         {
           no: "M001",
-          name: "student name",
-          parentsPhone: "+666666",
-          poits: "150",
-          classType: "Class 1",
-          age: "15",
+          name: "Teacher name",
+          teachingDate: "2021-09-01",
+          availableFor: "Adults",
+          language: "Thai",
+          score: "Test",
+          age: "25",
           gender: "Male",
         },
       ],

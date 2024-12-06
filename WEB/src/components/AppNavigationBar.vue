@@ -1,32 +1,53 @@
 <template>
-  <v-navigation-drawer color="info" v-model="drawer">
+  <v-navigation-drawer
+    v-model="drawer"
+    color="info"
+  >
     <div class="py-4">
       <v-list-item>
-        <v-img height="100" src="@/assets/logo.png" />
+        <v-img
+          height="100"
+          src="@/assets/logo.png"
+        />
       </v-list-item>
     </div>
 
-    <v-list :lines="false" mandatory nav exact>
-      <template v-for="(item, i) in items" :key="i">
+    <v-list
+      :lines="false"
+      nav
+      density="compact"
+      exact
+    >
+      <template
+        v-for="(item, i) in items"
+        :key="i"
+      >
         <v-list-item
           v-if="!item?.children?.length"
           :value="item"
-          active-class="bg-white"
-          color="black"
           :to="item.to"
+          :title="item.text"
+          active-class="bg-surface"
+          color="grey"
         >
-          <template v-slot:prepend>
-            <v-icon :icon="item.icon"></v-icon>
+          <template #prepend>
+            <v-icon :icon="item.icon" />
           </template>
-
-          <v-list-item-title v-text="item.text"></v-list-item-title>
         </v-list-item>
 
-        <v-list-group v-else :value="item.text" variant="plain">
-          <template v-slot:activator="{ props }">
-            <v-list-item v-bind="props" :title="item.text" color="black">
-              <template v-slot:prepend>
-                <v-icon :icon="item.icon"></v-icon>
+        <v-list-group
+          v-else
+          :value="item.text"
+        >
+          <template #activator="{ props }">
+            <v-list-item
+              v-bind="props"
+              :title="item.text"
+              :value="item.text"
+              color="black"
+            >
+              <template #prepend>
+                <v-icon :icon="item.icon" />
               </template>
             </v-list-item>
           </template>
@@ -36,9 +57,10 @@
             :key="ic"
             :title="itemSub.text"
             :value="itemSub.text"
-            active-class="bg-white"
-            color="black"
-          ></v-list-item>
+            :to="itemSub.to"
+            active-class="bg-surface"
+            color="grey"
+          />
         </v-list-group>
       </template>
     </v-list>
@@ -51,7 +73,7 @@ export default {
     return {
       drawer: null,
       items: [
-        { text: "Dashboard", icon: "mdi-view-dashboard" },
+        { text: "Dashboard", icon: "mdi-view-dashboard" , to: "/admin/dashboard" },
         {
           text: "Classes",
           icon: "mdi-table-account",
@@ -73,9 +95,9 @@ export default {
           text: "Teacher",
           icon: "mdi-account-tie",
           children: [
-            { text: "All Teacher" },
-            { text: "New Teacher Register" },
-            { text: "Teacher Meterial" },
+            { text: "All Teacher", to: "/admin/teacher/all" },
+            { text: "New Teacher Register", to: "/admin/teacher/create" },
+            { text: "Teacher Meterial", to: "/admin/teacher/materials" },
           ],
         },
         { text: "Users", icon: "mdi-account", to: "/admin/users" },

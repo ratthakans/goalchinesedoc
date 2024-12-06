@@ -9,21 +9,28 @@
           height="50"
           width="100%"
         >
-          <h4 class="text-h4 text-white font-weight-bold">Materials</h4>
+          <h4 class="text-h4 text-white font-weight-bold">
+            Materials
+          </h4>
         </v-sheet>
       </v-col>
     </v-row>
 
     <v-row justify="space-between ">
-      <v-col cols="4" class="d-flex ga-2">
-        <h5 class="text-h5">Materials</h5>
+      <v-col
+        cols="4"
+        class="d-flex ga-2"
+      >
+        <h5 class="text-h5">
+          Materials
+        </h5>
         <v-btn
           density="comfortable"
           color="info"
           icon="mdi-plus"
           variant="flat"
           to="/admin/materials/create"
-        ></v-btn>
+        />
       </v-col>
       <v-col cols="4">
         <v-text-field
@@ -40,22 +47,26 @@
     <v-row dense>
       <v-col cols="12">
         <v-data-table
-          :headers="headersMaterials"
           v-model:search="search"
+          :headers="headersMaterials"
           :filter-keys="['title', 'category', 'type']"
           :items="itemsMaterials"
           show-select
         >
-          <template v-slot:item.image="{ item }">
-            <v-card class="my-2" elevation="2" rounded>
+          <template #item.image="{ item }">
+            <v-card
+              class="my-2"
+              elevation="2"
+              rounded
+            >
               <v-img
                 :src="`https://cdn.vuetifyjs.com/docs/images/graphics/gpus/${item.image}`"
                 height="64"
                 cover
-              ></v-img>
+              />
             </v-card>
           </template>
-          <template v-slot:item.action="{ item }">
+          <template #item.action="{ item }">
             <div class="d-flex">
               <v-btn
                 color="primary"
@@ -63,7 +74,12 @@
                 icon="mdi-pencil"
                 :to="`/admin/materials/edit/${item.no}`"
               />
-              <v-btn color="error" variant="text" icon="mdi-trash-can" slim />
+              <v-btn
+                color="error"
+                variant="text"
+                icon="mdi-trash-can"
+                slim
+              />
             </div>
           </template>
         </v-data-table>
