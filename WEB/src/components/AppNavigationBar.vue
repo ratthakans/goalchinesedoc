@@ -1,65 +1,51 @@
 <template>
-  <v-navigation-drawer
-    v-model="drawer"
-    color="info"
-  >
+  <v-navigation-drawer v-model="drawer" color="info" app>
     <div class="py-4">
       <v-list-item>
-        <v-img
-          height="100"
-          src="@/assets/logo.png"
-        />
+        <v-img height="100" src="@/assets/logo.png" contain />
       </v-list-item>
     </div>
 
-    <v-list
-      :lines="false"
-      nav
-      exact
-    >
-      <template
-        v-for="(item, i) in items"
-        :key="i"
-      >
+    <v-list nav dense exact dark flat>
+      <template v-for="(item, i) in items">
         <v-list-item
+          :key="i"
           v-if="!item?.children?.length"
           :value="item"
           :to="item.to"
-          :title="item.text"
-          active-class="bg-surface"
-          color="black"
+          active-class="black--text surface"
+          link
+          dark
         >
-          <template #prepend>
-            <v-icon :icon="item.icon" />
-          </template>
+          <v-list-item-icon>
+            <v-icon>{{ item.icon }}</v-icon>
+          </v-list-item-icon>
+          <v-list-item-title>{{ item.text }}</v-list-item-title>
         </v-list-item>
 
         <v-list-group
           v-else
-          :value="item.text"
+          :key="item.text"
+          no-action
+          active-class="black--text "
         >
-          <template #activator="{ props }">
-            <v-list-item
-              v-bind="props"
-              :title="item.text"
-              :value="item.text"
-              color="black"
-            >
-              <template #prepend>
-                <v-icon :icon="item.icon" />
-              </template>
-            </v-list-item>
+          <template v-slot:activator>
+            <v-list-item-icon>
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>{{ item.text }}</v-list-item-title>
           </template>
 
           <v-list-item
             v-for="(itemSub, ic) in item.children"
             :key="ic"
-            :title="itemSub.text"
             :value="itemSub.text"
             :to="itemSub.to"
-            active-class="bg-surface"
-            color="black"
-          />
+            active-class="black--text surface"
+            link
+          >
+            <v-list-item-title>{{ itemSub.text }}</v-list-item-title>
+          </v-list-item>
         </v-list-group>
       </template>
     </v-list>

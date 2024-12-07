@@ -9,20 +9,14 @@
           height="50"
           width="100%"
         >
-          <h4 class="text-h4 text-white font-weight-bold">
-            Class Calenday
-          </h4>
+          <h4 class="text-h4 text-white font-weight-bold">Class Calenday</h4>
         </v-sheet>
       </v-col>
     </v-row>
 
     <v-row>
       <v-col>
-        <VCalendar
-          ref="calendar"
-          :events="events"
-          @click:event="showEvent"
-        />
+        <VCalendar ref="calendar" :events="events" @click:event="showEvent" />
 
         <v-menu
           v-model="selectedOpen"
@@ -30,15 +24,8 @@
           :activator="selectedElement"
           offset-x
         >
-          <v-card
-            color="grey lighten-4"
-            min-width="350px"
-            flat
-          >
-            <v-toolbar
-              :color="selectedEvent.color"
-              dark
-            >
+          <v-card color="grey lighten-4" min-width="350px" flat>
+            <v-toolbar :color="selectedEvent.color" dark>
               <v-btn icon>
                 <v-icon>mdi-pencil</v-icon>
               </v-btn>
@@ -55,11 +42,7 @@
               <span>{{ selectedEvent.details }}</span>
             </v-card-text>
             <v-card-actions>
-              <v-btn
-                text
-                color="secondary"
-                @click="selectedOpen = false"
-              >
+              <v-btn text color="secondary" @click="selectedOpen = false">
                 Cancel
               </v-btn>
             </v-card-actions>
@@ -105,7 +88,7 @@ export default {
   },
   methods: {
     showEvent({ nativeEvent, event }) {
-      console.log("🚀 ~ showEvent ~ event:", event)
+      console.log("🚀 ~ showEvent ~ event:", event);
       const open = () => {
         this.selectedEvent = event;
         this.selectedElement = nativeEvent.target;

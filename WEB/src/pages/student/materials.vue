@@ -9,9 +9,7 @@
           height="50"
           width="100%"
         >
-          <h4 class="text-h4 text-white font-weight-bold">
-            Materials
-          </h4>
+          <h4 class="text-h4 text-white font-weight-bold">Materials</h4>
         </v-sheet>
       </v-col>
     </v-row>
@@ -21,7 +19,7 @@
         <v-text-field
           v-model="search"
           placeholder="Search..."
-          density="compact"
+          dense
           hide-details="auto"
           bg-color="grey-lighten-4"
           variant="solo"
@@ -38,11 +36,7 @@
           :items="items"
         >
           <template #item.image="{ item }">
-            <v-card
-              class="my-2"
-              elevation="2"
-              rounded
-            >
+            <v-card class="my-2" elevation="2" rounded>
               <v-img
                 :src="`https://cdn.vuetifyjs.com/docs/images/graphics/gpus/${item.image}`"
                 height="64"
@@ -52,12 +46,7 @@
           </template>
 
           <template #item.action="{ item }">
-            <v-btn
-              color="info"
-              class="text-none"
-            >
-              view
-            </v-btn>
+            <v-btn color="info" class="text-none"> view </v-btn>
           </template>
         </v-data-table>
       </v-col>

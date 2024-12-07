@@ -3,12 +3,22 @@
     <AppNavigationBar />
 
     <AppBar />
+
     <v-main>
-      <router-view />
+      <slot />
     </v-main>
   </v-app>
 </template>
 
-<script setup>
-//
+<script>
+import AppNavigationBar from "@/components/AppNavigationBar";
+import AppBar from "@/components/AppBar";
+
+export default {
+  name: "DefaultLayout",
+  components: {
+    AppNavigationBar,
+    AppBar,
+  },
+};
 </script>

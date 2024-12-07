@@ -9,21 +9,14 @@
           height="50"
           width="100%"
         >
-          <h4 class="text-h4 text-white font-weight-bold">
-            Materials
-          </h4>
+          <h4 class="text-h4 text-white font-weight-bold">Materials</h4>
         </v-sheet>
       </v-col>
     </v-row>
 
     <v-row justify="space-between ">
-      <v-col
-        cols="4"
-        class="d-flex ga-2"
-      >
-        <h5 class="text-h5">
-          Materials
-        </h5>
+      <v-col cols="4" class="d-flex ga-2">
+        <h5 class="text-h5">Materials</h5>
         <v-btn
           density="comfortable"
           color="info"
@@ -36,7 +29,7 @@
         <v-text-field
           v-model="search"
           placeholder="Search..."
-          density="compact"
+          dense
           hide-details="auto"
           bg-color="grey-lighten-4"
           variant="solo"
@@ -54,11 +47,7 @@
           show-select
         >
           <template #item.image="{ item }">
-            <v-card
-              class="my-2"
-              elevation="2"
-              rounded
-            >
+            <v-card class="my-2" elevation="2" rounded>
               <v-img
                 :src="`https://cdn.vuetifyjs.com/docs/images/graphics/gpus/${item.image}`"
                 height="64"
@@ -74,12 +63,7 @@
                 icon="mdi-pencil"
                 :to="`/admin/materials/edit/${item.no}`"
               />
-              <v-btn
-                color="error"
-                variant="text"
-                icon="mdi-trash-can"
-                slim
-              />
+              <v-btn color="error" variant="text" icon="mdi-trash-can" slim />
             </div>
           </template>
         </v-data-table>

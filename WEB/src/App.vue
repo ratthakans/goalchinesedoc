@@ -1,7 +1,11 @@
 <template>
-  <router-view />
+  <div id="app">
+    <component :is="$route.meta.layout || 'div'">
+      <router-view />
+    </component>
+  </div>
 </template>
 
-<script setup>
-//
+<script>
+export default {};
 </script>

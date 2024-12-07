@@ -1,73 +1,31 @@
 <template>
   <v-row>
-    <v-col
-      cols="12"
-      md="6"
-      class="d-flex ga-2 align-center"
-    >
+    <v-col cols="12" md="6" class="d-flex ga-2 align-center">
       <v-subheader>Materials Information</v-subheader>
     </v-col>
-    <v-col
-      cols="12"
-      md="auto"
-      class="d-flex align-center"
-    >
+    <v-col cols="12" md="auto" class="d-flex align-center">
       <label class="v-label text-body-1 font-weight-bold pr-10">Type </label>
-      <v-radio-group
-        v-model="type"
-        inline
-        hide-details="auto"
-      >
-        <v-radio
-          label="Study / Teaching Materials"
-          value="Study"
-        />
-        <v-radio
-          label="Library Materials"
-          value="Library"
-        />
+      <v-radio-group v-model="type" inline hide-details="auto">
+        <v-radio label="Study / Teaching Materials" value="Study" />
+        <v-radio label="Library Materials" value="Library" />
       </v-radio-group>
     </v-col>
-    <v-col
-      cols="12"
-      md="6"
-    >
-      <v-text-field
-        density="compact"
-        hide-details="auto"
-        persistent-placeholder
-        variant="outlined"
-      >
+    <v-col cols="12" md="6">
+      <v-text-field dense hide-details="auto" persistent-placeholder outlined>
         <template #label>
           <span class="text-red">*</span> Materials title :
         </template>
       </v-text-field>
     </v-col>
-    <v-col
-      cols="12"
-      md="6"
-    >
-      <v-select
-        density="compact"
-        variant="outlined"
-        hide-details="auto"
-        persistent-placeholder
-      >
+    <v-col cols="12" md="6">
+      <v-select dense outlined hide-details="auto" persistent-placeholder>
         <template #label>
           <span class="text-red">*</span> Materials category :
         </template>
       </v-select>
     </v-col>
-    <v-col
-      cols="12"
-      md="6"
-    >
-      <v-select
-        density="compact"
-        variant="outlined"
-        hide-details="auto"
-        persistent-placeholder
-      >
+    <v-col cols="12" md="6">
+      <v-select dense outlined hide-details="auto" persistent-placeholder>
         <template #label>
           <span class="text-red">*</span> Materials for :
         </template>
@@ -76,35 +34,21 @@
   </v-row>
 
   <v-row>
-    <v-col
-      cols="12"
-      class="d-flex ga-2 align-center"
-    >
+    <v-col cols="12" class="d-flex ga-2 align-center">
       <v-subheader>Upload Materials</v-subheader>
     </v-col>
 
-    <v-col
-      cols="12"
-      md="6"
-    >
-      <v-text-field
-        density="compact"
-        hide-details="auto"
-        persistent-placeholder
-        variant="outlined"
-      >
+    <v-col cols="12" md="6">
+      <v-text-field dense hide-details="auto" persistent-placeholder outlined>
         <template #label>
           <span class="text-red">*</span> Materials No, :
         </template>
       </v-text-field>
     </v-col>
-    <v-col
-      cols="12"
-      md="6"
-    >
+    <v-col cols="12" md="6">
       <v-file-input
-        density="compact"
-        variant="outlined"
+        dense
+        outlined
         hide-details="auto"
         placeholder="No file chosen"
         persistent-placeholder
@@ -114,27 +58,21 @@
         </template>
       </v-file-input>
     </v-col>
-    <v-col
-      cols="12"
-      md="6"
-    >
+    <v-col cols="12" md="6">
       <v-textarea
-        density="compact"
+        dense
         hide-details="auto"
         persistent-placeholder
         label="Description"
-        variant="outlined"
+        outlined
       />
     </v-col>
-    <v-col
-      cols="12"
-      md="6"
-    >
+    <v-col cols="12" md="6">
       <v-text-field
-        density="compact"
+        dense
         hide-details="auto"
         persistent-placeholder
-        variant="outlined"
+        outlined
         label="Materials Link :"
       />
     </v-col>

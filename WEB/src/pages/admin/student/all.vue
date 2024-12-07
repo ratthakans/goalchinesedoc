@@ -9,21 +9,14 @@
           height="50"
           width="100%"
         >
-          <h4 class="text-h4 text-white font-weight-bold">
-            Students
-          </h4>
+          <h4 class="text-h4 text-white font-weight-bold">Students</h4>
         </v-sheet>
       </v-col>
     </v-row>
 
     <v-row justify="space-between ">
-      <v-col
-        cols="4"
-        class="d-flex ga-2"
-      >
-        <h5 class="text-h5">
-          Student
-        </h5>
+      <v-col cols="4" class="d-flex ga-2">
+        <h5 class="text-h5">Student</h5>
         <v-btn
           density="comfortable"
           color="info"
@@ -36,7 +29,7 @@
         <v-text-field
           v-model="search"
           placeholder="Search..."
-          density="compact"
+          dense
           hide-details="auto"
           bg-color="grey-lighten-4"
           variant="solo"
@@ -63,14 +56,14 @@
                 tile
                 rounded="lg"
               >
-                <v-img
-                  v-if="item.avatar"
-                  :src="item.avatar"
-                />
+                <v-img v-if="item.avatar" :src="item.avatar" />
                 <v-icon>mdi-account</v-icon>
               </v-avatar>
               <div class="d-flex flex-column ms-3">
-                <span class="d-block font-weight-medium text-high-emphasis text-truncate">{{ item.name }}</span>
+                <span
+                  class="d-block font-weight-medium text-high-emphasis text-truncate"
+                  >{{ item.name }}</span
+                >
               </div>
             </div>
           </template>
@@ -78,19 +71,15 @@
           <template #item.action="{ item }">
             <v-menu>
               <template #activator="{ props }">
-                <v-btn
-                  icon="mdi-dots-vertical"
-                  variant="text"
-                  v-bind="props"
-                />
+                <v-btn icon="mdi-dots-vertical" variant="text" v-bind="props" />
               </template>
 
-              <v-list
-                density="compact"
-                :lines="false"
-              >
+              <v-list dense :lines="false">
                 <v-list-item
-                  v-for="(item, i) in [{ title: 'View', to: `./${item.no}` }, { title: 'Edit', to: `./edit/${item.no}` }]"
+                  v-for="(item, i) in [
+                    { title: 'View', to: `./${item.no}` },
+                    { title: 'Edit', to: `./edit/${item.no}` },
+                  ]"
                   :key="i"
                   link
                   :to="item.to"

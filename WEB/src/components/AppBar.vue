@@ -1,19 +1,18 @@
 <template>
-  <v-app-bar flat>
+  <v-app-bar flat app color="white">
     <v-spacer />
     <v-list>
-      <v-list-item
-        subtitle="john@google.com"
-        title="Admin"
-      >
-        <template #prepend>
-          <v-avatar
-            size="42"
-            color="grey"
-          >
+      <v-list-item>
+        <v-list-item-avatar>
+          <v-avatar size="42" color="grey">
             <v-icon>mdi-account</v-icon>
           </v-avatar>
-        </template>
+        </v-list-item-avatar>
+
+        <v-list-item-content>
+          <v-list-item-title>john@google.com</v-list-item-title>
+          <v-list-item-subtitle>Admin</v-list-item-subtitle>
+        </v-list-item-content>
       </v-list-item>
     </v-list>
     <v-btn icon>

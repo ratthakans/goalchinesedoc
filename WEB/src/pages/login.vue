@@ -1,25 +1,12 @@
-<script></script>
-
 <template>
   <v-container class="fill-height">
-    <v-responsive
-      class="align-center fill-height mx-auto"
-      max-width="900"
-    >
-      <v-img
-        class="mb-4"
-        height="100"
-        src="@/assets/logo.png"
-      />
+    <v-responsive class="align-center fill-height mx-auto" max-width="900">
+      <v-img class="mb-4" height="150" src="@/assets/logo.png" contain />
 
       <div class="text-center">
-        <div class="text-body-2 font-weight-light mb-n1">
-          Welcome to
-        </div>
+        <div class="text-body-2 font-weight-light mb-n1">Welcome to</div>
 
-        <h1 class="text-h2 font-weight-bold">
-          Class Regiser
-        </h1>
+        <h1 class="text-h2 font-weight-bold">Class Regiser</h1>
       </div>
 
       <div class="py-2" />
@@ -29,9 +16,9 @@
           <v-text-field
             label="Username"
             placeholder="John"
-            density="compact"
+            dense
             hide-details="auto"
-            variant="outlined"
+            outlined
           />
         </v-col>
       </v-row>
@@ -41,9 +28,9 @@
             label="Password"
             placeholder="xxxxxx"
             type="password"
-            density="compact"
+            dense
             hide-details="auto"
-            variant="outlined"
+            outlined
           />
         </v-col>
       </v-row>
@@ -63,7 +50,9 @@
   </v-container>
 </template>
 
-<route lang="yaml">
-meta:
-  layout: login
-</route>
+<script>
+export default {
+  name: "LoginPage",
+  data() {},
+};
+</script>

@@ -9,24 +9,14 @@
           height="50"
           width="100%"
         >
-          <h4 class="text-h4 text-white font-weight-bold">
-            Library
-          </h4>
+          <h4 class="text-h4 text-white font-weight-bold">Library</h4>
         </v-sheet>
       </v-col>
     </v-row>
 
     <v-row>
-      <v-col
-        v-for="(_, i) in 4"
-        :key="i"
-        cols="3"
-      >
-        <v-card
-          class="mx-auto"
-          max-width="344"
-          rounded="lg"
-        >
+      <v-col v-for="(_, i) in 4" :key="i" cols="3">
+        <v-card class="mx-auto" max-width="344" rounded="lg">
           <v-img
             height="200px"
             src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"

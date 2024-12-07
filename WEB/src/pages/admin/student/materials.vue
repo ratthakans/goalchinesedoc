@@ -9,24 +9,20 @@
           height="50"
           width="100%"
         >
-          <h4 class="text-h4 text-white font-weight-bold">
-            Student Materials
-          </h4>
+          <h4 class="text-h4 text-white font-weight-bold">Student Materials</h4>
         </v-sheet>
       </v-col>
     </v-row>
 
     <v-row justify="space-between">
       <v-col cols="4">
-        <h5 class="text-h5">
-          <span class="text-red">*</span> Select Students
-        </h5>
+        <h5 class="text-h5"><span class="text-red">*</span> Select Students</h5>
       </v-col>
       <v-col cols="4">
         <v-text-field
           v-model="search"
           placeholder="Search..."
-          density="compact"
+          dense
           hide-details="auto"
           bg-color="grey-lighten-4"
           variant="solo"
@@ -53,27 +49,20 @@
                 tile
                 rounded="lg"
               >
-                <v-img
-                  v-if="item.avatar"
-                  :src="item.avatar"
-                />
+                <v-img v-if="item.avatar" :src="item.avatar" />
                 <v-icon>mdi-account</v-icon>
               </v-avatar>
               <div class="d-flex flex-column ms-3">
                 <span
                   class="d-block font-weight-medium text-high-emphasis text-truncate"
-                >{{ item.name }}</span>
+                  >{{ item.name }}</span
+                >
               </div>
             </div>
           </template>
 
           <template #item.action="{ item }">
-            <v-btn
-              color="info"
-              class="text-none"
-            >
-              view
-            </v-btn>
+            <v-btn color="info" class="text-none"> view </v-btn>
           </template>
         </v-data-table>
       </v-col>
@@ -89,7 +78,7 @@
         <v-text-field
           v-model="search"
           placeholder="Search..."
-          density="compact"
+          dense
           hide-details="auto"
           bg-color="grey-lighten-4"
           variant="solo"
@@ -107,11 +96,7 @@
           show-select
         >
           <template #item.image="{ item }">
-            <v-card
-              class="my-2"
-              elevation="2"
-              rounded
-            >
+            <v-card class="my-2" elevation="2" rounded>
               <v-img
                 :src="`https://cdn.vuetifyjs.com/docs/images/graphics/gpus/${item.image}`"
                 height="64"
@@ -125,13 +110,8 @@
 
     <v-row justify="end">
       <v-col cols="auto">
-        <v-btn
-          color="primary"
-          class="text-none"
-        >
-          <v-icon start>
-            mdi-content-save
-          </v-icon>
+        <v-btn color="primary" class="text-none">
+          <v-icon start> mdi-content-save </v-icon>
           Update
         </v-btn>
       </v-col>
@@ -145,7 +125,7 @@ export default {
     return {
       search: "",
       headers: [
-      {
+        {
           align: "start",
           key: "no",
           sortable: false,
@@ -160,7 +140,7 @@ export default {
         { key: "gender", title: "Gender" },
       ],
       items: [
-      {
+        {
           no: "M001",
           name: "student name",
           parentsPhone: "+666666",

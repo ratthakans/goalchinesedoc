@@ -17,13 +17,9 @@
             size="120"
           />
           <div class="d-flex flex-column justify-center">
-            <h4 class="text-h4 font-weight-bold">
-              Nannie
-            </h4>
+            <h4 class="text-h4 font-weight-bold">Nannie</h4>
             <div>
-              <v-icon color="yellow">
-                mdi-star-circle
-              </v-icon>
+              <v-icon color="yellow"> mdi-star-circle </v-icon>
               100 points
             </div>
           </div>
@@ -31,10 +27,7 @@
       </v-col>
     </v-row>
 
-    <v-row
-      justify="center"
-      class="mt-10 mt-md-0"
-    >
+    <v-row justify="center" class="mt-10 mt-md-0">
       <v-col cols="auto">
         <v-sheet
           color="grey-lighten-3"
@@ -43,13 +36,9 @@
           rounded="lg"
           class="pa-2"
         >
-          <div class="text-grey">
-            Remaining class:
-          </div>
+          <div class="text-grey">Remaining class:</div>
           <div class="d-flex justify-center align-center fill-height pb-4">
-            <h3 class="text-h3 font-weight-bold">
-              8/15
-            </h3>
+            <h3 class="text-h3 font-weight-bold">8/15</h3>
             <small class="mt-5 text-grey pl-4"> times</small>
           </div>
         </v-sheet>
@@ -62,13 +51,9 @@
           rounded="lg"
           class="pa-2"
         >
-          <div class="text-grey">
-            Leave class:
-          </div>
+          <div class="text-grey">Leave class:</div>
           <div class="d-flex justify-center align-center fill-height pb-4">
-            <h3 class="text-h3 font-weight-bold">
-              8/15
-            </h3>
+            <h3 class="text-h3 font-weight-bold">8/15</h3>
             <small class="mt-5 text-grey pl-4"> times</small>
           </div>
         </v-sheet>
@@ -91,14 +76,8 @@
               <v-expansion-panel-text class="pa-0">
                 <v-table class="pa-0">
                   <tbody>
-                    <tr
-                      v-for="item in items"
-                      :key="item.name"
-                    >
-                      <th
-                        width="20px"
-                        class="border-e-sm"
-                      >
+                    <tr v-for="item in items" :key="item.name">
+                      <th width="20px" class="border-e-sm">
                         {{ item.name }}
                       </th>
 
@@ -126,24 +105,13 @@
               <v-expansion-panel-text class="pa-0">
                 <v-table class="pa-0">
                   <tbody>
-                    <tr
-                      v-for="item in items"
-                      :key="item.name"
-                    >
-                      <th
-                        width="20px"
-                        class="border-e-2"
-                      >
+                    <tr v-for="item in items" :key="item.name">
+                      <th width="20px" class="border-e-2">
                         {{ item.name }}
                       </th>
 
                       <td>
-                        <v-chip
-                          class="ma-2"
-                          label
-                        >
-                          Label
-                        </v-chip>
+                        <v-chip class="ma-2" label> Label </v-chip>
                       </td>
                     </tr>
                   </tbody>

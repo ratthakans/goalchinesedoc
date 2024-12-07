@@ -9,21 +9,14 @@
           height="50"
           width="100%"
         >
-          <h4 class="text-h4 text-white font-weight-bold">
-            Users
-          </h4>
+          <h4 class="text-h4 text-white font-weight-bold">Users</h4>
         </v-sheet>
       </v-col>
     </v-row>
 
     <v-row justify="space-between ">
-      <v-col
-        cols="4"
-        class="d-flex ga-2"
-      >
-        <h5 class="text-h5">
-          Users
-        </h5>
+      <v-col cols="4" class="d-flex ga-2">
+        <h5 class="text-h5">Users</h5>
         <v-btn
           density="comfortable"
           color="info"
@@ -36,7 +29,7 @@
         <v-text-field
           v-model="search"
           placeholder="Search..."
-          density="compact"
+          dense
           hide-details="auto"
           bg-color="grey-lighten-4"
           variant="solo"
@@ -63,16 +56,14 @@
                 tile
                 rounded="lg"
               >
-                <v-img
-                  v-if="item.avatar"
-                  :src="item.avatar"
-                />
+                <v-img v-if="item.avatar" :src="item.avatar" />
                 <v-icon>mdi-account</v-icon>
               </v-avatar>
               <div class="d-flex flex-column ms-3">
                 <span
                   class="d-block font-weight-medium text-high-emphasis text-truncate"
-                >{{ item.name }}</span>
+                  >{{ item.name }}</span
+                >
               </div>
             </div>
           </template>
@@ -85,12 +76,7 @@
                 icon="mdi-pencil"
                 :to="`/admin/users/edit/${item.no}`"
               />
-              <v-btn
-                color="error"
-                variant="text"
-                icon="mdi-trash-can"
-                slim
-              />
+              <v-btn color="error" variant="text" icon="mdi-trash-can" slim />
             </div>
           </template>
         </v-data-table>

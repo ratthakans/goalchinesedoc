@@ -2,6 +2,11 @@
   <div>dashboard</div>
 </template>
 
-<script setup></script>
+<script>
+export default {
+  name: "DashboardPage",
+  data() {},
+};
+</script>
 
 <style lang="scss" scoped></style>
