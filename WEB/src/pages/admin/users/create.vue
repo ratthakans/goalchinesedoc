@@ -11,7 +11,7 @@
           to="/admin/users"
         />
         <h5 class="text-h5">
-          Add Users
+          Add User
         </h5>
       </v-col>
     </v-row>

@@ -15,7 +15,6 @@
     <v-list
       :lines="false"
       nav
-      density="compact"
       exact
     >
       <template
@@ -28,7 +27,7 @@
           :to="item.to"
           :title="item.text"
           active-class="bg-surface"
-          color="grey"
+          color="black"
         >
           <template #prepend>
             <v-icon :icon="item.icon" />
@@ -59,7 +58,7 @@
             :value="itemSub.text"
             :to="itemSub.to"
             active-class="bg-surface"
-            color="grey"
+            color="black"
           />
         </v-list-group>
       </template>
@@ -82,8 +81,16 @@ export default {
           text: "Classes",
           icon: "mdi-table-account",
           children: [
-            { text: "Calenday", icon: "mdi-calender" },
-            { text: "All Class Check", icon: "mdi-account-check" },
+            {
+              text: "Calenday",
+              icon: "mdi-calender",
+              to: "/admin/classes/calendar",
+            },
+            {
+              text: "All Class Check",
+              icon: "mdi-account-check",
+              to: "/admin/classes/check",
+            },
           ],
         },
         {

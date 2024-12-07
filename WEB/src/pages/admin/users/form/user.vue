@@ -30,7 +30,6 @@
             >
               <div class="d-flex justify-space-between">
                 <v-radio-group
-                  v-model="type"
                   inline
                   hide-details="auto"
                 >
@@ -200,14 +199,64 @@
     class="mt-6"
   >
     <v-col cols="12">
-      <v-subheader>Permissions</v-subheader>
-    </v-col>
-    <v-col cols="12">
-      <v-checkbox
-        label="John"
-        value="John"
-        hide-details="auto"
-      />
+      <v-table>
+        <tbody>
+          <tr>
+            <td>
+              <h6 class="text-h6">
+                Permissions Access
+              </h6>
+            </td>
+            <td colspan="3">
+              <div class="d-flex justify-end">
+                <v-checkbox
+                  v-model="isSelectAll"
+                  v-model:indeterminate="isIndeterminate"
+                  label="Select All"
+                  hide-details
+                />
+              </div>
+            </td>
+          </tr>
+
+          <tr
+            v-for="permission in permissions"
+            :key="permission.name"
+          >
+            <td>{{ permission.name }}</td>
+            <td>
+              <div class="d-flex justify-end">
+                <v-checkbox
+                  v-show="Object.hasOwn(permission, 'view')"
+                  v-model="permission.view"
+                  label="View"
+                  hide-details
+                />
+              </div>
+            </td>
+            <td>
+              <div class="d-flex justify-end">
+                <v-checkbox
+                  v-show="Object.hasOwn(permission, 'edit')"
+                  v-model="permission.edit"
+                  label="Edit / Delete"
+                  hide-details
+                />
+              </div>
+            </td>
+            <td>
+              <div class="d-flex justify-end">
+                <v-checkbox
+                  v-show="Object.hasOwn(permission, 'create')"
+                  v-model="permission.create"
+                  label="Create"
+                  hide-details
+                />
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </v-table>
     </v-col>
   </v-row>
 </template>
@@ -223,7 +272,83 @@ export default {
         type: "",
         image: "",
       },
+
+      // 👉 Permission List
+      permissions: [
+        {
+          name: "Dashboard",
+          view: false,
+          edit: false,
+        },
+        {
+          name: "Class Management",
+          view: false,
+          edit: false,
+          create: false,
+        },
+        {
+          name: "Class Calender",
+          view: false,
+          edit: false,
+          create: false,
+        },
+        {
+          name: "Class Check",
+          view: false,
+          edit: false,
+          create: false,
+        },
+        {
+          name: "Student Management",
+          view: false,
+          edit: false,
+          create: false,
+        },
+        {
+          name: "Student Metrials Management",
+          view: false,
+          edit: false,
+          create: false,
+        },
+        {
+          name: "Teacher Management",
+          view: false,
+          edit: false,
+          create: false,
+        },
+        {
+          name: "Teacher Metrials Management",
+          view: false,
+          edit: false,
+          create: false,
+        },
+        {
+          name: "Metrials Management",
+          view: false,
+          edit: false,
+          create: false,
+        },
+        {
+          name: "Users Management",
+          view: false,
+          edit: false,
+          create: false,
+        },
+        {
+          name: "Library Management",
+          view: false,
+        },
+        {
+          name: "Setting",
+          view: false,
+        },
+      ],
     };
+  },
+  computed: {
+    name() {
+      return this.data
+    }
   },
 };
 </script>
