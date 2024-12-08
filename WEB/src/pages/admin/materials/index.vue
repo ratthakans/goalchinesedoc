@@ -9,7 +9,7 @@
           height="50"
           width="100%"
         >
-          <h4 class="text-h4 text-white font-weight-bold">Materials</h4>
+          <h4 class="text-h4 white--text font-weight-bold">Materials</h4>
         </v-sheet>
       </v-col>
     </v-row>
@@ -31,8 +31,8 @@
           placeholder="Search..."
           dense
           hide-details="auto"
-          bg-color="grey-lighten-4"
-          variant="solo"
+          background-color="grey lighten-4"
+          solo
           flat
         />
       </v-col>
@@ -40,14 +40,13 @@
     <v-row dense>
       <v-col cols="12">
         <v-data-table
-          v-model:search="search"
           :headers="headersMaterials"
           :filter-keys="['title', 'category', 'type']"
           :items="itemsMaterials"
           show-select
         >
-          <template #item.image="{ item }">
-            <v-card class="my-2" elevation="2" rounded>
+          <template #[`item.image`]="{ item }">
+            <v-card class="my-2" elevation="2" rounded height="64" width="70">
               <v-img
                 :src="`https://cdn.vuetifyjs.com/docs/images/graphics/gpus/${item.image}`"
                 height="64"
@@ -55,15 +54,21 @@
               />
             </v-card>
           </template>
-          <template #item.action="{ item }">
+          <template #[`item.action`]="{ item }">
             <div class="d-flex">
               <v-btn
                 color="primary"
-                variant="text"
-                icon="mdi-pencil"
+                icon
+                dark
+                small
+                depressed
                 :to="`/admin/materials/edit/${item.no}`"
-              />
-              <v-btn color="error" variant="text" icon="mdi-trash-can" slim />
+              >
+                <v-icon> mdi-pencil</v-icon>
+              </v-btn>
+              <v-btn color="error" icon dark small>
+                <v-icon>mdi-trash-can</v-icon>
+              </v-btn>
             </div>
           </template>
         </v-data-table>
@@ -74,25 +79,26 @@
 
 <script>
 export default {
+  name: "MaterialsPage",
   data() {
     return {
       search: "",
       headersMaterials: [
         {
           align: "start",
-          key: "no",
+          value: "no",
           sortable: false,
-          title: "Materials No.",
+          text: "Materials No.",
         },
-        { key: "image", title: "Photo" },
-        { key: "title", title: "Title" },
-        { key: "category", title: "Materials Category" },
-        { key: "materialFor", title: "Materials for teacher/student" },
-        { key: "type", title: "Type" },
-        { key: "fileType", title: "File type" },
-        { key: "date", title: "Date" },
-        { key: "description", title: "Description" },
-        { key: "action", title: "Action", sortable: false },
+        { value: "image", text: "Photo" },
+        { value: "title", text: "Title" },
+        { value: "category", text: "Materials Category" },
+        { value: "materialFor", text: "Materials for teacher/student" },
+        { value: "type", text: "Type" },
+        { value: "fileType", text: "File type" },
+        { value: "date", text: "Date" },
+        { value: "description", text: "Description" },
+        { value: "action", text: "Action", sortable: false },
       ],
       itemsMaterials: [
         {

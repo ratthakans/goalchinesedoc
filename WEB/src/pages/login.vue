@@ -53,6 +53,5 @@
 <script>
 export default {
   name: "LoginPage",
-  data() {},
 };
 </script>

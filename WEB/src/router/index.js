@@ -5,6 +5,12 @@ import DefaultLayout from "../layouts/default";
 
 import Login from "../pages/login.vue";
 import Dashboard from "../pages/admin/dashboard.vue";
+import Users from "../pages/admin/users/index.vue";
+import UsersCreate from "../pages/admin/users/create.vue";
+import UsersEdit from "../pages/admin/users/edit.vue";
+import Materials from "../pages/admin/materials/index.vue";
+import Library from "../pages/admin/library.vue";
+import Setting from "../pages/admin/setting.vue";
 
 Vue.use(VueRouter);
 
@@ -24,6 +30,54 @@ const routes = [
       layout: DefaultLayout, // we add new meta layout here to use it later
     },
     component: Dashboard,
+  },
+  {
+    path: "/admin/materials",
+    name: "materials",
+    meta: {
+      layout: DefaultLayout, // we add new meta layout here to use it later
+    },
+    component: Materials,
+  },
+  {
+    path: "/admin/users",
+    name: "users",
+    meta: {
+      layout: DefaultLayout, // we add new meta layout here to use it later
+    },
+    component: Users,
+  },
+  {
+    path: "/admin/users/create",
+    name: "usersCreate",
+    meta: {
+      layout: DefaultLayout, // we add new meta layout here to use it later
+    },
+    component: UsersCreate,
+  },
+  {
+    path: "/admin/users/edit/:id",
+    name: "usersEdit",
+    meta: {
+      layout: DefaultLayout, // we add new meta layout here to use it later
+    },
+    component: UsersEdit,
+  },
+  {
+    path: "/admin/library",
+    name: "library",
+    meta: {
+      layout: DefaultLayout, // we add new meta layout here to use it later
+    },
+    component: Library,
+  },
+  {
+    path: "/admin/setting",
+    name: "setting",
+    meta: {
+      layout: DefaultLayout, // we add new meta layout here to use it later
+    },
+    component: Setting,
   },
 ];
 

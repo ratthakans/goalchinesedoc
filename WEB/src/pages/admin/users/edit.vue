@@ -2,7 +2,9 @@
   <v-container>
     <v-row>
       <v-col cols="12" class="d-flex ga-2 align-center">
-        <v-btn variant="text" icon="mdi-arrow-left" to="/admin/users" />
+        <v-btn variant="text" icon to="/admin/users" class="mr-2">
+          <v-icon>mdi-arrow-left</v-icon>
+        </v-btn>
         <h5 class="text-h5">Edit Users</h5>
       </v-col>
     </v-row>
@@ -21,8 +23,9 @@
 </template>
 
 <script>
-import FormUser from "../form/user.vue";
+import FormUser from "./form/user.vue";
 export default {
+  name: "EditUser",
   components: {
     FormUser,
   },

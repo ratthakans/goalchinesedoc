@@ -9,21 +9,24 @@
           height="50"
           width="100%"
         >
-          <h4 class="text-h4 text-white font-weight-bold">Users</h4>
+          <h4 class="text-h4 white--text font-weight-bold">Users</h4>
         </v-sheet>
       </v-col>
     </v-row>
 
-    <v-row justify="space-between ">
-      <v-col cols="4" class="d-flex ga-2">
+    <v-row justify="space-between">
+      <v-col cols="4" class="d-flex">
         <h5 class="text-h5">Users</h5>
         <v-btn
-          density="comfortable"
           color="info"
-          icon="mdi-plus"
-          variant="flat"
+          small
+          fab
+          depressed
           to="/admin/users/create"
-        />
+          class="mx-2"
+        >
+          <v-icon>mdi-plus</v-icon>
+        </v-btn>
       </v-col>
       <v-col cols="4">
         <v-text-field
@@ -31,8 +34,8 @@
           placeholder="Search..."
           dense
           hide-details="auto"
-          bg-color="grey-lighten-4"
-          variant="solo"
+          background-color="grey lighten-4"
+          solo
           flat
         />
       </v-col>
@@ -40,13 +43,12 @@
     <v-row dense>
       <v-col cols="12">
         <v-data-table
-          v-model:search="search"
           :headers="headers"
           :filter-keys="['title', 'category', 'type']"
           :items="itemsMaterials"
           show-select
         >
-          <template #item.name="{ item }">
+          <template #[`item.name`]="{ item }">
             <div class="d-flex align-center">
               <v-avatar
                 size="45"
@@ -68,15 +70,14 @@
             </div>
           </template>
 
-          <template #item.action="{ item }">
+          <template #[`item.action`]="{ item }">
             <div class="d-flex">
-              <v-btn
-                color="primary"
-                variant="text"
-                icon="mdi-pencil"
-                :to="`/admin/users/edit/${item.no}`"
-              />
-              <v-btn color="error" variant="text" icon="mdi-trash-can" slim />
+              <v-btn color="primary" icon :to="`/admin/users/edit/${item.no}`">
+                <v-icon>mdi-pencil</v-icon>
+              </v-btn>
+              <v-btn color="error" icon>
+                <v-icon>mdi-trash-can</v-icon>
+              </v-btn>
             </div>
           </template>
         </v-data-table>
@@ -87,24 +88,25 @@
 
 <script>
 export default {
+  name: "UsersPage",
   data() {
     return {
       search: "",
       headers: [
         {
           align: "start",
-          key: "no",
+          value: "no",
           sortable: false,
-          title: "Admission No.",
+          text: "Admission No.",
         },
-        { key: "name", title: "Student Name" },
-        { key: "parentsPhone", title: "Parents mobile No." },
-        { key: "poits", title: "Poits" },
-        { key: "studentType", title: "Student Type" },
-        { key: "classType", title: "Class Type" },
-        { key: "age", title: "Age" },
-        { key: "gender", title: "Gender" },
-        { key: "action", title: "Action" },
+        { value: "name", text: "Student Name" },
+        { value: "parentsPhone", text: "Parents mobile No." },
+        { value: "poits", text: "Poits" },
+        { value: "studentType", text: "Student Type" },
+        { value: "classType", text: "Class Type" },
+        { value: "age", text: "Age" },
+        { value: "gender", text: "Gender" },
+        { value: "action", text: "Action" },
       ],
       itemsMaterials: [
         {

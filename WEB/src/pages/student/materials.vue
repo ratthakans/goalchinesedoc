@@ -9,7 +9,7 @@
           height="50"
           width="100%"
         >
-          <h4 class="text-h4 text-white font-weight-bold">Materials</h4>
+          <h4 class="text-h4 white--text font-weight-bold">Materials</h4>
         </v-sheet>
       </v-col>
     </v-row>
@@ -21,8 +21,8 @@
           placeholder="Search..."
           dense
           hide-details="auto"
-          bg-color="grey-lighten-4"
-          variant="solo"
+          background-color="grey lighten-4"
+          solo
           flat
         />
       </v-col>

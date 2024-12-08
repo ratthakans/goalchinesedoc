@@ -6,7 +6,7 @@
           <v-row>
             <v-col cols="12" md="4">
               <label class="v-label mb-2 text-subtitle-2">
-                <span class="text-red mr-2">*</span> Personal Name :
+                <span class="red--text mr-2">*</span> Personal Name :
               </label>
               <v-text-field
                 v-model="formInput.title"
@@ -22,7 +22,7 @@
                 <v-radio-group v-model="type" inline hide-details="auto">
                   <template #label>
                     <div class="text-subtitle-2">
-                      <span class="text-red mr-2">*</span> Gender :
+                      <span class="red--text mr-2">*</span> Gender :
                     </div>
                   </template>
                   <v-radio label="Male" value="Male" />
@@ -75,7 +75,7 @@
 
             <v-col cols="12" md="4">
               <label class="v-label mb-2 text-subtitle-2">
-                <span class="text-red mr-2">*</span> User Name :
+                <span class="red--text mr-2">*</span> User Name :
               </label>
               <v-text-field
                 v-model="formInput.title"
@@ -88,7 +88,7 @@
             </v-col>
             <v-col cols="12" md="4">
               <label class="v-label mb-2 text-subtitle-2">
-                <span class="text-red mr-2">*</span> Password :
+                <span class="red--text mr-2">*</span> Password :
               </label>
               <v-text-field
                 v-model="formInput.title"
@@ -127,7 +127,7 @@
 
             <v-col cols="12" md="4">
               <label class="v-label mb-2 text-subtitle-2">
-                <span class="text-red mr-2">*</span> Resume No :
+                <span class="red--text mr-2">*</span> Resume No :
               </label>
               <v-text-field
                 v-model="formInput.title"
@@ -181,7 +181,7 @@
             </v-col>
             <v-col cols="12" md="4">
               <label class="v-label mb-2 text-subtitle-2">
-                <span class="text-red mr-2">*</span> Score for kids :
+                <span class="red--text mr-2">*</span> Score for kids :
               </label>
               <v-text-field
                 v-model="formInput.title"
@@ -194,7 +194,7 @@
             </v-col>
             <v-col cols="12" md="4">
               <label class="v-label mb-2 text-subtitle-2">
-                <span class="text-red mr-2">*</span> Score for Adult :
+                <span class="red--text mr-2">*</span> Score for Adult :
               </label>
               <v-text-field
                 v-model="formInput.title"
@@ -208,7 +208,7 @@
 
             <v-col cols="12" md="4">
               <label class="v-label mb-2 text-subtitle-2">
-                <span class="text-red mr-2">*</span> Teacher type :
+                <span class="red--text mr-2">*</span> Teacher type :
               </label>
               <v-select
                 v-model="formInput.title"
@@ -221,7 +221,7 @@
             </v-col>
             <v-col cols="12" md="4">
               <label class="v-label mb-2 text-subtitle-2">
-                <span class="text-red mr-2">*</span> Register No :
+                <span class="red--text mr-2">*</span> Register No :
               </label>
               <v-text-field
                 v-model="formInput.title"
@@ -234,7 +234,7 @@
             </v-col>
             <v-col cols="12" md="4">
               <label class="v-label mb-2 text-subtitle-2">
-                <span class="text-red mr-2">*</span> Upload Photo :
+                <span class="red--text mr-2">*</span> Upload Photo :
               </label>
               <v-file-input
                 dense
@@ -245,7 +245,7 @@
             </v-col>
             <v-col cols="12" md="4">
               <label class="v-label mb-2 text-subtitle-2">
-                <span class="text-red mr-2">*</span> Available for class:
+                <span class="red--text mr-2">*</span> Available for class:
               </label>
               <v-select
                 v-model="formInput.title"
@@ -298,7 +298,7 @@
                   <v-row>
                     <v-col cols="12">
                       <label class="v-label mb-2 text-subtitle-2">
-                        <span class="text-red mr-2">*</span> Update Date :
+                        <span class="red--text mr-2">*</span> Update Date :
                       </label>
                       <v-text-field
                         v-model="date"
@@ -408,7 +408,7 @@
               <v-row>
                 <v-col cols="12" md="4">
                   <label class="v-label mb-2 text-subtitle-2">
-                    <span class="text-red mr-2">*</span> Update score Date :
+                    <span class="red--text mr-2">*</span> Update score Date :
                   </label>
                   <v-text-field
                     v-model="date"
@@ -491,7 +491,7 @@
                 </v-col>
                 <v-col cols="12" md="8">
                   <label class="v-label mb-2 text-subtitle-2">
-                    <span class="text-red mr-2">*</span> Resonal for update :
+                    <span class="red--text mr-2">*</span> Resonal for update :
                   </label>
                   <v-text-field
                     v-model="formInput.title"
@@ -504,7 +504,7 @@
                 </v-col>
                 <v-col cols="12" md="4">
                   <label class="v-label mb-2 text-subtitle-2">
-                    <span class="text-red mr-2">*</span> admin :
+                    <span class="red--text mr-2">*</span> admin :
                   </label>
                   <v-text-field
                     v-model="formInput.title"

@@ -9,7 +9,7 @@
           height="50"
           width="100%"
         >
-          <h4 class="text-h4 text-white font-weight-bold">Library</h4>
+          <h4 class="text-h4 white--text font-weight-bold">Library</h4>
         </v-sheet>
       </v-col>
     </v-row>

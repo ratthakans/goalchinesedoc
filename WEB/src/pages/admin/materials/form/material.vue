@@ -13,21 +13,21 @@
     <v-col cols="12" md="6">
       <v-text-field dense hide-details="auto" persistent-placeholder outlined>
         <template #label>
-          <span class="text-red">*</span> Materials title :
+          <span class="red--text">*</span> Materials title :
         </template>
       </v-text-field>
     </v-col>
     <v-col cols="12" md="6">
       <v-select dense outlined hide-details="auto" persistent-placeholder>
         <template #label>
-          <span class="text-red">*</span> Materials category :
+          <span class="red--text">*</span> Materials category :
         </template>
       </v-select>
     </v-col>
     <v-col cols="12" md="6">
       <v-select dense outlined hide-details="auto" persistent-placeholder>
         <template #label>
-          <span class="text-red">*</span> Materials for :
+          <span class="red--text">*</span> Materials for :
         </template>
       </v-select>
     </v-col>
@@ -41,7 +41,7 @@
     <v-col cols="12" md="6">
       <v-text-field dense hide-details="auto" persistent-placeholder outlined>
         <template #label>
-          <span class="text-red">*</span> Materials No, :
+          <span class="red--text">*</span> Materials No, :
         </template>
       </v-text-field>
     </v-col>
@@ -54,7 +54,7 @@
         persistent-placeholder
       >
         <template #label>
-          <span class="text-red">*</span> Materials Document :
+          <span class="red--text">*</span> Materials Document :
         </template>
       </v-file-input>
     </v-col>

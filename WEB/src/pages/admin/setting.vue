@@ -9,7 +9,7 @@
           height="50"
           width="100%"
         >
-          <h4 class="text-h4 text-white font-weight-bold">Setting</h4>
+          <h4 class="text-h4 white--text font-weight-bold">Setting</h4>
         </v-sheet>
       </v-col>
     </v-row>
@@ -33,10 +33,11 @@
             <v-avatar
               border="surface lg opacity-100"
               class="mt-2 mx-2"
-              image="https://cdn.vuetifyjs.com/images/john.jpg"
               rounded="xl"
               size="150"
-            />
+            >
+              <img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John" />
+            </v-avatar>
 
             <v-btn color="error" class="text-none mt-2"> Remove Logo </v-btn>
           </v-col>
@@ -51,7 +52,7 @@
           </v-col>
 
           <v-col cols="12" md="9">
-            <v-text-field dense hide-details="auto" v />
+            <v-text-field dense hide-details="auto" outlined />
             <v-btn color="success" depressed class="text-none mt-2">
               Save
             </v-btn>
@@ -74,12 +75,9 @@
               B1
             </v-chip>
 
-            <v-btn
-              density="comfortable"
-              color="info"
-              icon="mdi-plus"
-              variant="flat"
-            />
+            <v-btn color="info" fab dark small depressed>
+              <v-icon>mdi-plus</v-icon>
+            </v-btn>
           </v-col>
         </v-row>
         <v-row dense>
@@ -93,12 +91,9 @@
               B1
             </v-chip>
 
-            <v-btn
-              density="comfortable"
-              color="info"
-              icon="mdi-plus"
-              variant="flat"
-            />
+            <v-btn color="info" fab dark small depressed>
+              <v-icon>mdi-plus</v-icon>
+            </v-btn>
           </v-col>
         </v-row>
         <v-row dense>
@@ -112,12 +107,9 @@
               B1
             </v-chip>
 
-            <v-btn
-              density="comfortable"
-              color="info"
-              icon="mdi-plus"
-              variant="flat"
-            />
+            <v-btn color="info" fab dark small depressed>
+              <v-icon>mdi-plus</v-icon>
+            </v-btn>
           </v-col>
         </v-row>
         <v-row dense>
@@ -131,12 +123,9 @@
               B1
             </v-chip>
 
-            <v-btn
-              density="comfortable"
-              color="info"
-              icon="mdi-plus"
-              variant="flat"
-            />
+            <v-btn color="info" fab dark small depressed>
+              <v-icon>mdi-plus</v-icon>
+            </v-btn>
           </v-col>
         </v-row>
         <v-row dense>
@@ -150,12 +139,9 @@
               B1
             </v-chip>
 
-            <v-btn
-              density="comfortable"
-              color="info"
-              icon="mdi-plus"
-              variant="flat"
-            />
+            <v-btn color="info" fab dark small depressed>
+              <v-icon>mdi-plus</v-icon>
+            </v-btn>
           </v-col>
         </v-row>
       </v-col>
@@ -166,6 +152,11 @@
   </v-container>
 </template>
 
-<script setup></script>
+<script>
+export default {
+  name: "SettingPage",
+  data() {},
+};
+</script>
 
 <style lang="scss" scoped></style>

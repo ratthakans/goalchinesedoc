@@ -9,14 +9,16 @@
           height="50"
           width="100%"
         >
-          <h4 class="text-h4 text-white font-weight-bold">Teacher Materials</h4>
+          <h4 class="text-h4 white--text font-weight-bold">
+            Teacher Materials
+          </h4>
         </v-sheet>
       </v-col>
     </v-row>
 
     <v-row justify="space-between">
       <v-col cols="4">
-        <h5 class="text-h5"><span class="text-red">*</span> Select teacher</h5>
+        <h5 class="text-h5"><span class="red--text">*</span> Select teacher</h5>
       </v-col>
       <v-col cols="4">
         <v-text-field
@@ -24,8 +26,8 @@
           placeholder="Search..."
           dense
           hide-details="auto"
-          bg-color="grey-lighten-4"
-          variant="solo"
+          background-color="grey lighten-4"
+          solo
           flat
         />
       </v-col>
@@ -71,7 +73,7 @@
     <v-row justify="space-between mt-10">
       <v-col cols="4">
         <h5 class="text-h5">
-          <span class="text-red">*</span> Select Materials
+          <span class="red--text">*</span> Select Materials
         </h5>
       </v-col>
       <v-col cols="4">
@@ -80,8 +82,8 @@
           placeholder="Search..."
           dense
           hide-details="auto"
-          bg-color="grey-lighten-4"
-          variant="solo"
+          background-color="grey lighten-4"
+          solo
           flat
         />
       </v-col>

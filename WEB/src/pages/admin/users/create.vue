@@ -1,8 +1,10 @@
 <template>
   <v-container>
     <v-row>
-      <v-col cols="12" class="d-flex ga-2 align-center">
-        <v-btn variant="text" icon="mdi-arrow-left" to="/admin/users" />
+      <v-col cols="12" class="d-flex align-center">
+        <v-btn variant="text" icon to="/admin/users" class="mr-2">
+          <v-icon>mdi-arrow-left</v-icon>
+        </v-btn>
         <h5 class="text-h5">Add User</h5>
       </v-col>
     </v-row>
@@ -23,6 +25,7 @@
 <script>
 import FormUser from "./form/user.vue";
 export default {
+  name: "CreateUser",
   components: {
     FormUser,
   },
