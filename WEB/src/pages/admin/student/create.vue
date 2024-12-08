@@ -2,7 +2,9 @@
   <v-container>
     <v-row>
       <v-col cols="12" class="d-flex ga-2 align-center">
-        <v-btn variant="text" icon="mdi-arrow-left" to="/admin/student/all" />
+        <v-btn variant="text" icon to="/admin/student/all" class="mr-2">
+          <v-icon>mdi-arrow-left</v-icon>
+        </v-btn>
         <h5 class="text-h5">New Student addmission</h5>
       </v-col>
     </v-row>
@@ -23,6 +25,7 @@
 <script>
 import FormStudent from "./form/student.vue";
 export default {
+  name: "CreateStudent",
   components: {
     FormStudent,
   },

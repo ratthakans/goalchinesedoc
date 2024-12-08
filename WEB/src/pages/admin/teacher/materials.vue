@@ -35,7 +35,6 @@
     <v-row dense>
       <v-col cols="12">
         <v-data-table
-          v-model:search="search"
           :headers="headers"
           :filter-keys="['title', 'category', 'type']"
           :items="items"
@@ -63,7 +62,7 @@
             </div>
           </template>
 
-          <template #item.action="{ item }">
+          <template #item.action="{}">
             <v-btn color="info" class="text-none"> view </v-btn>
           </template>
         </v-data-table>
@@ -91,14 +90,13 @@
     <v-row dense>
       <v-col cols="12">
         <v-data-table
-          v-model:search="search"
           :headers="headersMaterials"
           :filter-keys="['title', 'category', 'type']"
           :items="itemsMaterials"
           show-select
         >
           <template #item.image="{ item }">
-            <v-card class="my-2" elevation="2" rounded>
+            <v-card class="my-2" elevation="2" rounded height="64" width="100">
               <v-img
                 :src="`https://cdn.vuetifyjs.com/docs/images/graphics/gpus/${item.image}`"
                 height="64"
@@ -123,23 +121,24 @@
 
 <script>
 export default {
+  name: "TeacherMaterials",
   data() {
     return {
       search: "",
       headers: [
         {
           align: "start",
-          key: "no",
+          value: "no",
           sortable: false,
-          title: "Teacher No.",
+          text: "Teacher No.",
         },
-        { key: "name", title: "Teacher Name" },
-        { key: "teachingDate", title: "Start teaching date" },
-        { key: "availableFor", title: "Available for" },
-        { key: "language", title: "Language" },
-        { key: "score", title: "Teacher score" },
-        { key: "age", title: "Age" },
-        { key: "gender", title: "Gender" },
+        { value: "name", text: "Teacher Name" },
+        { value: "teachingDate", text: "Start teaching date" },
+        { value: "availableFor", text: "Available for" },
+        { value: "language", text: "Language" },
+        { value: "score", text: "Teacher score" },
+        { value: "age", text: "Age" },
+        { value: "gender", text: "Gender" },
       ],
       items: [
         {
@@ -156,18 +155,18 @@ export default {
       headersMaterials: [
         {
           align: "start",
-          key: "no",
+          value: "no",
           sortable: false,
-          title: "Materials No.",
+          text: "Materials No.",
         },
-        { key: "image", title: "Photo" },
-        { key: "title", title: "Title" },
-        { key: "category", title: "Materials Category" },
-        { key: "materialFor", title: "Materials for teacher/student" },
-        { key: "type", title: "Type" },
-        { key: "fileType", title: "File type" },
-        { key: "date", title: "Date" },
-        { key: "description", title: "Description" },
+        { value: "image", text: "Photo" },
+        { value: "title", text: "Title" },
+        { value: "category", text: "Materials Category" },
+        { value: "materialFor", text: "Materials for teacher/student" },
+        { value: "type", text: "Type" },
+        { value: "fileType", text: "File type" },
+        { value: "date", text: "Date" },
+        { value: "description", text: "Description" },
       ],
       itemsMaterials: [
         {

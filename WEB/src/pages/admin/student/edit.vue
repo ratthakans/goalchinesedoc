@@ -2,7 +2,9 @@
   <v-container>
     <v-row>
       <v-col cols="12" class="d-flex ga-2 align-center">
-        <v-btn variant="text" icon="mdi-arrow-left" to="/admin/student/all" />
+        <v-btn icon to="/admin/student/all" class="mr-2">
+          <v-icon>mdi-arrow-left</v-icon>
+        </v-btn>
         <h5 class="text-h5">Edit Student</h5>
       </v-col>
     </v-row>
@@ -21,8 +23,9 @@
 </template>
 
 <script>
-import FormStudent from "../form/student.vue";
+import FormStudent from "./form/student.vue";
 export default {
+  name: "EditStudent",
   components: {
     FormStudent,
   },

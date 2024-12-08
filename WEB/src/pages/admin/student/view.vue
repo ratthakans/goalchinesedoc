@@ -2,7 +2,9 @@
   <v-container>
     <v-row>
       <v-col cols="12" class="d-flex ga-2 align-center">
-        <v-btn variant="text" icon="mdi-arrow-left" to="/admin/teacher/all" />
+        <v-btn icon to="/admin/student/all" class="mr-2">
+          <v-icon>mdi-arrow-left</v-icon>
+        </v-btn>
         <h5 class="text-h5">Students View</h5>
       </v-col>
     </v-row>
@@ -16,14 +18,10 @@
           height="80"
           width="100%"
         >
-          <v-avatar
-            border="surface lg opacity-100"
-            class="mt-2 mx-2"
-            image="https://cdn.vuetifyjs.com/images/john.jpg"
-            rounded="xl"
-            size="120"
-          />
-          <div class="d-flex flex-column justify-center">
+          <v-avatar class="mt-2 mx-2" rounded="xl" size="120">
+            <v-img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John" />
+          </v-avatar>
+          <div class="d-flex white--text flex-column justify-center">
             <h4 class="text-h4 font-weight-bold">Student name</h4>
             <div>
               <v-icon color="yellow"> mdi-star-circle </v-icon>
@@ -37,38 +35,37 @@
     <v-row class="mt-10">
       <v-col cols="12">
         <v-tabs v-model="tab" color="deep-purple-accent-4">
-          <v-tab :value="1"> General </v-tab>
-          <v-tab :value="2"> Materials list </v-tab>
-          <v-tab :value="3"> Payment History </v-tab>
-          <v-tab :value="4"> Class list </v-tab>
+          <v-tab :key="1"> General </v-tab>
+          <v-tab :key="2"> Materials list </v-tab>
+          <v-tab :key="3"> Payment History </v-tab>
+          <v-tab :key="4"> Class list </v-tab>
         </v-tabs>
 
-        <v-tabs-window v-model="tab">
-          <v-tabs-window-item :value="1">
+        <v-tabs-items v-model="tab">
+          <v-tab-item :key="1">
             <v-container fluid>
               <v-row>
                 <v-col cols="12">
-                  <v-card
-                    title="General"
-                    append-icon="mdi-pencil-box-outline"
-                    outlined
-                    height="250"
-                  />
+                  <v-card outlined height="250">
+                    <v-card-title primary-title>
+                      General <v-spacer></v-spacer>
+                      <v-icon>mdi-pencil-box-outline</v-icon>
+                    </v-card-title>
+                  </v-card>
                 </v-col>
               </v-row>
             </v-container>
-          </v-tabs-window-item>
-          <v-tabs-window-item :value="2">
+          </v-tab-item>
+          <v-tab-item :key="2">
             <v-container fluid>
               <v-row>
                 <v-col cols="12">
-                  <v-card
-                    title="Materials list"
-                    append-icon="mdi-pencil-box-outline"
-                    outlined
-                    height="250"
-                  >
-                    <v-table height="300px" fixed-header>
+                  <v-card outlined height="250">
+                    <v-card-title primary-title>
+                      Materials list <v-spacer></v-spacer>
+                      <v-icon>mdi-pencil-box-outline</v-icon>
+                    </v-card-title>
+                    <v-simple-table height="300px" fixed-header>
                       <thead>
                         <tr>
                           <th class="text-left">Material No.</th>
@@ -82,23 +79,22 @@
                           <td>{{ item.calories }}</td>
                         </tr>
                       </tbody>
-                    </v-table>
+                    </v-simple-table>
                   </v-card>
                 </v-col>
               </v-row>
             </v-container>
-          </v-tabs-window-item>
-          <v-tabs-window-item :value="3">
+          </v-tab-item>
+          <v-tab-item :key="3">
             <v-container fluid>
               <v-row>
                 <v-col cols="12">
-                  <v-card
-                    title="Payment History"
-                    append-icon="mdi-pencil-box-outline"
-                    outlined
-                    height="250"
-                  >
-                    <v-table height="300px" fixed-header>
+                  <v-card outlined height="250">
+                    <v-card-title primary-title>
+                      Payment History <v-spacer></v-spacer>
+                      <v-icon>mdi-pencil-box-outline</v-icon>
+                    </v-card-title>
+                    <v-simple-table height="300px" fixed-header>
                       <thead>
                         <tr>
                           <th class="text-left">Pay date</th>
@@ -116,27 +112,27 @@
                           <td>{{ item.calories }}</td>
                         </tr>
                       </tbody>
-                    </v-table>
+                    </v-simple-table>
                   </v-card>
                 </v-col>
               </v-row>
             </v-container>
-          </v-tabs-window-item>
-          <v-tabs-window-item :value="4">
+          </v-tab-item>
+          <v-tab-item :key="4">
             <v-container fluid>
               <v-row>
                 <v-col cols="12">
-                  <v-card
-                    title="Class list"
-                    append-icon="mdi-pencil-box-outline"
-                    outlined
-                    height="250"
-                  />
+                  <v-card outlined height="250">
+                    <v-card-title primary-title>
+                      Class list<v-spacer></v-spacer>
+                      <v-icon>mdi-pencil-box-outline</v-icon>
+                    </v-card-title>
+                  </v-card>
                 </v-col>
               </v-row>
             </v-container>
-          </v-tabs-window-item>
-        </v-tabs-window>
+          </v-tab-item>
+        </v-tabs-items>
       </v-col>
     </v-row>
   </v-container>
@@ -144,9 +140,10 @@
 
 <script>
 export default {
+  name: "ViewStudent",
   data() {
     return {
-      tab: 1,
+      tab: null,
     };
   },
 };

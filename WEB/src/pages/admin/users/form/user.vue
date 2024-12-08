@@ -20,7 +20,9 @@
                 />
               </v-col>
               <v-col cols="12" md="auto">
-                <label class="v-label mb-2 text-subtitle-2"> Gender : </label>
+                <label class="v-label mb-2 text-subtitle-2"
+                  ><span class="red--text mr-2">*</span> Gender :
+                </label>
                 <v-radio-group row hide-details="auto">
                   <v-radio label="Male" value="Male" />
                   <v-radio label="Female" value="Female" />
@@ -28,7 +30,9 @@
                 </v-radio-group>
               </v-col>
               <v-col cols="12" md="">
-                <label class="v-label mb-2 text-subtitle-2"> Age : </label>
+                <label class="v-label mb-2 text-subtitle-2"
+                  ><span class="red--text mr-2">*</span> Age :
+                </label>
                 <v-text-field
                   v-model="formInput.title"
                   dense

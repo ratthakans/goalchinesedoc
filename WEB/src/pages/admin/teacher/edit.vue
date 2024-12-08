@@ -2,7 +2,9 @@
   <v-container>
     <v-row>
       <v-col cols="12" class="d-flex ga-2 align-center">
-        <v-btn variant="text" icon="mdi-arrow-left" to="/admin/teacher/all" />
+        <v-btn variant="text" icon to="/admin/teacher/all" class="mr-2">
+          <v-icon>mdi-arrow-left</v-icon>
+        </v-btn>
         <h5 class="text-h5">Edit Teacher</h5>
       </v-col>
     </v-row>
@@ -21,8 +23,9 @@
 </template>
 
 <script>
-import FormTeacher from "../form/teacher.vue";
+import FormTeacher from "./form/teacher.vue";
 export default {
+  name: "EditTeacher",
   components: {
     FormTeacher,
   },

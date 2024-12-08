@@ -6,7 +6,7 @@
       </v-list-item>
     </div>
 
-    <v-list nav dense exact dark flat>
+    <v-list nav dense dark flat>
       <template v-for="(item, i) in items">
         <v-list-item
           :key="i"
@@ -16,6 +16,8 @@
           active-class="black--text surface"
           link
           dark
+          exact
+          exact-path
         >
           <v-list-item-icon>
             <v-icon>{{ item.icon }}</v-icon>
@@ -43,6 +45,8 @@
             :to="itemSub.to"
             active-class="black--text surface"
             link
+            exact
+            exact-path
           >
             <v-list-item-title>{{ itemSub.text }}</v-list-item-title>
           </v-list-item>

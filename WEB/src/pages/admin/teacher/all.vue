@@ -14,16 +14,19 @@
       </v-col>
     </v-row>
 
-    <v-row justify="space-between ">
+    <v-row justify="space-between">
       <v-col cols="4" class="d-flex ga-2">
         <h5 class="text-h5">Teachers</h5>
         <v-btn
-          density="comfortable"
           color="info"
-          icon="mdi-plus"
-          variant="flat"
-          :href="'/admin/teacher/create'"
-        />
+          small
+          fab
+          depressed
+          to="/admin/teacher/create"
+          class="mx-2"
+        >
+          <v-icon>mdi-plus</v-icon>
+        </v-btn>
       </v-col>
       <v-col cols="4">
         <v-text-field
@@ -40,7 +43,6 @@
     <v-row dense>
       <v-col cols="12">
         <v-data-table
-          v-model:search="search"
           :headers="headers"
           :filter-keys="['title', 'category', 'type']"
           :items="items"
@@ -69,22 +71,24 @@
           </template>
 
           <template #item.action="{ item }">
-            <v-menu>
-              <template #activator="{ props }">
-                <v-btn icon="mdi-dots-vertical" variant="text" v-bind="props" />
+            <v-menu bottom left>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn icon v-bind="attrs" v-on="on">
+                  <v-icon>mdi-dots-vertical</v-icon>
+                </v-btn>
               </template>
 
-              <v-list dense :lines="false">
+              <v-list dense>
                 <v-list-item
-                  v-for="(item, i) in [
-                    { title: 'View', to: `./${item.no}` },
+                  v-for="(menu, i) in [
+                    { title: 'View', to: `./view/${item.no}` },
                     { title: 'Edit', to: `./edit/${item.no}` },
                   ]"
                   :key="i"
                   link
-                  :to="item.to"
+                  :to="menu.to"
                 >
-                  <v-list-item-title>{{ item.title }}</v-list-item-title>
+                  <v-list-item-title>{{ menu.title }}</v-list-item-title>
                 </v-list-item>
                 <v-list-item link>
                   <v-list-item-title>Delete</v-list-item-title>
@@ -100,24 +104,25 @@
 
 <script>
 export default {
+  name: "TeacherAll",
   data() {
     return {
       search: "",
       headers: [
         {
           align: "start",
-          key: "no",
+          value: "no",
           sortable: false,
-          title: "Teacher No.",
+          text: "Teacher No.",
         },
-        { key: "name", title: "Teacher Name" },
-        { key: "teachingDate", title: "Start teaching date" },
-        { key: "availableFor", title: "Available for" },
-        { key: "language", title: "Language" },
-        { key: "score", title: "Teacher score" },
-        { key: "age", title: "Age" },
-        { key: "gender", title: "Gender" },
-        { key: "action", title: "Action" },
+        { value: "name", text: "Teacher Name" },
+        { value: "teachingDate", text: "Start teaching date" },
+        { value: "availableFor", text: "Available for" },
+        { value: "language", text: "Language" },
+        { value: "score", text: "Teacher score" },
+        { value: "age", text: "Age" },
+        { value: "gender", text: "Gender" },
+        { value: "action", text: "Action" },
       ],
       items: [
         {
