@@ -7,7 +7,11 @@ import Login from "../pages/login.vue";
 import Dashboard from "../pages/admin/dashboard.vue";
 
 import classesCalenday from "../pages/admin/classes/calendar.vue";
-import classesCheck from "../pages/admin/classes/check/all.vue";
+import classesAll from "../pages/admin/classes/all.vue";
+import classesCreate from "../pages/admin/classes/create.vue";
+import classesEdit from "../pages/admin/classes/edit.vue";
+import classesView from "../pages/admin/classes/view.vue";
+import classesAttendance from "../pages/admin/classes/attendance.vue";
 
 import Student from "../pages/admin/student/all.vue";
 import StudentCreate from "../pages/admin/student/create.vue";
@@ -61,12 +65,44 @@ const routes = [
     component: classesCalenday,
   },
   {
-    path: "/admin/classes/check",
-    name: "classesCheck",
+    path: "/admin/classes/all",
+    name: "classesAll",
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
     },
-    component: classesCheck,
+    component: classesAll,
+  },
+  {
+    path: "/admin/classes/create",
+    name: "classesCreate",
+    meta: {
+      layout: DefaultLayout, // we add new meta layout here to use it later
+    },
+    component: classesCreate,
+  },
+  {
+    path: "/admin/classes/edit/:id",
+    name: "classesEdit",
+    meta: {
+      layout: DefaultLayout, // we add new meta layout here to use it later
+    },
+    component: classesEdit,
+  },
+  {
+    path: "/admin/classes/view/:id",
+    name: "classesView",
+    meta: {
+      layout: DefaultLayout, // we add new meta layout here to use it later
+    },
+    component: classesView,
+  },
+  {
+    path: "/admin/classes/attendance",
+    name: "classesAttendance",
+    meta: {
+      layout: DefaultLayout, // we add new meta layout here to use it later
+    },
+    component: classesAttendance,
   },
   {
     path: "/admin/student/all",

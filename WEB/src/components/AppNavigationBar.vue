@@ -79,7 +79,7 @@ export default {
             {
               text: "All Class Check",
               icon: "mdi-account-check",
-              to: "/admin/classes/check",
+              to: "/admin/classes/all",
             },
           ],
         },

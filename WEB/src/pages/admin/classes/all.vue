@@ -23,7 +23,7 @@
           small
           fab
           depressed
-          to="/admin/student/create"
+          to="/admin/classes/create"
           class="mx-2"
         >
           <v-icon>mdi-plus</v-icon>
@@ -96,6 +96,7 @@
                   v-for="(menu, i) in [
                     { title: 'View', to: `./view/${item.no}` },
                     { title: 'Edit', to: `./edit/${item.no}` },
+                    { title: 'Attendance', to: `./attendance` },
                   ]"
                   :key="i"
                   link
