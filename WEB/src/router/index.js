@@ -36,6 +36,15 @@ import MaterialsEdit from "../pages/admin/materials/edit.vue";
 import Library from "../pages/admin/library.vue";
 import Setting from "../pages/admin/setting.vue";
 
+// Student pages
+import StudentClass from "../pages/student/class.vue";
+import StudentMaterialsPage from "../pages/student/materials.vue";
+import Studentlibrary from "../pages/student/library.vue";
+
+// Teacher pages
+import TeacherClass from "../pages/teacher/class.vue";
+import TeacherMaterialsPage from "../pages/teacher/materials.vue";
+
 Vue.use(VueRouter);
 
 const routes = [
@@ -247,6 +256,50 @@ const routes = [
       layout: DefaultLayout, // we add new meta layout here to use it later
     },
     component: Setting,
+  },
+
+  // Student pages
+  {
+    path: "/student/class",
+    name: "studentClass",
+    meta: {
+      layout: DefaultLayout, // we add new meta layout here to use it later
+    },
+    component: StudentClass,
+  },
+  {
+    path: "/student/materials",
+    name: "studentMaterialsPage",
+    meta: {
+      layout: DefaultLayout, // we add new meta layout here to use it later
+    },
+    component: StudentMaterialsPage,
+  },
+  {
+    path: "/student/library",
+    name: "studentlibrary",
+    meta: {
+      layout: DefaultLayout, // we add new meta layout here to use it later
+    },
+    component: Studentlibrary,
+  },
+
+  // Teacher pages
+  {
+    path: "/teacher/class",
+    name: "teacherClass",
+    meta: {
+      layout: DefaultLayout, // we add new meta layout here to use it later
+    },
+    component: TeacherClass,
+  },
+  {
+    path: "/teacher/materials",
+    name: "tacherMaterialsPage",
+    meta: {
+      layout: DefaultLayout, // we add new meta layout here to use it later
+    },
+    component: TeacherMaterialsPage,
   },
 ];
 

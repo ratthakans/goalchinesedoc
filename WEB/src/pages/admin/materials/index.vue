@@ -14,7 +14,7 @@
       </v-col>
     </v-row>
 
-    <v-row justify="space-between ">
+    <v-row justify="space-between">
       <v-col cols="4" class="d-flex ga-2">
         <h5 class="text-h5">Materials</h5>
 

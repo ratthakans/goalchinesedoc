@@ -15,7 +15,7 @@
         </v-list-item-content>
       </v-list-item>
     </v-list>
-    <v-btn icon>
+    <v-btn icon to="/">
       <v-icon>mdi-logout</v-icon>
     </v-btn>
   </v-app-bar>

@@ -155,7 +155,9 @@
 <script>
 export default {
   name: "SettingPage",
-  data() {},
+  data() {
+    return {};
+  },
 };
 </script>
 
