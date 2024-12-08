@@ -17,13 +17,17 @@
     <v-row justify="space-between ">
       <v-col cols="4" class="d-flex ga-2">
         <h5 class="text-h5">Materials</h5>
+
         <v-btn
-          density="comfortable"
           color="info"
-          icon="mdi-plus"
-          variant="flat"
+          small
+          fab
+          depressed
           to="/admin/materials/create"
-        />
+          class="mx-2"
+        >
+          <v-icon>mdi-plus</v-icon>
+        </v-btn>
       </v-col>
       <v-col cols="4">
         <v-text-field

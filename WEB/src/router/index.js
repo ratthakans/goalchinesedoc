@@ -6,6 +6,9 @@ import DefaultLayout from "../layouts/default";
 import Login from "../pages/login.vue";
 import Dashboard from "../pages/admin/dashboard.vue";
 
+import classesCalenday from "../pages/admin/classes/calendar.vue";
+import classesCheck from "../pages/admin/classes/check/all.vue";
+
 import Student from "../pages/admin/student/all.vue";
 import StudentCreate from "../pages/admin/student/create.vue";
 import StudentView from "../pages/admin/student/view.vue";
@@ -21,7 +24,11 @@ import TeacherMaterials from "../pages/admin/teacher/materials.vue";
 import Users from "../pages/admin/users/index.vue";
 import UsersCreate from "../pages/admin/users/create.vue";
 import UsersEdit from "../pages/admin/users/edit.vue";
+
 import Materials from "../pages/admin/materials/index.vue";
+import MaterialsCreate from "../pages/admin/materials/create.vue";
+import MaterialsEdit from "../pages/admin/materials/edit.vue";
+
 import Library from "../pages/admin/library.vue";
 import Setting from "../pages/admin/setting.vue";
 
@@ -44,13 +51,22 @@ const routes = [
     },
     component: Dashboard,
   },
+
   {
-    path: "/admin/materials",
-    name: "materials",
+    path: "/admin/classes/calendar",
+    name: "classesCalendar",
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
     },
-    component: Materials,
+    component: classesCalenday,
+  },
+  {
+    path: "/admin/classes/check",
+    name: "classesCheck",
+    meta: {
+      layout: DefaultLayout, // we add new meta layout here to use it later
+    },
+    component: classesCheck,
   },
   {
     path: "/admin/student/all",
@@ -155,6 +171,30 @@ const routes = [
       layout: DefaultLayout, // we add new meta layout here to use it later
     },
     component: UsersEdit,
+  },
+  {
+    path: "/admin/materials",
+    name: "materials",
+    meta: {
+      layout: DefaultLayout, // we add new meta layout here to use it later
+    },
+    component: Materials,
+  },
+  {
+    path: "/admin/materials/create",
+    name: "materialsCreate",
+    meta: {
+      layout: DefaultLayout, // we add new meta layout here to use it later
+    },
+    component: MaterialsCreate,
+  },
+  {
+    path: "/admin/materials/edit/:id",
+    name: "materialsEdit",
+    meta: {
+      layout: DefaultLayout, // we add new meta layout here to use it later
+    },
+    component: MaterialsEdit,
   },
   {
     path: "/admin/library",
