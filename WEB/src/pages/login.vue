@@ -14,6 +14,7 @@
       <v-row justify="center">
         <v-col cols="6">
           <v-text-field
+            v-model="username"
             label="Username"
             placeholder="John"
             dense
@@ -25,6 +26,7 @@
       <v-row justify="center">
         <v-col cols="6">
           <v-text-field
+            v-model="password"
             label="Password"
             placeholder="xxxxxx"
             type="password"
@@ -36,12 +38,7 @@
       </v-row>
       <v-row justify="center">
         <v-col cols="6">
-          <v-btn
-            block
-            color="primary"
-            depressed
-            @click="$router.push('/admin/dashboard')"
-          >
+          <v-btn block color="primary" depressed @click="login">
             Sign In
           </v-btn>
         </v-col>
@@ -51,7 +48,47 @@
 </template>
 
 <script>
+import { mapActions } from "pinia";
+import { useAppStore } from "@/stores/app";
 export default {
   name: "LoginPage",
+  data() {
+    return {
+      username: "admin",
+      password: "123456",
+      error: null,
+    };
+  },
+  methods: {
+    ...mapActions(useAppStore, { setUserInfo: "setUserInfo" }),
+    login() {
+      this.$auth
+        .login({
+          data: {
+            username: this.username,
+            password: this.password,
+          }, // Axios
+          redirect: null,
+          fetchUser: false,
+          staySignedIn: true,
+        })
+        .then(
+          ({ data }) => {
+            this.$auth.token(null, data.token, false);
+            this.$auth.user(data);
+            this.setUserInfo(data);
+            if (data.role === "admin")
+              this.$router.replace({ name: "dashboard" });
+            else if (data.role === "student")
+              this.$router.replace({ name: "studentClass" });
+            else if (data.role === "teacher")
+              this.$router.replace({ name: "teacherClass" });
+          },
+          (res) => {
+            console.log("🚀 ~ login ~ res:", res);
+          }
+        );
+    },
+  },
 };
 </script>

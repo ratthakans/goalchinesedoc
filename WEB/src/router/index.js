@@ -45,6 +45,9 @@ import Studentlibrary from "../pages/student/library.vue";
 import TeacherClass from "../pages/teacher/class.vue";
 import TeacherMaterialsPage from "../pages/teacher/materials.vue";
 
+import page403 from "../pages/error/403.vue";
+import page404 from "../pages/error/404.vue";
+
 Vue.use(VueRouter);
 
 const routes = [
@@ -61,6 +64,7 @@ const routes = [
     name: "dashboard",
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
+      auth: "admin",
     },
     component: Dashboard,
   },
@@ -70,6 +74,7 @@ const routes = [
     name: "classesCalendar",
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
+      auth: "admin",
     },
     component: classesCalenday,
   },
@@ -78,6 +83,7 @@ const routes = [
     name: "classesAll",
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
+      auth: "admin",
     },
     component: classesAll,
   },
@@ -86,6 +92,7 @@ const routes = [
     name: "classesCreate",
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
+      auth: "admin",
     },
     component: classesCreate,
   },
@@ -94,6 +101,7 @@ const routes = [
     name: "classesEdit",
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
+      auth: "admin",
     },
     component: classesEdit,
   },
@@ -102,6 +110,7 @@ const routes = [
     name: "classesView",
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
+      auth: "admin",
     },
     component: classesView,
   },
@@ -110,6 +119,7 @@ const routes = [
     name: "classesAttendance",
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
+      auth: "admin",
     },
     component: classesAttendance,
   },
@@ -118,6 +128,7 @@ const routes = [
     name: "student",
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
+      auth: "admin",
     },
     component: Student,
   },
@@ -126,6 +137,7 @@ const routes = [
     name: "studentCreate",
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
+      auth: "admin",
     },
     component: StudentCreate,
   },
@@ -134,6 +146,7 @@ const routes = [
     name: "studentView",
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
+      auth: "admin",
     },
     component: StudentView,
   },
@@ -142,6 +155,7 @@ const routes = [
     name: "studentEdit",
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
+      auth: "admin",
     },
     component: StudentEdit,
   },
@@ -150,6 +164,7 @@ const routes = [
     name: "studentMaterials",
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
+      auth: "admin",
     },
     component: StudentMaterials,
   },
@@ -158,6 +173,7 @@ const routes = [
     name: "teacher",
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
+      auth: "admin",
     },
     component: Teacher,
   },
@@ -301,12 +317,28 @@ const routes = [
     },
     component: TeacherMaterialsPage,
   },
+  {
+    path: "/403",
+    name: "403",
+    meta: {
+      layout: LoginLayout, // we add new meta layout here to use it later
+    },
+    component: page403,
+  },
+  {
+    path: "*",
+    name: "404",
+    meta: {
+      layout: LoginLayout, // we add new meta layout here to use it later
+    },
+    component: page404,
+  },
 ];
 
-const router = new VueRouter({
+Vue.router = new VueRouter({
   mode: "history",
   base: process.env.BASE_URL,
   routes,
 });
 
-export default router;
+export default Vue.router;

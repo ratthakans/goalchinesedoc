@@ -7,7 +7,7 @@
     </div>
 
     <v-list nav dense dark flat>
-      <template v-for="(item, i) in items">
+      <template v-for="(item, i) in menus">
         <v-list-item
           :key="i"
           v-if="!item?.children?.length"
@@ -61,7 +61,12 @@ export default {
   data() {
     return {
       drawer: null,
-      items: [
+      menus: [],
+    };
+  },
+  mounted() {
+    if (this.$auth.check(["admin"])) {
+      this.menus = [
         {
           text: "Dashboard",
           icon: "mdi-view-dashboard",
@@ -109,8 +114,27 @@ export default {
           to: "/admin/library",
         },
         { text: "Setting", icon: "mdi-cog", to: "/admin/setting" },
-      ],
-    };
+      ];
+    }
+
+    if (this.$auth.check(["student"])) {
+      this.menus = [
+        { text: "Classes", icon: "mdi-table-account", to: "/student/class" },
+        { text: "Materials", icon: "mdi-file", to: "/student/materials" },
+        {
+          text: "Library",
+          icon: "mdi-book-open-page-variant",
+          to: "/student/library",
+        },
+      ];
+    }
+
+    if (this.$auth.check(["teacher"])) {
+      this.menus = [
+        { text: "Classes", icon: "mdi-table-account", to: "/teacher/class" },
+        { text: "Materials", icon: "mdi-file", to: "/teacher/materials" },
+      ];
+    }
   },
 };
 </script>

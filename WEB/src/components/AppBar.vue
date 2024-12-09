@@ -10,17 +10,43 @@
         </v-list-item-avatar>
 
         <v-list-item-content>
-          <v-list-item-title>john@google.com</v-list-item-title>
-          <v-list-item-subtitle>Admin</v-list-item-subtitle>
+          <v-list-item-title
+            >{{ userInfo?.firstName }}
+            {{ userInfo?.lastName }}</v-list-item-title
+          >
+          <v-list-item-subtitle>{{ userInfo?.username }}</v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
     </v-list>
-    <v-btn icon to="/">
+    <v-btn icon @click="logout">
       <v-icon>mdi-logout</v-icon>
     </v-btn>
   </v-app-bar>
 </template>
 
-<script setup></script>
+<script>
+import { mapState, mapActions } from "pinia";
+import { useAppStore } from "@/stores/app";
+export default {
+  computed: {
+    ...mapState(useAppStore, {
+      userInfo: "getUserinfo",
+    }),
+  },
+  mounted() {},
+  methods: {
+    ...mapActions(useAppStore, { setUserInfo: "setUserInfo" }),
+    logout() {
+      this.$auth
+        .logout({
+          redirect: { name: "login" },
+        })
+        .then(() => {
+          this.setUserInfo(null);
+        });
+    },
+  },
+};
+</script>
 
 <style lang="scss" scoped></style>
