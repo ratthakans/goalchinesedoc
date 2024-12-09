@@ -99,7 +99,7 @@
         <v-row dense>
           <v-col cols="12">
             <label class="v-label text-body-2 font-weight-bold">
-              Class tyle
+              Class type
             </label>
           </v-col>
           <v-col cols="12">
@@ -115,7 +115,7 @@
         <v-row dense>
           <v-col cols="12">
             <label class="v-label text-body-2 font-weight-bold">
-              Student tyle
+              Student type
             </label>
           </v-col>
           <v-col cols="12">
@@ -131,7 +131,7 @@
         <v-row dense>
           <v-col cols="12">
             <label class="v-label text-body-2 font-weight-bold">
-              Teacher tyle
+              Teacher type
             </label>
           </v-col>
           <v-col cols="12">

@@ -64,7 +64,9 @@ const routes = [
     name: "dashboard",
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
-      auth: "admin",
+      auth: {
+        roles: ["user", "admin"],
+      },
     },
     component: Dashboard,
   },
@@ -74,7 +76,9 @@ const routes = [
     name: "classesCalendar",
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
-      auth: "admin",
+      auth: {
+        roles: ["user", "admin"],
+      },
     },
     component: classesCalenday,
   },
@@ -83,7 +87,9 @@ const routes = [
     name: "classesAll",
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
-      auth: "admin",
+      auth: {
+        roles: ["user", "admin"],
+      },
     },
     component: classesAll,
   },
@@ -92,7 +98,9 @@ const routes = [
     name: "classesCreate",
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
-      auth: "admin",
+      auth: {
+        roles: ["user", "admin"],
+      },
     },
     component: classesCreate,
   },
@@ -101,7 +109,9 @@ const routes = [
     name: "classesEdit",
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
-      auth: "admin",
+      auth: {
+        roles: ["user", "admin"],
+      },
     },
     component: classesEdit,
   },
@@ -110,7 +120,9 @@ const routes = [
     name: "classesView",
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
-      auth: "admin",
+      auth: {
+        roles: ["user", "admin"],
+      },
     },
     component: classesView,
   },
@@ -119,7 +131,9 @@ const routes = [
     name: "classesAttendance",
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
-      auth: "admin",
+      auth: {
+        roles: ["user", "admin"],
+      },
     },
     component: classesAttendance,
   },
@@ -128,7 +142,9 @@ const routes = [
     name: "student",
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
-      auth: "admin",
+      auth: {
+        roles: ["user", "admin"],
+      },
     },
     component: Student,
   },
@@ -137,7 +153,9 @@ const routes = [
     name: "studentCreate",
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
-      auth: "admin",
+      auth: {
+        roles: ["user", "admin"],
+      },
     },
     component: StudentCreate,
   },
@@ -146,7 +164,9 @@ const routes = [
     name: "studentView",
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
-      auth: "admin",
+      auth: {
+        roles: ["user", "admin"],
+      },
     },
     component: StudentView,
   },
@@ -155,7 +175,9 @@ const routes = [
     name: "studentEdit",
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
-      auth: "admin",
+      auth: {
+        roles: ["user", "admin"],
+      },
     },
     component: StudentEdit,
   },
@@ -164,7 +186,9 @@ const routes = [
     name: "studentMaterials",
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
-      auth: "admin",
+      auth: {
+        roles: ["user", "admin"],
+      },
     },
     component: StudentMaterials,
   },
@@ -173,7 +197,9 @@ const routes = [
     name: "teacher",
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
-      auth: "admin",
+      auth: {
+        roles: ["user", "admin"],
+      },
     },
     component: Teacher,
   },
@@ -182,6 +208,9 @@ const routes = [
     name: "teacherCreate",
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
+      auth: {
+        roles: ["user", "admin"],
+      },
     },
     component: TeacherCreate,
   },
@@ -190,6 +219,9 @@ const routes = [
     name: "teacherView",
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
+      auth: {
+        roles: ["user", "admin"],
+      },
     },
     component: TeacherView,
   },
@@ -198,6 +230,9 @@ const routes = [
     name: "teacherEdit",
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
+      auth: {
+        roles: ["user", "admin"],
+      },
     },
     component: TeacherEdit,
   },
@@ -206,6 +241,9 @@ const routes = [
     name: "teacherMaterials",
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
+      auth: {
+        roles: ["user", "admin"],
+      },
     },
     component: TeacherMaterials,
   },
@@ -214,6 +252,9 @@ const routes = [
     name: "users",
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
+      auth: {
+        roles: ["user", "admin"],
+      },
     },
     component: Users,
   },
@@ -222,6 +263,9 @@ const routes = [
     name: "usersCreate",
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
+      auth: {
+        roles: ["user", "admin"],
+      },
     },
     component: UsersCreate,
   },
@@ -230,6 +274,9 @@ const routes = [
     name: "usersEdit",
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
+      auth: {
+        roles: ["user", "admin"],
+      },
     },
     component: UsersEdit,
   },
@@ -238,6 +285,9 @@ const routes = [
     name: "materials",
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
+      auth: {
+        roles: ["user", "admin"],
+      },
     },
     component: Materials,
   },
@@ -246,6 +296,9 @@ const routes = [
     name: "materialsCreate",
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
+      auth: {
+        roles: ["user", "admin"],
+      },
     },
     component: MaterialsCreate,
   },
@@ -254,6 +307,9 @@ const routes = [
     name: "materialsEdit",
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
+      auth: {
+        roles: ["user", "admin"],
+      },
     },
     component: MaterialsEdit,
   },
@@ -262,6 +318,9 @@ const routes = [
     name: "library",
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
+      auth: {
+        roles: ["user", "admin"],
+      },
     },
     component: Library,
   },
@@ -270,6 +329,9 @@ const routes = [
     name: "setting",
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
+      auth: {
+        roles: ["user", "admin"],
+      },
     },
     component: Setting,
   },
@@ -280,6 +342,7 @@ const routes = [
     name: "studentClass",
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
+      auth: "student",
     },
     component: StudentClass,
   },
@@ -288,6 +351,7 @@ const routes = [
     name: "studentMaterialsPage",
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
+      auth: "student",
     },
     component: StudentMaterialsPage,
   },
@@ -296,6 +360,7 @@ const routes = [
     name: "studentlibrary",
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
+      auth: "student",
     },
     component: Studentlibrary,
   },
@@ -306,6 +371,7 @@ const routes = [
     name: "teacherClass",
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
+      auth: "teacher",
     },
     component: TeacherClass,
   },
@@ -314,6 +380,7 @@ const routes = [
     name: "tacherMaterialsPage",
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
+      auth: "teacher",
     },
     component: TeacherMaterialsPage,
   },

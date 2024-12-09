@@ -1,6 +1,6 @@
 <template>
   <v-container class="fill-height">
-    <v-responsive class="align-center fill-height mx-auto" max-width="900">
+    <v-responsive class="align-center fill-height mx-auto" max-width="700">
       <v-img class="mb-4" height="150" src="@/assets/logo.png" contain />
 
       <div class="text-center">
@@ -29,10 +29,12 @@
             v-model="password"
             label="Password"
             placeholder="xxxxxx"
-            type="password"
+            :type="showPassword ? 'text' : 'password'"
             dense
             hide-details="auto"
             outlined
+            :append-icon="showPassword ? 'mdi-eye-off' : 'mdi-eye'"
+            @click:append="showPassword = !showPassword"
           />
         </v-col>
       </v-row>
@@ -57,6 +59,7 @@ export default {
       username: "admin",
       password: "123456",
       error: null,
+      showPassword: false,
     };
   },
   methods: {
