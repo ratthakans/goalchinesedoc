@@ -60,12 +60,13 @@
         </v-file-input>
       </v-col>
       <v-col cols="12" md="6">
-        <v-textarea
+        <v-select
           dense
           hide-details="auto"
           persistent-placeholder
-          label="Description"
           outlined
+          label="Materials Link Type :"
+          :items="['pptx', 'pdf', 'mp4', 'youtube', 'canva']"
         />
       </v-col>
       <v-col cols="12" md="6">
@@ -75,6 +76,15 @@
           persistent-placeholder
           outlined
           label="Materials Link :"
+        />
+      </v-col>
+      <v-col cols="12" md="6">
+        <v-textarea
+          dense
+          hide-details="auto"
+          persistent-placeholder
+          label="Description"
+          outlined
         />
       </v-col>
     </v-row>

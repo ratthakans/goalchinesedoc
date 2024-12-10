@@ -20,7 +20,7 @@
 
         <v-btn
           color="info"
-          small
+          x-small
           fab
           depressed
           to="/admin/classes/create"

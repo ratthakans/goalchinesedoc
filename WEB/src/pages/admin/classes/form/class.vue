@@ -458,6 +458,130 @@
         </v-card>
       </v-col>
     </v-row>
+
+    <v-row>
+      <v-col cols="12">
+        <v-card outlined>
+          <v-card-title primary-title> Teacher fee for the class </v-card-title>
+          <v-card-text>
+            <v-row>
+              <v-col cols="12" md="4">
+                <label class="v-label mb-2 text-subtitle-2">
+                  Class Name :
+                </label>
+                <v-text-field
+                  v-model="formInput.title"
+                  dense
+                  outlined
+                  single-line
+                  hide-details="auto"
+                  disabled
+                />
+              </v-col>
+
+              <v-col cols="12" md="2">
+                <label class="v-label mb-2 text-subtitle-2">Class No : </label>
+                <v-text-field
+                  v-model="formInput.title"
+                  dense
+                  outlined
+                  single-line
+                  hide-details="auto"
+                  disabled
+                />
+              </v-col>
+
+              <v-col cols="12" md="2">
+                <label class="v-label mb-2 text-subtitle-2">Branch : </label>
+                <v-select
+                  v-model="formInput.title"
+                  dense
+                  outlined
+                  single-line
+                  hide-details="auto"
+                  disabled
+                />
+              </v-col>
+
+              <v-col cols="12" md="4">
+                <label class="v-label mb-2 text-subtitle-2"
+                  >Class Type :
+                </label>
+                <v-select
+                  v-model="formInput.title"
+                  dense
+                  outlined
+                  single-line
+                  hide-details="auto"
+                  disabled
+                />
+              </v-col>
+
+              <v-col cols="12" md="3">
+                <label class="v-label mb-2 text-subtitle-2"
+                  >Teacher Name :
+                </label>
+                <v-select
+                  v-model="formInput.title"
+                  dense
+                  outlined
+                  single-line
+                  hide-details="auto"
+                  disabled
+                />
+              </v-col>
+
+              <v-col cols="12" md="5">
+                <label class="v-label mb-2 text-subtitle-2"
+                  >Student Name :
+                </label>
+                <v-select
+                  v-model="formInput.title"
+                  dense
+                  :items="['foo', 'bar', 'fizz', 'buzz']"
+                  outlined
+                  single-line
+                  hide-details="auto"
+                  multiple
+                  disabled
+                />
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12" md="6">
+                <v-list>
+                  <v-list-item v-for="(status, i) in statusList" :key="i">
+                    <v-list-item-content>
+                      <v-list-item-title>
+                        <v-row>
+                          <v-col cols="6" class="d-flex align-center">
+                            <v-badge
+                              class="my-0"
+                              inline
+                              :color="status.color"
+                            ></v-badge>
+                            <span>{{ status.text }}</span>
+                          </v-col>
+                          <v-col cols="4">
+                            <v-text-field
+                              dense
+                              outlined
+                              single-line
+                              hide-details="auto"
+                            />
+                          </v-col>
+                        </v-row>
+                        <v-spacer></v-spacer>
+                      </v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-list>
+              </v-col>
+            </v-row>
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
   </div>
 </template>
 
@@ -483,6 +607,28 @@ export default {
         type: "",
         image: "",
       },
+      statusList: [
+        {
+          text: "Regular",
+          value: "regular",
+          color: "green",
+        },
+        {
+          text: "Student missing class",
+          value: "student missing",
+          color: "pink",
+        },
+        {
+          text: "Teacher missing class",
+          value: "teacher missing",
+          color: "red",
+        },
+        {
+          text: "Other",
+          value: "other",
+          color: "info",
+        },
+      ],
     };
   },
 };

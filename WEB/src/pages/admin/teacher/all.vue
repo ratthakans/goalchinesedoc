@@ -19,7 +19,7 @@
         <h5 class="text-h5">Teachers</h5>
         <v-btn
           color="info"
-          small
+          x-small
           fab
           depressed
           to="/admin/teacher/create"
@@ -115,7 +115,7 @@ export default {
           sortable: false,
           text: "Teacher No.",
         },
-        { value: "name", text: "Teacher Name" },
+        { value: "name", text: "Teacher Name", width: "20%" },
         { value: "teachingDate", text: "Start teaching date" },
         { value: "availableFor", text: "Available for" },
         { value: "language", text: "Language" },

@@ -75,7 +75,7 @@
               B1
             </v-chip>
 
-            <v-btn color="info" fab dark small depressed>
+            <v-btn color="info" fab dark x-small depressed>
               <v-icon>mdi-plus</v-icon>
             </v-btn>
           </v-col>
@@ -91,7 +91,7 @@
               B1
             </v-chip>
 
-            <v-btn color="info" fab dark small depressed>
+            <v-btn color="info" fab dark x-small depressed>
               <v-icon>mdi-plus</v-icon>
             </v-btn>
           </v-col>
@@ -107,7 +107,7 @@
               B1
             </v-chip>
 
-            <v-btn color="info" fab dark small depressed>
+            <v-btn color="info" fab dark x-small depressed>
               <v-icon>mdi-plus</v-icon>
             </v-btn>
           </v-col>
@@ -123,7 +123,7 @@
               B1
             </v-chip>
 
-            <v-btn color="info" fab dark small depressed>
+            <v-btn color="info" fab dark x-small depressed>
               <v-icon>mdi-plus</v-icon>
             </v-btn>
           </v-col>
@@ -139,7 +139,55 @@
               B1
             </v-chip>
 
-            <v-btn color="info" fab dark small depressed>
+            <v-btn color="info" fab dark x-small depressed>
+              <v-icon>mdi-plus</v-icon>
+            </v-btn>
+          </v-col>
+        </v-row>
+        <v-row dense>
+          <v-col cols="12">
+            <label class="v-label text-body-2 font-weight-bold">
+              Materials for
+            </label>
+          </v-col>
+          <v-col cols="12">
+            <v-chip class="mx-2" size="large" closable label rounded="lg">
+              B1
+            </v-chip>
+
+            <v-btn color="info" fab dark x-small depressed>
+              <v-icon>mdi-plus</v-icon>
+            </v-btn>
+          </v-col>
+        </v-row>
+        <v-row dense>
+          <v-col cols="12">
+            <label class="v-label text-body-2 font-weight-bold">
+              Materials category
+            </label>
+          </v-col>
+          <v-col cols="12">
+            <v-chip class="mx-2" size="large" closable label rounded="lg">
+              B1
+            </v-chip>
+
+            <v-btn color="info" fab dark x-small depressed>
+              <v-icon>mdi-plus</v-icon>
+            </v-btn>
+          </v-col>
+        </v-row>
+        <v-row dense>
+          <v-col cols="12">
+            <label class="v-label text-body-2 font-weight-bold">
+              Cerrency
+            </label>
+          </v-col>
+          <v-col cols="12">
+            <v-chip class="mx-2" size="large" closable label rounded="lg">
+              B1
+            </v-chip>
+
+            <v-btn color="info" fab dark x-small depressed>
               <v-icon>mdi-plus</v-icon>
             </v-btn>
           </v-col>

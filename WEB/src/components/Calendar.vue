@@ -62,7 +62,7 @@
           :event-color="getEventColor"
           :type="type"
           @click:event="showEvent"
-          @click:more="viewDay"
+          @click:more="viewMore"
           @click:date="viewDay"
           @change="getEvents"
         >
@@ -418,6 +418,10 @@ export default {
       }
 
       nativeEvent.stopPropagation();
+    },
+    viewMore({ date }) {
+      this.focus = date;
+      this.type = "day";
     },
     getEventColor(event) {
       return event.color;

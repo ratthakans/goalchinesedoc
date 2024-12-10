@@ -115,11 +115,11 @@ export default {
         },
         { text: "Users", icon: "mdi-account", to: "/admin/users" },
         { text: "Materials", icon: "mdi-file", to: "/admin/materials" },
-        {
-          text: "Library",
-          icon: "mdi-book-open-page-variant",
-          to: "/admin/library",
-        },
+        // {
+        //   text: "Library",
+        //   icon: "mdi-book-open-page-variant",
+        //   to: "/admin/library",
+        // },
         { text: "Setting", icon: "mdi-cog", to: "/admin/setting" },
       ];
     }

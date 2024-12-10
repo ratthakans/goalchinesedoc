@@ -20,7 +20,7 @@
 
         <v-btn
           color="info"
-          small
+          x-small
           fab
           depressed
           to="/admin/student/create"
@@ -115,22 +115,23 @@ export default {
           value: "no",
           sortable: false,
           text: "Admission No.",
+          width: "2%",
         },
-        { value: "name", text: "Student Name" },
-        { value: "parentsPhone", text: "Mobile No." },
-        { value: "poits", text: "Poits" },
-        { value: "studentType", text: "Student Type" },
-        { value: "classType", text: "Class Type" },
-        { value: "age", text: "Age" },
-        { value: "gender", text: "Gender" },
-        { value: "action", text: "Action" },
+        { value: "name", text: "Student Name", width: "*" },
+        { value: "parentsPhone", text: "Mobile No.", width: "10%" },
+        { value: "points", text: "Points", width: "7%" },
+        { value: "studentType", text: "Student Type", width: "7%" },
+        { value: "classType", text: "Class Type", width: "7%" },
+        { value: "age", text: "Age", width: "5%" },
+        { value: "gender", text: "Gender", width: "7%" },
+        { value: "action", text: "Action", width: "7%" },
       ],
       items: [
         {
           no: "M001",
           name: "student name",
           parentsPhone: "+666666",
-          poits: "150",
+          points: "150",
           classType: "Class 1",
           age: "15",
           gender: "Male",

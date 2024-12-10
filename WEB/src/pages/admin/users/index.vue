@@ -19,7 +19,7 @@
         <h5 class="text-h5">Users</h5>
         <v-btn
           color="info"
-          small
+          x-small
           fab
           depressed
           to="/admin/users/create"
@@ -99,7 +99,7 @@ export default {
           sortable: false,
           text: "Admission No.",
         },
-        { value: "name", text: "Student Name" },
+        { value: "name", text: "Student Name", width: "30%" },
         { value: "parentsPhone", text: "Parents mobile No." },
         { value: "poits", text: "Poits" },
         { value: "studentType", text: "Student Type" },

@@ -254,6 +254,11 @@ export default {
           create: false,
         },
         {
+          name: "Class teacher fee",
+          view: false,
+          edit: false,
+        },
+        {
           name: "Class Check",
           view: false,
           edit: false,

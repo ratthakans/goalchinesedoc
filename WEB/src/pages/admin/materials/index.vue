@@ -20,7 +20,7 @@
 
         <v-btn
           color="info"
-          small
+          x-small
           fab
           depressed
           to="/admin/materials/create"
@@ -93,9 +93,10 @@ export default {
           value: "no",
           sortable: false,
           text: "Materials No.",
+          width: "3%",
         },
         { value: "image", text: "Photo" },
-        { value: "title", text: "Title" },
+        { value: "title", text: "Title", width: "40%" },
         { value: "category", text: "Materials Category" },
         { value: "materialFor", text: "Materials for teacher/student" },
         { value: "type", text: "Type" },
