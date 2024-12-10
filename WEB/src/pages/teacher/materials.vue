@@ -111,21 +111,15 @@ export default {
         instance.UI.disableElements(["leftPanelButton"]);
         instance.UI.disableElements(["searchPanelToggle"]);
         instance.UI.disableElements(["notesPanelToggle"]);
-        // instance.UI.disableElements("annotationEditToolButton");
+        instance.UI.disableElements(["groupedLeftHeaderButtons"]);
+        instance.UI.disableElements([
+          "menuButton",
+          "panToolButton",
+          "annotationEditToolButton",
+        ]);
+        // Add header button that will get file data on click
 
         const { documentViewer } = instance.Core;
-
-        // Add header button that will get file data on click
-        instance.UI.setHeaderItems((header) => {
-          header.update([
-            {
-              type: "toogleElementButton",
-              img: "icon-header-sidebar-line",
-              elemenu: "leftPanel",
-              dataElement: "leftPanelButton",
-            },
-          ]);
-        });
 
         documentViewer.setWatermark({
           // Draw diagonal watermark in middle of the document

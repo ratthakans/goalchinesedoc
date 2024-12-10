@@ -48,15 +48,23 @@
           </template>
 
           <template #item.action="{}">
-            <v-btn color="info" class="text-none"> view </v-btn>
+            <v-btn color="info" class="text-none" @click="openDoc">
+              view
+            </v-btn>
           </template>
         </v-data-table>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col cols="12">
+        <div ref="viewer"></div>
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
+import WebViewer from "@pdftron/webviewer";
 export default {
   name: "StudentMaterials",
   data() {
@@ -92,6 +100,62 @@ export default {
         },
       ],
     };
+  },
+  methods: {
+    openDoc() {
+      WebViewer(
+        {
+          // disabledElements: ["default-top-header"],
+          path: `${process.env.BASE_URL}webviewer`,
+          initialDoc: "https://getsamplefiles.com/download/pptx/sample-2.pptx",
+        },
+        this.$refs.viewer
+      ).then((instance) => {
+        // hide the ribbons
+        instance.UI.disableElements(["default-ribbon-group"]);
+        instance.UI.disableElements(["tools-header"]);
+        instance.UI.disableElements(["leftPanelButton"]);
+        instance.UI.disableElements(["searchPanelToggle"]);
+        instance.UI.disableElements(["notesPanelToggle"]);
+        instance.UI.disableElements(["groupedLeftHeaderButtons"]);
+
+        const { documentViewer } = instance.Core;
+
+        // Add header button that will get file data on click
+        // instance.UI.setHeaderItems((header) => {
+        //   header.update([
+        //     {
+        //       type: "toogleElementButton",
+        //       img: "icon-header-sidebar-line",
+        //       elemenu: "leftPanel",
+        //       dataElement: "leftPanelButton",
+        //     },
+        //   ]);
+        // });
+
+        documentViewer.setWatermark({
+          // Draw diagonal watermark in middle of the document
+          diagonal: {
+            fontSize: 25, // or even smaller size
+            fontFamily: "sans-serif",
+            color: "red",
+            opacity: 50, // from 0 to 100
+            text: "Watermark",
+          },
+
+          // Draw header watermark
+          header: {
+            fontSize: 10,
+            fontFamily: "sans-serif",
+            color: "red",
+            opacity: 70,
+            left: "left watermark",
+            center: "center watermark",
+            right: "",
+          },
+        });
+      });
+    },
   },
 };
 </script>

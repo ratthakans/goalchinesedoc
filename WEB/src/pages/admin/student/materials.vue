@@ -71,7 +71,7 @@
       </v-col>
     </v-row>
 
-    <v-row justify="space-between mt-10">
+    <v-row justify="space-between">
       <v-col cols="4">
         <h5 class="text-h5">
           <span class="red--text">*</span> Select Materials

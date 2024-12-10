@@ -63,7 +63,7 @@
 
     <v-row justify="center">
       <v-col cols="10">
-        <v-subheader>Others setting</v-subheader>
+        <h6 class="text-h6">Others setting</h6>
       </v-col>
       <v-col cols="10">
         <v-row dense>
@@ -71,13 +71,43 @@
             <label class="v-label text-body-2 font-weight-bold">Branch </label>
           </v-col>
           <v-col cols="12">
-            <v-chip class="mx-2" size="large" closable label rounded="lg">
-              B1
-            </v-chip>
+            <v-row>
+              <v-col cols="auto">
+                <v-chip class="mx-2" size="large" closable label rounded="lg">
+                  B1
+                </v-chip>
+              </v-col>
 
-            <v-btn color="info" fab dark x-small depressed>
-              <v-icon>mdi-plus</v-icon>
-            </v-btn>
+              <v-col cols="4" v-if="isvisible.createBranch">
+                <div class="d-flex">
+                  <v-text-field
+                    dense
+                    outlined
+                    single-line
+                    hide-details="auto"
+                    placeholder="Enter branch"
+                  />
+                  <v-btn
+                    color="success"
+                    class="mx-1"
+                    @click="isvisible.createBranch = !isvisible.createBranch"
+                    >save</v-btn
+                  >
+                </div>
+              </v-col>
+              <v-col cols="auto" v-else>
+                <v-btn
+                  color="info"
+                  fab
+                  dark
+                  x-small
+                  depressed
+                  @click="isvisible.createBranch = !isvisible.createBranch"
+                >
+                  <v-icon>mdi-plus</v-icon>
+                </v-btn>
+              </v-col>
+            </v-row>
           </v-col>
         </v-row>
         <v-row dense>
@@ -87,13 +117,43 @@
             </label>
           </v-col>
           <v-col cols="12">
-            <v-chip class="mx-2" size="large" closable label rounded="lg">
-              B1
-            </v-chip>
+            <v-row>
+              <v-col cols="auto">
+                <v-chip class="mx-2" size="large" closable label rounded="lg">
+                  B1
+                </v-chip>
+              </v-col>
 
-            <v-btn color="info" fab dark x-small depressed>
-              <v-icon>mdi-plus</v-icon>
-            </v-btn>
+              <v-col cols="4" v-if="isvisible.materialsType">
+                <div class="d-flex">
+                  <v-text-field
+                    dense
+                    outlined
+                    single-line
+                    hide-details="auto"
+                    placeholder="Enter Materials type"
+                  />
+                  <v-btn
+                    color="success"
+                    class="mx-1"
+                    @click="isvisible.materialsType = !isvisible.materialsType"
+                    >save</v-btn
+                  >
+                </div>
+              </v-col>
+              <v-col cols="auto" v-else>
+                <v-btn
+                  color="info"
+                  fab
+                  dark
+                  x-small
+                  depressed
+                  @click="isvisible.materialsType = !isvisible.materialsType"
+                >
+                  <v-icon>mdi-plus</v-icon>
+                </v-btn>
+              </v-col>
+            </v-row>
           </v-col>
         </v-row>
         <v-row dense>
@@ -103,13 +163,43 @@
             </label>
           </v-col>
           <v-col cols="12">
-            <v-chip class="mx-2" size="large" closable label rounded="lg">
-              B1
-            </v-chip>
+            <v-row>
+              <v-col cols="auto">
+                <v-chip class="mx-2" size="large" closable label rounded="lg">
+                  B1
+                </v-chip>
+              </v-col>
 
-            <v-btn color="info" fab dark x-small depressed>
-              <v-icon>mdi-plus</v-icon>
-            </v-btn>
+              <v-col cols="4" v-if="isvisible.classType">
+                <div class="d-flex">
+                  <v-text-field
+                    dense
+                    outlined
+                    single-line
+                    hide-details="auto"
+                    placeholder="Enter Class type"
+                  />
+                  <v-btn
+                    color="success"
+                    class="mx-1"
+                    @click="isvisible.classType = !isvisible.classType"
+                    >save</v-btn
+                  >
+                </div>
+              </v-col>
+              <v-col cols="auto" v-else>
+                <v-btn
+                  color="info"
+                  fab
+                  dark
+                  x-small
+                  depressed
+                  @click="isvisible.classType = !isvisible.classType"
+                >
+                  <v-icon>mdi-plus</v-icon>
+                </v-btn>
+              </v-col>
+            </v-row>
           </v-col>
         </v-row>
         <v-row dense>
@@ -119,13 +209,43 @@
             </label>
           </v-col>
           <v-col cols="12">
-            <v-chip class="mx-2" size="large" closable label rounded="lg">
-              B1
-            </v-chip>
+            <v-row>
+              <v-col cols="auto">
+                <v-chip class="mx-2" size="large" closable label rounded="lg">
+                  B1
+                </v-chip>
+              </v-col>
 
-            <v-btn color="info" fab dark x-small depressed>
-              <v-icon>mdi-plus</v-icon>
-            </v-btn>
+              <v-col cols="4" v-if="isvisible.studentType">
+                <div class="d-flex">
+                  <v-text-field
+                    dense
+                    outlined
+                    single-line
+                    hide-details="auto"
+                    placeholder="Enter Student type"
+                  />
+                  <v-btn
+                    color="success"
+                    class="mx-1"
+                    @click="isvisible.studentType = !isvisible.studentType"
+                    >save</v-btn
+                  >
+                </div>
+              </v-col>
+              <v-col cols="auto" v-else>
+                <v-btn
+                  color="info"
+                  fab
+                  dark
+                  x-small
+                  depressed
+                  @click="isvisible.studentType = !isvisible.studentType"
+                >
+                  <v-icon>mdi-plus</v-icon>
+                </v-btn>
+              </v-col>
+            </v-row>
           </v-col>
         </v-row>
         <v-row dense>
@@ -135,13 +255,43 @@
             </label>
           </v-col>
           <v-col cols="12">
-            <v-chip class="mx-2" size="large" closable label rounded="lg">
-              B1
-            </v-chip>
+            <v-row>
+              <v-col cols="auto">
+                <v-chip class="mx-2" size="large" closable label rounded="lg">
+                  B1
+                </v-chip>
+              </v-col>
 
-            <v-btn color="info" fab dark x-small depressed>
-              <v-icon>mdi-plus</v-icon>
-            </v-btn>
+              <v-col cols="4" v-if="isvisible.teacherType">
+                <div class="d-flex">
+                  <v-text-field
+                    dense
+                    outlined
+                    single-line
+                    hide-details="auto"
+                    placeholder="Enter Teacher type"
+                  />
+                  <v-btn
+                    color="success"
+                    class="mx-1"
+                    @click="isvisible.teacherType = !isvisible.teacherType"
+                    >save</v-btn
+                  >
+                </div>
+              </v-col>
+              <v-col cols="auto" v-else>
+                <v-btn
+                  color="info"
+                  fab
+                  dark
+                  x-small
+                  depressed
+                  @click="isvisible.teacherType = !isvisible.teacherType"
+                >
+                  <v-icon>mdi-plus</v-icon>
+                </v-btn>
+              </v-col>
+            </v-row>
           </v-col>
         </v-row>
         <v-row dense>
@@ -151,13 +301,43 @@
             </label>
           </v-col>
           <v-col cols="12">
-            <v-chip class="mx-2" size="large" closable label rounded="lg">
-              B1
-            </v-chip>
+            <v-row>
+              <v-col cols="auto">
+                <v-chip class="mx-2" size="large" closable label rounded="lg">
+                  B1
+                </v-chip>
+              </v-col>
 
-            <v-btn color="info" fab dark x-small depressed>
-              <v-icon>mdi-plus</v-icon>
-            </v-btn>
+              <v-col cols="4" v-if="isvisible.materialsFor">
+                <div class="d-flex">
+                  <v-text-field
+                    dense
+                    outlined
+                    single-line
+                    hide-details="auto"
+                    placeholder="Enter Materials for"
+                  />
+                  <v-btn
+                    color="success"
+                    class="mx-1"
+                    @click="isvisible.materialsFor = !isvisible.materialsFor"
+                    >save</v-btn
+                  >
+                </div>
+              </v-col>
+              <v-col cols="auto" v-else>
+                <v-btn
+                  color="info"
+                  fab
+                  dark
+                  x-small
+                  depressed
+                  @click="isvisible.materialsFor = !isvisible.materialsFor"
+                >
+                  <v-icon>mdi-plus</v-icon>
+                </v-btn>
+              </v-col>
+            </v-row>
           </v-col>
         </v-row>
         <v-row dense>
@@ -167,29 +347,93 @@
             </label>
           </v-col>
           <v-col cols="12">
-            <v-chip class="mx-2" size="large" closable label rounded="lg">
-              B1
-            </v-chip>
+            <v-row>
+              <v-col cols="auto">
+                <v-chip class="mx-2" size="large" closable label rounded="lg">
+                  B1
+                </v-chip>
+              </v-col>
 
-            <v-btn color="info" fab dark x-small depressed>
-              <v-icon>mdi-plus</v-icon>
-            </v-btn>
+              <v-col cols="4" v-if="isvisible.materialsCategory">
+                <div class="d-flex">
+                  <v-text-field
+                    dense
+                    outlined
+                    single-line
+                    hide-details="auto"
+                    placeholder="Enter Materials category"
+                  />
+                  <v-btn
+                    color="success"
+                    class="mx-1"
+                    @click="
+                      isvisible.materialsCategory = !isvisible.materialsCategory
+                    "
+                    >save</v-btn
+                  >
+                </div>
+              </v-col>
+              <v-col cols="auto" v-else>
+                <v-btn
+                  color="info"
+                  fab
+                  dark
+                  x-small
+                  depressed
+                  @click="
+                    isvisible.materialsCategory = !isvisible.materialsCategory
+                  "
+                >
+                  <v-icon>mdi-plus</v-icon>
+                </v-btn>
+              </v-col>
+            </v-row>
           </v-col>
         </v-row>
         <v-row dense>
           <v-col cols="12">
             <label class="v-label text-body-2 font-weight-bold">
-              Cerrency
+              Currency
             </label>
           </v-col>
           <v-col cols="12">
-            <v-chip class="mx-2" size="large" closable label rounded="lg">
-              B1
-            </v-chip>
+            <v-row>
+              <v-col cols="auto">
+                <v-chip class="mx-2" size="large" closable label rounded="lg">
+                  B1
+                </v-chip>
+              </v-col>
 
-            <v-btn color="info" fab dark x-small depressed>
-              <v-icon>mdi-plus</v-icon>
-            </v-btn>
+              <v-col cols="4" v-if="isvisible.currency">
+                <div class="d-flex">
+                  <v-text-field
+                    dense
+                    outlined
+                    single-line
+                    hide-details="auto"
+                    placeholder="Enter currency"
+                  />
+                  <v-btn
+                    color="success"
+                    class="mx-1"
+                    @click="isvisible.currency = !isvisible.currency"
+                    >save</v-btn
+                  >
+                </div>
+              </v-col>
+              <v-col cols="auto" v-else>
+                <v-btn
+                  color="info"
+                  fab
+                  dark
+                  x-small
+                  depressed
+                  @click="isvisible.currency = !isvisible.currency"
+                >
+                  <v-icon>mdi-plus</v-icon>
+                </v-btn>
+              </v-col>
+            </v-row>
           </v-col>
         </v-row>
       </v-col>
@@ -204,7 +448,18 @@
 export default {
   name: "SettingPage",
   data() {
-    return {};
+    return {
+      isvisible: {
+        createBranch: false,
+        materialsType: false,
+        classType: false,
+        studentType: false,
+        teacherType: false,
+        materialsFor: false,
+        materialsCategory: false,
+        currency: false,
+      },
+    };
   },
 };
 </script>
