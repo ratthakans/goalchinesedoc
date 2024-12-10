@@ -489,6 +489,27 @@ export default {
           timed: true,
         },
         {
+          name: "PTO2",
+          start: "2024-12-02T18:15:00.000Z",
+          end: "2024-12-03T04:00:00.000Z",
+          color: "grey darken-1",
+          timed: true,
+        },
+        {
+          name: "PTO3",
+          start: "2024-12-02T18:15:00.000Z",
+          end: "2024-12-03T04:00:00.000Z",
+          color: "grey darken-1",
+          timed: true,
+        },
+        {
+          name: "PTO4",
+          start: "2024-12-02T18:15:00.000Z",
+          end: "2024-12-03T04:00:00.000Z",
+          color: "grey darken-1",
+          timed: true,
+        },
+        {
           name: "Travel",
           start: "2024-12-27T09:30:00.000Z",
           end: "2024-12-27T11:30:00.000Z",

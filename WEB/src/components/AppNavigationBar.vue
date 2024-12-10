@@ -84,7 +84,7 @@ export default {
           icon: "mdi-table-account",
           children: [
             {
-              text: "Calenday",
+              text: "Calendar",
               icon: "mdi-calender",
               to: "/admin/classes/calendar",
             },

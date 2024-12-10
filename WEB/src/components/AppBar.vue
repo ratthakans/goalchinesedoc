@@ -1,7 +1,7 @@
 <template>
   <v-app-bar flat app color="white">
     <v-spacer />
-    <v-list>
+    <v-list dense color="transparent">
       <v-list-item>
         <v-list-item-avatar>
           <v-avatar size="42" color="grey">
