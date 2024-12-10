@@ -106,11 +106,11 @@ export default {
         { name: "Total classes Branch 1", value: 20, color: "primary" },
         { name: "Total Student Branch 1", value: 20, color: "success" },
         { name: "Expiring Classes Branch 1", value: 101, color: "warning" },
-        { name: "Montyly income Branch 1", value: 21, color: "error" },
+        { name: "Monthly income Branch 1", value: 21, color: "error" },
         { name: "Total classes Branch 2", value: 20, color: "primary" },
         { name: "Total Student Branch 2", value: 20, color: "success" },
         { name: "Expiring Classes Branch 2", value: 101, color: "warning" },
-        { name: "Montyly income Branch 2", value: 21, color: "error" },
+        { name: "Monthly income Branch 2", value: 21, color: "error" },
       ],
     };
   },

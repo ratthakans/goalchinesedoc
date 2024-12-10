@@ -43,7 +43,6 @@
               label="Branch"
               outlined
               dense
-              :items="['month', 'week', '4day', 'day']"
               hide-details
               style="inline-size: 50px"
             ></v-select>
@@ -66,7 +65,11 @@
           @click:more="viewDay"
           @click:date="viewDay"
           @change="getEvents"
-        ></v-calendar>
+        >
+          <template #event="{ event }">
+            <div class="px-1">{{ event?.name }}</div>
+          </template>
+        </v-calendar>
 
         <v-menu
           v-model="selectedOpenDay"

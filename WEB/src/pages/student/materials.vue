@@ -35,13 +35,16 @@
           :items="items"
         >
           <template #item.image="{ item }">
-            <v-card class="my-2" elevation="2" rounded width="100">
+            <v-avatar size="64" rounded color="grey lighten-4" class="my-2">
               <v-img
                 :src="`https://cdn.vuetifyjs.com/docs/images/graphics/gpus/${item.image}`"
                 height="64"
+                width="64"
                 cover
+                v-if="item.image"
               />
-            </v-card>
+              <v-icon v-else size="45">mdi-notebook-edit</v-icon>
+            </v-avatar>
           </template>
 
           <template #item.action="{}">
@@ -67,7 +70,7 @@ export default {
           text: "Materials No.",
         },
         { value: "image", text: "Photo" },
-        { value: "title", text: "Title" },
+        { value: "title", text: "Title", width: "40%" },
         { value: "category", text: "Materials Category" },
         { value: "type", text: "Materials for teacher/student" },
         { value: "action", text: "Action", sortable: false },
@@ -76,6 +79,13 @@ export default {
         {
           no: "M001",
           image: "1.png",
+          title: "Book",
+          category: "Class 1",
+          type: "Student",
+        },
+        {
+          no: "M001",
+          image: "",
           title: "Book",
           category: "Class 1",
           type: "Student",

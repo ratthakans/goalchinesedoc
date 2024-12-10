@@ -33,6 +33,11 @@ export default {
       userInfo: "getUserinfo",
     }),
   },
+  watch: {
+    userInfo(v) {
+      console.log("v :>> ", v);
+    },
+  },
   mounted() {},
   methods: {
     ...mapActions(useAppStore, { setUserInfo: "setUserInfo" }),

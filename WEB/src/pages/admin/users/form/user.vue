@@ -160,7 +160,7 @@
                 <td>
                   <h6 class="text-h6">Permissions Access</h6>
                 </td>
-                <td colspan="3">
+                <td colspan="4">
                   <div class="d-flex justify-end">
                     <v-checkbox
                       v-model="isSelectAll"
@@ -187,7 +187,16 @@
                     <v-checkbox
                       v-show="Object.hasOwn(permission, 'edit')"
                       v-model="permission.edit"
-                      label="Edit / Delete"
+                      label="Edit"
+                    />
+                  </div>
+                </td>
+                <td>
+                  <div class="d-flex justify-end">
+                    <v-checkbox
+                      v-show="Object.hasOwn(permission, 'delete')"
+                      v-model="permission.delete"
+                      label="Delete"
                     />
                   </div>
                 </td>
@@ -241,18 +250,21 @@ export default {
           name: "Class Calender",
           view: false,
           edit: false,
+          delete: false,
           create: false,
         },
         {
           name: "Class Check",
           view: false,
           edit: false,
+          delete: false,
           create: false,
         },
         {
           name: "Student Management",
           view: false,
           edit: false,
+          delete: false,
           create: false,
         },
         {
@@ -265,6 +277,7 @@ export default {
           name: "Teacher Management",
           view: false,
           edit: false,
+          delete: false,
           create: false,
         },
         {
@@ -277,12 +290,14 @@ export default {
           name: "Metrials Management",
           view: false,
           edit: false,
+          delete: false,
           create: false,
         },
         {
           name: "Users Management",
           view: false,
           edit: false,
+          delete: false,
           create: false,
         },
         {

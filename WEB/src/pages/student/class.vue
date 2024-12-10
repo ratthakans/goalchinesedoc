@@ -10,16 +10,17 @@
           width="100%"
         >
           <v-avatar
-            border="surface lg opacity-100"
             class="mt-2 mx-2"
-            image="https://cdn.vuetifyjs.com/images/john.jpg"
             rounded="xl"
             size="120"
+            color="grey lighten-2"
           >
             <v-img
               src="https://cdn.vuetifyjs.com/images/john.jpg"
               alt="John"
+              v-if="userInfo?.photo"
             ></v-img>
+            <v-icon v-else size="62">mdi-account-school</v-icon>
           </v-avatar>
           <div class="d-flex flex-column justify-center white--text">
             <h4 class="text-h4 font-weight-bold">Nannie</h4>
@@ -68,7 +69,7 @@
     <v-container>
       <v-row>
         <v-col>
-          <v-expansion-panels accordion>
+          <v-expansion-panels accordion mandatory>
             <v-expansion-panel class="">
               <v-expansion-panel-header class="primary--text primary-lighten-4">
                 Class: Class 1

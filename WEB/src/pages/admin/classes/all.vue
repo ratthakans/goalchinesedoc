@@ -55,28 +55,27 @@
           :items="items"
           show-select
         >
-          <template #item.name="{ item }">
-            <div class="d-flex align-center">
-              <v-avatar
-                size="45"
-                :color="item.avatar ? '' : 'grey lighten-4'"
-                :class="item.avatar ? '' : 'v-avatar-light-bg primary--text'"
-                :variant="!item.avatar ? 'tonal' : undefined"
-                tile
-                rounded="lg"
-              >
-                <v-img v-if="item.avatar" :src="item.avatar" />
-                <v-icon>mdi-account</v-icon>
-              </v-avatar>
-              <div class="d-flex flex-column ms-3">
-                <span
-                  class="d-block font-weight-medium text-high-emphasis text-truncate"
-                  >{{ item.name }}</span
-                >
+          <template v-slot:header.data-table-select="{ on, props }">
+            <span class="text-subheading ml-1">All</span>
+            <v-simple-checkbox
+              v-bind="props"
+              v-on="on"
+              hide-details
+            ></v-simple-checkbox>
+          </template>
+
+          <template #item.studyDay="{ item }">
+            <div class="d-flex flex-column">
+              <div v-for="(it, i) in item.studyDay" :key="i">{{ it.day }}</div>
+            </div>
+          </template>
+          <template #item.timeSlot="{ item }">
+            <div class="d-flex flex-column">
+              <div v-for="(it, i) in item.studyDay" :key="i">
+                {{ it.timeSlot }}
               </div>
             </div>
           </template>
-
           <template #item.remaining="{ item }">
             <span :class="{ 'red--text': item.remaining <= 2 }">{{
               item.remaining
@@ -128,32 +127,58 @@ export default {
           value: "no",
           sortable: false,
           text: "Class No.",
+          width: "2%",
         },
-        { value: "name", text: "Class Name" },
-        { value: "studyDay", text: "Study day" },
-        { value: "timeSlot", text: "Time slot" },
-        { value: "teacherName", text: "Teacher name" },
-        { value: "classTime", text: "Total class time", align: "center" },
-        { value: "completed", text: "Completed class", align: "center" },
-        { value: "remaining", text: "Remaining class", align: "center" },
-        { value: "action", text: "Action" },
+        { value: "name", text: "Class Name", width: "*" },
+        { value: "studyDay", text: "Study day", width: "10%" },
+        { value: "timeSlot", text: "Time slot", width: "10%" },
+        { value: "teacherName", text: "Teacher name", width: "10%" },
+        {
+          value: "classTime",
+          text: "Total class time",
+          align: "center",
+          width: "5%",
+        },
+        {
+          value: "completed",
+          text: "Completed class",
+          align: "center",
+          width: "5%",
+        },
+        {
+          value: "remaining",
+          text: "Remaining class",
+          align: "center",
+          width: "5%",
+        },
+        { value: "action", text: "Action", width: "5%" },
       ],
       items: [
         {
           no: "M001",
           name: "Class 1",
-          studyDay: "Monday, Wednesday, Friday",
-          timeSlot: "8:00 AM - 10:00 AM",
           teacherName: "Teacher 1",
           classTime: "30",
           completed: "10",
           remaining: "20",
+          studyDay: [
+            {
+              day: "Monday",
+              timeSlot: "8:00 - 10:00",
+            },
+            {
+              day: "Wednesday",
+              timeSlot: "8:00 - 10:00",
+            },
+            {
+              day: "Friday",
+              timeSlot: "8:00 - 10:00",
+            },
+          ],
         },
         {
           no: "M001",
           name: "Class 1",
-          studyDay: "Monday, Wednesday, Friday",
-          timeSlot: "8:00 AM - 10:00 AM",
           teacherName: "Teacher 1",
           classTime: "30",
           completed: "10",

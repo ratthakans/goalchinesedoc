@@ -17,7 +17,7 @@
     <v-container>
       <v-row>
         <v-col>
-          <v-expansion-panels accordion>
+          <v-expansion-panels accordion mandatory>
             <v-expansion-panel class="">
               <v-expansion-panel-header class="primary--text primary-lighten-4">
                 Class: Class 1

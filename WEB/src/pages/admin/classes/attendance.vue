@@ -16,26 +16,22 @@
           :filter-keys="['title', 'category', 'type']"
           :items="items"
         >
-          <template #item.name="{ item }">
-            <div class="d-flex align-center">
-              <v-avatar
-                size="45"
-                :color="item.avatar ? '' : 'grey lighten-4'"
-                :class="item.avatar ? '' : 'v-avatar-light-bg primary--text'"
-                :variant="!item.avatar ? 'tonal' : undefined"
-                tile
-                rounded="lg"
-              >
-                <v-img v-if="item.avatar" :src="item.avatar" />
-                <v-icon>mdi-account</v-icon>
-              </v-avatar>
-              <div class="d-flex flex-column ms-3">
-                <span
-                  class="d-block font-weight-medium text-high-emphasis text-truncate"
-                  >{{ item.name }}</span
-                >
+          <template #item.studyDay="{ item }">
+            <div class="d-flex flex-column">
+              <div v-for="(it, i) in item.studyDay" :key="i">{{ it.day }}</div>
+            </div>
+          </template>
+          <template #item.timeSlot="{ item }">
+            <div class="d-flex flex-column">
+              <div v-for="(it, i) in item.studyDay" :key="i">
+                {{ it.timeSlot }}
               </div>
             </div>
+          </template>
+          <template #item.remaining="{ item }">
+            <span :class="{ 'red--text': item.remaining <= 2 }">{{
+              item.remaining
+            }}</span>
           </template>
 
           <template #item.teacherLeave="{ item }">
@@ -200,26 +196,40 @@ export default {
           value: "no",
           sortable: false,
           text: "Class No.",
+          width: "2%",
         },
-        { value: "name", text: "Class Name" },
-        { value: "studyDay", text: "Study day" },
-        { value: "timeSlot", text: "Time slot" },
-        { value: "teacherLeave", text: "Teacher leave" },
-        { value: "studentLeave", text: "Student leave" },
+        { value: "name", text: "Class Name", width: "20%" },
+        { value: "studyDay", text: "Study day", width: "10%" },
+        { value: "timeSlot", text: "Time slot", width: "10%" },
+        { value: "teacherLeave", text: "Teacher leave", width: "5%" },
+        { value: "studentLeave", text: "Student leave", width: "5%" },
         {
           value: "times",
           text: "Times",
-          width: "300",
+          width: "*",
           class: "overflow-x-auto",
         },
-        { value: "action", text: "Action" },
+        { value: "action", text: "Action", width: "5%" },
       ],
       items: [
         {
           no: "M001",
           name: "Class 1",
-          studyDay: "Monday, Wednesday, Friday",
-          timeSlot: "8:00 AM - 10:00 AM",
+
+          studyDay: [
+            {
+              day: "Monday",
+              timeSlot: "8:00 - 10:00",
+            },
+            {
+              day: "Wednesday",
+              timeSlot: "8:00 - 10:00",
+            },
+            {
+              day: "Friday",
+              timeSlot: "8:00 - 10:00",
+            },
+          ],
           teacherLeave: 0,
           studentLeave: 1,
           times: [
