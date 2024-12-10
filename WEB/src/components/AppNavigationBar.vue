@@ -57,6 +57,8 @@
 </template>
 
 <script>
+import { mapState } from "pinia";
+import { useAppStore } from "@/stores/app";
 export default {
   data() {
     return {
@@ -64,8 +66,13 @@ export default {
       menus: [],
     };
   },
+  computed: {
+    ...mapState(useAppStore, {
+      userInfo: "getUserinfo",
+    }),
+  },
   mounted() {
-    if (this.$auth.check(["admin"])) {
+    if (this.userInfo?.role === "admin") {
       this.menus = [
         {
           text: "Dashboard",
@@ -117,7 +124,7 @@ export default {
       ];
     }
 
-    if (this.$auth.check(["student"])) {
+    if (this.userInfo?.role === "student") {
       this.menus = [
         { text: "Classes", icon: "mdi-table-account", to: "/student/class" },
         { text: "Materials", icon: "mdi-file", to: "/student/materials" },
@@ -129,7 +136,7 @@ export default {
       ];
     }
 
-    if (this.$auth.check(["teacher"])) {
+    if (this.userInfo?.role === "teacher") {
       this.menus = [
         { text: "Classes", icon: "mdi-table-account", to: "/teacher/class" },
         { text: "Materials", icon: "mdi-file", to: "/teacher/materials" },

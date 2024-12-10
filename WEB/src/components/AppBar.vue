@@ -42,13 +42,10 @@ export default {
   methods: {
     ...mapActions(useAppStore, { setUserInfo: "setUserInfo" }),
     logout() {
-      this.$auth
-        .logout({
-          redirect: { name: "login" },
-        })
-        .then(() => {
-          this.setUserInfo(null);
-        });
+      this.setUserInfo(null);
+      localStorage.removeItem("userInfo");
+      localStorage.removeItem("token");
+      this.$router.push({ name: "login" });
     },
   },
 };

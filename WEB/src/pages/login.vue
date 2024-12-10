@@ -40,7 +40,7 @@
       </v-row>
       <v-row justify="center">
         <v-col cols="6">
-          <v-btn block color="primary" depressed @click="login">
+          <v-btn block color="primary" depressed @click="loginUser">
             Sign In
           </v-btn>
         </v-col>
@@ -64,33 +64,26 @@ export default {
   },
   methods: {
     ...mapActions(useAppStore, { setUserInfo: "setUserInfo" }),
-    login() {
-      this.$auth
-        .login({
-          data: {
-            username: this.username,
-            password: this.password,
-          }, // Axios
-          redirect: null,
-          fetchUser: false,
-          staySignedIn: true,
-        })
-        .then(
-          ({ data }) => {
-            this.$auth.token(null, data.token, false);
-            this.$auth.user(data);
-            this.setUserInfo(data);
-            if (data.role === "admin")
-              this.$router.replace({ name: "dashboard" });
-            else if (data.role === "student")
-              this.$router.replace({ name: "studentClass" });
-            else if (data.role === "teacher")
-              this.$router.replace({ name: "teacherClass" });
-          },
-          (res) => {
-            console.log("🚀 ~ login ~ res:", res);
-          }
-        );
+    async loginUser() {
+      try {
+        const { data } = await this.axios.post("/auth/login", {
+          username: this.username,
+          password: this.password,
+        });
+
+        this.setUserInfo(data);
+        localStorage.setItem("token", data.token);
+
+        if (data.role === "admin") {
+          this.$router.push({ name: "dashboard" });
+        } else if (data.role === "teacher") {
+          this.$router.push({ name: "teacherClass" });
+        } else if (data.role === "student") {
+          this.$router.push({ name: "studentClass" });
+        }
+      } catch (error) {
+        console.error("Error logging in:", error);
+      }
     },
   },
 };

@@ -1,5 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
+import { useAppStore } from "@/stores/app";
+
 import LoginLayout from "../layouts/login";
 import DefaultLayout from "../layouts/default";
 
@@ -342,7 +344,7 @@ const routes = [
     name: "studentClass",
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
-      auth: "student",
+      auth: { roles: ["student"] },
     },
     component: StudentClass,
   },
@@ -351,7 +353,7 @@ const routes = [
     name: "studentMaterialsPage",
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
-      auth: "student",
+      auth: { roles: ["student"] },
     },
     component: StudentMaterialsPage,
   },
@@ -360,7 +362,7 @@ const routes = [
     name: "studentlibrary",
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
-      auth: "student",
+      auth: { roles: ["student"] },
     },
     component: Studentlibrary,
   },
@@ -371,7 +373,7 @@ const routes = [
     name: "teacherClass",
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
-      auth: "teacher",
+      auth: { roles: ["teacher"] },
     },
     component: TeacherClass,
   },
@@ -380,7 +382,7 @@ const routes = [
     name: "tacherMaterialsPage",
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
-      auth: "teacher",
+      auth: { roles: ["teacher"] },
     },
     component: TeacherMaterialsPage,
   },
@@ -402,10 +404,36 @@ const routes = [
   },
 ];
 
-Vue.router = new VueRouter({
+const router = new VueRouter({
   mode: "history",
   base: process.env.BASE_URL,
   routes,
 });
 
-export default Vue.router;
+router.beforeEach((to, from, next) => {
+  const allowedRoles = to.meta?.auth?.roles;
+  if (allowedRoles) {
+    // Check if user is authenticated
+    const userStore = useAppStore();
+    const userInfo = userStore.userInfo;
+    if (userInfo) {
+      // Decode the JWT to get user data
+
+      if (allowedRoles.includes(userInfo.role)) {
+        // User has the required role
+        next();
+      } else {
+        // User doesn't have the required role; redirect to home
+        next("/403");
+      }
+    } else {
+      // User is not authenticated; redirect to login
+      next("/");
+    }
+  } else {
+    // Allow access to routes without specified allowedRoles
+    next();
+  }
+});
+
+export default router;
