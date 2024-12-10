@@ -6,7 +6,7 @@
       </v-list-item>
     </div>
 
-    <v-list nav dense dark flat>
+    <v-list dark flat>
       <template v-for="(item, i) in menus">
         <v-list-item
           :key="i"

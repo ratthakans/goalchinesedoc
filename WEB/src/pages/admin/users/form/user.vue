@@ -247,7 +247,7 @@ export default {
           create: false,
         },
         {
-          name: "Class Calender",
+          name: "Class Calendar",
           view: false,
           edit: false,
           delete: false,
@@ -259,7 +259,7 @@ export default {
           edit: false,
         },
         {
-          name: "Class Check",
+          name: "Check Class Attendance",
           view: false,
           edit: false,
           delete: false,
@@ -305,10 +305,10 @@ export default {
           delete: false,
           create: false,
         },
-        {
-          name: "Library Management",
-          view: false,
-        },
+        // {
+        //   name: "Library Management",
+        //   view: false,
+        // },
         {
           name: "Setting",
           view: false,
