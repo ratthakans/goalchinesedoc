@@ -281,7 +281,7 @@
                   <span class="red--text mr-2">*</span>End date :
                 </label>
                 <v-menu
-                  v-model="menu"
+                  v-model="menu2"
                   :close-on-content-click="false"
                   :nudge-right="40"
                   transition="scale-transition"
@@ -304,7 +304,7 @@
                   </template>
                   <v-date-picker
                     v-model="date"
-                    @input="menu = false"
+                    @input="menu2 = false"
                   ></v-date-picker>
                 </v-menu>
               </v-col>
@@ -323,18 +323,7 @@
               </v-col>
             </v-row>
 
-            <v-row
-              v-for="(item, i) in [
-                'Mon',
-                'Tue',
-                'Wed',
-                'Thu',
-                'Fri',
-                'Sat',
-                'Sun',
-              ]"
-              :key="i"
-            >
+            <v-row v-for="(item, i) in itemsTimes" :key="i">
               <v-col cols="2" class="d-flex align-center">
                 <label class="v-label text-subtitle-2" v-if="i == 0">
                   <span class="red--text mr-2">*</span>Start time :
@@ -343,39 +332,81 @@
               <v-col cols="12" md="2">
                 <v-checkbox
                   v-model="selectedDays"
-                  :label="item"
-                  :value="item"
+                  :label="item.text"
+                  :value="item.value"
                   hide-details="auto"
                   class="mt-1"
                 ></v-checkbox>
               </v-col>
               <v-col cols="12" md="2">
-                <v-text-field
-                  label="Select time"
-                  dense
-                  type="time"
-                  outlined
-                  single-line
-                  hide-details="auto"
-                ></v-text-field>
+                <v-menu
+                  :ref="setRef"
+                  :close-on-content-click="false"
+                  :nudge-right="40"
+                  transition="scale-transition"
+                  offset-y
+                  max-width="290px"
+                  min-width="290px"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-text-field
+                      v-model="item.startTime"
+                      label="--:--"
+                      readonly
+                      dense
+                      outlined
+                      single-line
+                      hide-details="auto"
+                      v-bind="attrs"
+                      v-on="on"
+                    ></v-text-field>
+                  </template>
+                  <v-time-picker
+                    v-model="item.startTime"
+                    full-width
+                    @click:minute="itemsRef[i].save(item.startTime)"
+                    format="24hr"
+                  ></v-time-picker>
+                </v-menu>
               </v-col>
               <v-col cols="auto" md="auto" class="d-flex align-center">
                 <label class="v-label mb-2 text-subtitle-2"> To </label>
               </v-col>
               <v-col cols="12" md="2">
-                <v-text-field
-                  label="Select time"
-                  dense
-                  type="time"
-                  outlined
-                  single-line
-                  hide-details="auto"
-                ></v-text-field>
+                <v-menu
+                  :ref="setRef2"
+                  :close-on-content-click="false"
+                  :nudge-right="40"
+                  transition="scale-transition"
+                  offset-y
+                  max-width="290px"
+                  min-width="290px"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-text-field
+                      v-model="item.endTime"
+                      label="--:--"
+                      readonly
+                      dense
+                      outlined
+                      single-line
+                      hide-details="auto"
+                      v-bind="attrs"
+                      v-on="on"
+                    ></v-text-field>
+                  </template>
+                  <v-time-picker
+                    v-model="item.endTime"
+                    full-width
+                    @click:minute="itemsRef2[i].save(item.endTime)"
+                    format="24hr"
+                  ></v-time-picker>
+                </v-menu>
               </v-col>
               <v-col cols="" class="d-flex align-center">
                 <label class="v-label mr-2 text-subtitle-2"> Note : </label>
                 <v-text-field
-                  v-model="formInput.title"
+                  v-model="item.note"
                   dense
                   outlined
                   hide-details="auto"
@@ -577,6 +608,16 @@
                   </v-list-item>
                 </v-list>
               </v-col>
+              <v-col cols="4">
+                <label class="v-label mb-2 text-subtitle-2">Currency : </label>
+                <v-select
+                  dense
+                  :items="['USD', 'EUR', 'INR']"
+                  outlined
+                  single-line
+                  hide-details="auto"
+                />
+              </v-col>
             </v-row>
           </v-card-text>
         </v-card>
@@ -591,7 +632,9 @@ export default {
   data() {
     return {
       menu: false,
+      menu2: false,
       menuTime: false,
+      time: null,
       date: null,
       selectedDays: [],
       selectedCheckList: [],
@@ -629,7 +672,68 @@ export default {
           color: "info",
         },
       ],
+      itemsRef: [],
+      itemsRef2: [],
+      itemsTimes: [
+        {
+          text: "Mon",
+          value: "mon",
+          startTime: "",
+          endTime: "",
+          note: "",
+        },
+        {
+          text: "Tue",
+          value: "tue",
+          startTime: "",
+          endTime: "",
+          note: "",
+        },
+        {
+          text: "Wed",
+          value: "wed",
+          startTime: "",
+          endTime: "",
+          note: "",
+        },
+        {
+          text: "Thu",
+          value: "thu",
+          startTime: "",
+          endTime: "",
+          note: "",
+        },
+        {
+          text: "Fri",
+          value: "fri",
+          startTime: "",
+          endTime: "",
+          note: "",
+        },
+        {
+          text: "Sat",
+          value: "sat",
+          startTime: "",
+          endTime: "",
+          note: "",
+        },
+        {
+          text: "Sun",
+          value: "sun",
+          startTime: "",
+          endTime: "",
+          note: "",
+        },
+      ],
     };
+  },
+  methods: {
+    setRef(e) {
+      return this.itemsRef.push(e);
+    },
+    setRef2(e) {
+      return this.itemsRef2.push(e);
+    },
   },
 };
 </script>
