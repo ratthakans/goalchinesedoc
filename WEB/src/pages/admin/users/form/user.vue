@@ -253,11 +253,7 @@ export default {
           delete: false,
           create: false,
         },
-        {
-          name: "Class teacher fee",
-          view: false,
-          edit: false,
-        },
+
         {
           name: "Check Class Attendance",
           view: false,
@@ -267,6 +263,20 @@ export default {
         },
         {
           name: "Student Management",
+          view: false,
+          edit: false,
+          delete: false,
+          create: false,
+        },
+        {
+          name: "Student Payment",
+          view: false,
+          edit: false,
+          delete: false,
+          create: false,
+        },
+        {
+          name: "Student Point",
           view: false,
           edit: false,
           delete: false,
@@ -284,6 +294,11 @@ export default {
           edit: false,
           delete: false,
           create: false,
+        },
+        {
+          name: "Teacher fee Management",
+          view: false,
+          edit: false,
         },
         {
           name: "Teacher Metrials Management",
