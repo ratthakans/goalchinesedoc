@@ -69,37 +69,7 @@
     <v-container>
       <v-row>
         <v-col>
-          <v-expansion-panels accordion mandatory>
-            <v-expansion-panel class="">
-              <v-expansion-panel-header class="primary--text primary-lighten-4">
-                Class: Class 1
-              </v-expansion-panel-header>
-              <v-expansion-panel-content class="pa-0">
-                <v-simple-table class="pa-0">
-                  <tbody>
-                    <tr v-for="item in items" :key="item.name">
-                      <th width="20px" class="border-e-sm">
-                        {{ item.name }}
-                      </th>
-
-                      <td>
-                        <v-chip
-                          v-for="subject in item.items"
-                          :key="subject.name"
-                          class="ma-2 text-primary"
-                          variant="flat"
-                          label
-                          color="primary-lighten-4"
-                        >
-                          {{ subject.name }} {{ subject.time }}
-                        </v-chip>
-                      </td>
-                    </tr>
-                  </tbody>
-                </v-simple-table>
-              </v-expansion-panel-content>
-            </v-expansion-panel>
-          </v-expansion-panels>
+          <CalendarComponent class="mt-6" :eventsItems="events" />
         </v-col>
       </v-row>
     </v-container>
@@ -107,25 +77,34 @@
 </template>
 
 <script>
+import CalendarComponent from "@/components/Calendar.vue";
 export default {
   name: "StudentClass",
+  components: {
+    CalendarComponent,
+  },
   data() {
     return {
-      items: [
+      events: [
         {
-          name: "Monday",
-          items: [
-            { name: "Science", time: "(02:30 PM - 05:30 PM)" },
-            { name: "Math", time: "(02:30 PM - 05:30 PM)" },
-            { name: "English", time: "(02:30 PM - 05:30 PM)" },
-          ],
+          name: "เดี่ยว - Nannie",
+          start: "2024-12-19 08:00",
+          end: "2024-12-19 10:30",
+          color: "cyan",
+          time: true,
         },
         {
-          name: "Tuesday",
-          items: [
-            { name: "Science", time: "(02:30 PM - 05:30 PM)" },
-            { name: "English", time: "(02:30 PM - 05:30 PM)" },
-          ],
+          name: "เดี่ยว - Nannie",
+          start: "2024-12-17 08:00",
+          end: "2024-12-17 10:30",
+          color: "cyan",
+          time: true,
+        },
+        {
+          name: "เดี่ยว - Nannie",
+          start: "2024-12-27 08:00",
+          end: "2024-12-27 10:30",
+          color: "cyan",
         },
       ],
     };

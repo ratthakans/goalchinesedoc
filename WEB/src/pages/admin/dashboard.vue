@@ -84,7 +84,7 @@
       </v-col>
     </v-row>
 
-    <CalendarComponent class="mt-6" />
+    <CalendarComponent class="mt-6" :eventsItems="events" isAdmin />
   </v-container>
 </template>
 
@@ -97,6 +97,84 @@ export default {
   },
   data() {
     return {
+      events: [
+        {
+          name: "เดี่ยว - Nannie",
+          start: "2024-12-19 08:00",
+          end: "2024-12-19 10:30",
+          color: "cyan",
+          time: true,
+        },
+        {
+          name: "เดี่ยว - Nannie",
+          start: "2024-12-17 08:00",
+          end: "2024-12-17 10:30",
+          color: "cyan",
+          time: true,
+        },
+        {
+          name: "เดี่ยว - Nannie",
+          start: "2024-12-27 08:00",
+          end: "2024-12-27 10:30",
+          color: "cyan",
+        },
+        {
+          name: "Event",
+          start: "2024-12-10 06:30",
+          end: "2024-12-10 07:30",
+          color: "green",
+          timed: true,
+        },
+        {
+          name: "Event",
+          start: "2024-12-28 09:15",
+          end: "2024-12-28 11:15",
+          color: "grey darken-1",
+          timed: true,
+        },
+        {
+          name: "PTO",
+          start: "2024-12-02 18:15",
+          end: "2024-12-03 04:00",
+          color: "grey darken-1",
+          timed: true,
+        },
+        {
+          name: "PTO2",
+          start: "2024-12-02 18:15",
+          end: "2024-12-03 04:00",
+          color: "grey darken-1",
+          timed: true,
+        },
+        {
+          name: "PTO3",
+          start: "2024-12-02 18:15",
+          end: "2024-12-03 04:00",
+          color: "grey darken-1",
+          timed: true,
+        },
+        {
+          name: "PTO4",
+          start: "2024-12-02 18:15",
+          end: "2024-12-03 04:00",
+          color: "grey darken-1",
+          timed: true,
+        },
+        {
+          name: "Travel",
+          start: "2024-12-27 09:30",
+          end: "2024-12-27 11:30",
+          color: "grey darken-1",
+          timed: true,
+        },
+        {
+          name: "Travel",
+          start: "2024-12-30 15:45",
+          end: "2024-12-30 17:15",
+          color: "indigo",
+          timed: true,
+        },
+      ],
       totalList: [
         { name: "Total Student", value: 20, color: "warning" },
         { name: "Total Teacher", value: 101, color: "info" },

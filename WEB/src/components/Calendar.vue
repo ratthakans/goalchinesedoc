@@ -64,8 +64,8 @@
           @click:event="showEvent"
           @click:more="viewMore"
           @click:date="viewDay"
-          @change="getEvents"
         >
+          <!-- @change="getEvents" -->
           <template #event="{ event }">
             <div class="px-1">{{ event?.name }}</div>
           </template>
@@ -82,6 +82,7 @@
               {{ dateToYMD(selectedEventDay?.date) }}
               <v-spacer></v-spacer>
               <v-btn
+                v-if="isAdmin"
                 @click.stop="dialog = true"
                 color="primary"
                 x-small
@@ -102,10 +103,10 @@
                     <div class="d-flex flex-row">
                       <div class="d-flex flex-column">
                         <h6 class="subtitle-1">
-                          {{ event.start.toLocaleTimeString() }}
+                          {{ new Date(event.start).toLocaleTimeString() }}
                         </h6>
                         <span class="body-2">
-                          {{ event.end.toLocaleTimeString() }}
+                          {{ new Date(event.end).toLocaleTimeString() }}
                         </span>
                       </div>
                       <v-divider
@@ -116,7 +117,7 @@
                       <div class="d-flex flex-column">
                         <h6 class="subtitle-1">{{ event.name }}</h6>
                         <span class="body-2">
-                          {{ event.end.toLocaleTimeString() }}
+                          {{ new Date(event.end).toLocaleTimeString() }}
                         </span>
                       </div>
                     </div>
@@ -141,7 +142,7 @@
           <v-card width="350px" flat>
             <v-card-title class="pb-0">
               <v-spacer></v-spacer>
-              <v-menu>
+              <v-menu v-if="isAdmin">
                 <template #activator="{ on, attrs }">
                   <v-btn icon v-bind="attrs" v-on="on" small>
                     <v-icon>mdi-dots-vertical</v-icon>
@@ -183,7 +184,13 @@
                     {{ dateToYMDShort(selectedEvent?.start) }}
                   </h6>
                   <h4 class="text-h5">
-                    {{ selectedEvent.start?.toLocaleTimeString() }}
+                    {{
+                      new Date(selectedEvent.start)?.toLocaleTimeString([], {
+                        hourCycle: "h23",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })
+                    }}
                   </h4>
                 </v-col>
                 <v-col cols="auto">
@@ -194,7 +201,13 @@
                     {{ dateToYMDShort(selectedEvent?.end) }}
                   </h6>
                   <h4 class="text-h5">
-                    {{ selectedEvent.end?.toLocaleTimeString() }}
+                    {{
+                      new Date(selectedEvent.end)?.toLocaleTimeString([], {
+                        hourCycle: "h23",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })
+                    }}
                   </h4>
                 </v-col>
               </v-row>
@@ -469,6 +482,16 @@
 <script>
 export default {
   name: "CalendarComponent",
+  props: {
+    eventsItems: {
+      type: Array,
+      default: () => [],
+    },
+    isAdmin: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data: () => ({
     time: "14:30",
     menu: false,
@@ -487,7 +510,7 @@ export default {
     selectedOpenDay: false,
     selectedElementDay: null,
     selectedEventDay: {},
-    events: [],
+
     colors: [
       "blue",
       "indigo",
@@ -523,6 +546,14 @@ export default {
       "#b38bdc",
     ],
   }),
+  watch: {
+    eventsItems: {
+      immediate: true,
+      handler(val) {
+        this.events = val;
+      },
+    },
+  },
   mounted() {
     // this.$refs.calendar.checkChange();
   },
@@ -531,8 +562,8 @@ export default {
       const open = () => {
         const findEvent = this.events.filter((event) => {
           return (
-            event.start <= new Date(`${date}T23:59:59`) &&
-            new Date(`${date}T00:00:00`) <= event.end
+            new Date(event.start) <= new Date(`${date} 23:59:59`) &&
+            new Date(`${date} 00:00:00`) <= new Date(event.end)
           );
         });
 
