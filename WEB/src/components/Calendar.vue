@@ -137,7 +137,6 @@
           :close-on-content-click="false"
           :activator="selectedElement"
           offset-x
-          z-index="999999"
         >
           <v-card width="350px" flat>
             <v-card-title class="pb-0">
@@ -152,12 +151,19 @@
                 <v-list dense :lines="false">
                   <v-list-item
                     v-for="(menu, i) in [
-                      { title: 'Edit' },
-                      { title: 'Copy to multiple dates' },
+                      {
+                        title: 'Edit',
+                        onClick: () => (dialog = true),
+                      },
+                      {
+                        title: 'Copy to multiple dates',
+                        onClick: () => (dialogCopyClass = true),
+                      },
                       { title: 'Delete' },
                     ]"
                     :key="i"
                     link
+                    @click="menu.onClick"
                   >
                     <v-list-item-title>{{ menu.title }}</v-list-item-title>
                   </v-list-item>
@@ -245,7 +251,15 @@
 
     <v-dialog v-model="dialog" max-width="450">
       <v-card>
-        <v-card-title class="text-h5"> Title </v-card-title>
+        <v-card-title class="text-h5">
+          <v-text-field
+            dense
+            outlined
+            single-line
+            hide-details="auto"
+            placeholder="Enter title"
+          />
+        </v-card-title>
 
         <v-card-text>
           <v-row dense>
@@ -261,9 +275,42 @@
 
               <span class="subtitle-2 mx-2">Starts :</span>
 
-              <div class="ml-auto">
+              <div class="ml-auto d-flex align-center">
                 <v-chip class="mx-2" small label> Fri, Nov 8 2024 </v-chip>
-                <v-chip class="mx-2" small label> 9:30 PM </v-chip>
+                <!-- <v-chip class="mx-2" small label> 9:30 PM </v-chip> -->
+                <v-menu
+                  ref="menu"
+                  v-model="menu"
+                  :close-on-content-click="false"
+                  :nudge-right="40"
+                  :return-value.sync="time"
+                  transition="scale-transition"
+                  offset-y
+                  max-width="290px"
+                  min-width="290px"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-text-field
+                      v-model="time"
+                      label="Picker in menu"
+                      readonly
+                      dense
+                      outlined
+                      single-line
+                      hide-details="auto"
+                      v-bind="attrs"
+                      v-on="on"
+                      style="max-width: 70px"
+                    ></v-text-field>
+                  </template>
+                  <v-time-picker
+                    v-if="menu"
+                    v-model="time"
+                    full-width
+                    @click:minute="$refs.menu.save(time)"
+                    format="24hr"
+                  ></v-time-picker>
+                </v-menu>
               </div>
             </v-col>
             <v-col cols="12" class="d-flex align-center">
@@ -271,9 +318,42 @@
 
               <span class="subtitle-2 mx-2">End :</span>
 
-              <div class="ml-auto">
+              <div class="ml-auto d-flex align-center">
                 <v-chip class="mx-2" small label> Fri, Nov 8 2024 </v-chip>
-                <v-chip class="mx-2" small label> 9:30 PM </v-chip>
+                <!-- <v-chip class="mx-2" small label> 9:30 PM </v-chip> -->
+                <v-menu
+                  ref="menu2"
+                  v-model="menu2"
+                  :close-on-content-click="false"
+                  :nudge-right="40"
+                  :return-value.sync="time"
+                  transition="scale-transition"
+                  offset-y
+                  max-width="290px"
+                  min-width="290px"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-text-field
+                      v-model="time"
+                      label="Picker in menu"
+                      readonly
+                      dense
+                      outlined
+                      single-line
+                      hide-details="auto"
+                      v-bind="attrs"
+                      v-on="on"
+                      style="max-width: 70px"
+                    ></v-text-field>
+                  </template>
+                  <v-time-picker
+                    v-if="menu2"
+                    v-model="time"
+                    full-width
+                    @click:minute="$refs.menu2.save(time)"
+                    format="24hr"
+                  ></v-time-picker>
+                </v-menu>
               </div>
             </v-col>
             <v-col cols="12" class="d-flex align-center">
@@ -294,8 +374,7 @@
               <v-icon color="primary">mdi-link</v-icon>
 
               <span class="subtitle-2 mx-2">Link :</span>
-
-              <span>test</span>
+              <v-text-field dense outlined single-line hide-details="auto" />
             </v-col>
             <v-col cols="12" class="d-flex align-center">
               <v-icon color="primary">mdi-clock-time-five-outline</v-icon>
@@ -316,6 +395,26 @@
 
               <span class="subtitle-2 mx-2">Coral pink :</span>
 
+              <v-item-group>
+                <v-item
+                  v-for="(color, i) in listColors"
+                  :key="i"
+                  v-slot="{ active, toggle }"
+                >
+                  <v-chip
+                    class="ma-1"
+                    :color="color"
+                    :input-value="active"
+                    @click="toggle"
+                    dark
+                    small
+                  >
+                    <v-icon small v-if="active">mdi-check</v-icon>
+                  </v-chip>
+                </v-item>
+              </v-item-group>
+            </v-col>
+            <v-col cols="12">
               <span>
                 <v-avatar color="primary" size="30">
                   <span class="white--text subtitle-1">N</span></v-avatar
@@ -343,6 +442,27 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+
+    <v-dialog
+      ref="dialogCopyClass"
+      v-model="dialogCopyClass"
+      persistent
+      width="290px"
+    >
+      <v-date-picker v-model="selectedDate" multiple scrollable>
+        <v-spacer></v-spacer>
+        <v-btn text color="primary" @click="dialogCopyClass = false">
+          Cancel
+        </v-btn>
+        <v-btn
+          text
+          color="primary"
+          @click="$refs.dialogCopyClass.save(selectedDate)"
+        >
+          OK
+        </v-btn>
+      </v-date-picker>
+    </v-dialog>
   </div>
 </template>
 
@@ -350,6 +470,9 @@
 export default {
   name: "CalendarComponent",
   data: () => ({
+    time: "14:30",
+    menu: false,
+    menu2: false,
     focus: "",
     type: "month",
     typeToLabel: {
@@ -385,6 +508,20 @@ export default {
       "Party",
     ],
     dialog: false,
+    dialogCopyClass: false,
+    selectedDate: [],
+    listColors: [
+      "#2ecc87",
+      "#3dc2c8",
+      "#47b2f7",
+      // "#948078",
+      // "#212121",
+      "#e73b3b",
+      "#f35f8c",
+      "#fb7f77",
+      "#fdc02d",
+      "#b38bdc",
+    ],
   }),
   mounted() {
     // this.$refs.calendar.checkChange();

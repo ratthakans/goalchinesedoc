@@ -32,6 +32,17 @@
           </template>
         </v-select>
       </v-col>
+      <v-col cols="12" md="6">
+        <v-file-input
+          dense
+          outlined
+          hide-details="auto"
+          placeholder="No file chosen"
+          persistent-placeholder
+        >
+          <template #label> Upload Photo : </template>
+        </v-file-input>
+      </v-col>
     </v-row>
 
     <v-row>

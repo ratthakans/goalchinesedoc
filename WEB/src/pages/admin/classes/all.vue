@@ -54,9 +54,12 @@
           :filter-keys="['title', 'category', 'type']"
           :items="items"
           show-select
+          class="text-subtitle-1 grey--text text--darken-3"
         >
           <template v-slot:header.data-table-select="{ on, props }">
-            <span class="text-subheading ml-1">All</span>
+            <span class="text-subtitle-2 grey--text text--darken-5 ml-1"
+              >All</span
+            >
             <v-simple-checkbox
               v-bind="props"
               v-on="on"
@@ -128,30 +131,59 @@ export default {
           sortable: false,
           text: "Class No.",
           width: "2%",
+          class: "text-subtitle-2  grey--text text--darken-5",
         },
-        { value: "name", text: "Class Name", width: "*" },
-        { value: "studyDay", text: "Study day", width: "10%" },
-        { value: "timeSlot", text: "Time slot", width: "10%" },
-        { value: "teacherName", text: "Teacher name", width: "10%" },
+        {
+          value: "name",
+          text: "Class Name",
+          width: "*",
+          class: "text-subtitle-2  grey--text text--darken-5",
+        },
+        {
+          value: "studyDay",
+          text: "Study day",
+          width: "10%",
+          class: "text-subtitle-2  grey--text text--darken-5",
+        },
+        {
+          value: "timeSlot",
+          text: "Time slot",
+          width: "10%",
+          class: "text-subtitle-2  grey--text text--darken-5",
+        },
+        {
+          value: "teacherName",
+          text: "Teacher name",
+          width: "10%",
+          class: "text-subtitle-2  grey--text text--darken-5",
+        },
         {
           value: "classTime",
           text: "Total class time",
           align: "center",
           width: "5%",
+          class: "text-subtitle-2  grey--text text--darken-5",
         },
         {
           value: "completed",
           text: "Completed class",
           align: "center",
           width: "5%",
+          class: "text-subtitle-2  grey--text text--darken-5",
         },
         {
           value: "remaining",
           text: "Remaining class",
           align: "center",
           width: "5%",
+          class: "text-subtitle-2  grey--text text--darken-5",
         },
-        { value: "action", text: "Action", width: "5%" },
+        {
+          value: "action",
+          text: "Action",
+          width: "5%",
+          class: "text-subtitle-2  grey--text text--darken-5",
+        },
       ],
       items: [
         {
