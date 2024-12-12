@@ -23,6 +23,8 @@ services:
 #     build: ./api-server
 #     ports:
 #       - "3000:3000"
+      # depends_on:
+      #   - db
 #     volumes:
 #       - ./api-server:/usr/src/app
 #     environment:
@@ -41,12 +43,11 @@ services:
   #   depends_on:
   #     - mongo
 
-  # mongo:
-  #   image: mongo:4.2
-  #   ports:
-  #     - "27017:27017"
-  #   volumes:
-  #     - mongo-data:/data/db
-
-# volumes:
-#   mongo-data:
+  db:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+    volumes:
+      - db_data:/var/lib/mysql 
+volumes:
+  db_data:
