@@ -9,3 +9,9 @@
 <script>
 export default {};
 </script>
+
+<style>
+.swal2-popup {
+  font-family: Roboto, sans-serif !important;
+}
+</style>

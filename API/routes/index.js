@@ -16,17 +16,17 @@ const settingRoutes = require("./settingRoutes");
 
 // Define route groups with the `/api` prefix
 router.use("/auth", authRoutes);
-router.use("/accounts", accountRoutes);
+router.use("/account", accountRoutes);
 router.use("/classType", classTypeRoutes);
 router.use("/branch", branchRoutes);
 router.use("/studentType", studentTypeRoutes);
-router.use("/teacherTypes", teacherTypeRoutes);
-router.use("/materialCategories", materialCategoryRoutes);
+router.use("/teacherType", teacherTypeRoutes);
+router.use("/materialCategory", materialCategoryRoutes);
 router.use("/materialFor", materialForRoutes);
-router.use("/materialTypes", materialTypeRoutes);
-router.use("/currencies", currencyRoutes);
+router.use("/materialType", materialTypeRoutes);
+router.use("/currency", currencyRoutes);
 router.use("/materials", materialsRoutes);
-router.use("/myMaterials", myMaterialRoutes);
-router.use("/settings", settingRoutes);
+router.use("/myMaterial", myMaterialRoutes);
+router.use("/setting", settingRoutes);
 
 module.exports = router;

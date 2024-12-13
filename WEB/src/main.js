@@ -9,6 +9,11 @@ import VueAxios from "vue-axios";
 import { createPinia, PiniaVuePlugin } from "pinia";
 import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
 
+import VueSweetalert2 from "vue-sweetalert2";
+
+// If you don't need the styles, do not connect
+import "sweetalert2/dist/sweetalert2.min.css";
+
 const pinia = createPinia();
 pinia.use(piniaPluginPersistedstate);
 Vue.use(PiniaVuePlugin);
@@ -21,6 +26,13 @@ axios.defaults.headers.common["Authorization"] =
 Vue.use(VueAxios, axios);
 
 Vue.config.productionTip = false;
+
+const options = {
+  confirmButtonColor: "#5c6add",
+  cancelButtonColor: "#ea6f6e",
+};
+
+Vue.use(VueSweetalert2, options);
 
 new Vue({
   router,

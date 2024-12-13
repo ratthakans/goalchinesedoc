@@ -25,21 +25,24 @@
 
           <v-col cols="12" md="9">
             <v-file-input
+              v-model="formInput.file"
               dense
               outlined
               label="Choose a file..."
               hide-details="auto"
+              accept="image/*"
             />
             <v-avatar
-              border="surface lg opacity-100"
               class="mt-2 mx-2"
               rounded="xl"
               size="150"
+              color="grey lighten-3"
             >
-              <img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John" />
+              <img v-if="formInput.logo" :src="formInput.logo" alt="John" />
             </v-avatar>
-
-            <v-btn color="error" class="text-none mt-2"> Remove Logo </v-btn>
+            <v-btn color="error" class="text-none mt-2" @click="deleteLogo">
+              Remove Logo
+            </v-btn>
           </v-col>
         </v-row>
       </v-col>
@@ -52,8 +55,18 @@
           </v-col>
 
           <v-col cols="12" md="9">
-            <v-text-field dense hide-details="auto" outlined />
-            <v-btn color="success" depressed class="text-none mt-2">
+            <v-text-field
+              v-model="formInput.academyName"
+              dense
+              hide-details="auto"
+              outlined
+            />
+            <v-btn
+              color="success"
+              depressed
+              class="text-none mt-2"
+              @click="saveSetting"
+            >
               Save
             </v-btn>
           </v-col>
@@ -66,310 +79,52 @@
         <h6 class="text-h6">Others setting</h6>
       </v-col>
       <v-col cols="10">
-        <v-row dense>
+        <v-row dense v-for="(value, name, index) in isvisible" :key="index">
           <v-col cols="12">
-            <label class="v-label text-body-2 font-weight-bold">Branch </label>
-          </v-col>
-          <v-col cols="12">
-            <v-row>
-              <v-col cols="auto">
-                <v-chip class="mx-2" size="large" closable label rounded="lg">
-                  B1
-                </v-chip>
-              </v-col>
-
-              <v-col cols="4" v-if="isvisible.createBranch">
-                <div class="d-flex">
-                  <v-text-field
-                    dense
-                    outlined
-                    single-line
-                    hide-details="auto"
-                    placeholder="Enter branch"
-                  />
-                  <v-btn
-                    color="success"
-                    class="mx-1"
-                    @click="isvisible.createBranch = !isvisible.createBranch"
-                    >save</v-btn
-                  >
-                </div>
-              </v-col>
-              <v-col cols="auto" v-else>
-                <v-btn
-                  color="info"
-                  fab
-                  dark
-                  x-small
-                  depressed
-                  @click="isvisible.createBranch = !isvisible.createBranch"
-                >
-                  <v-icon>mdi-plus</v-icon>
-                </v-btn>
-              </v-col>
-            </v-row>
-          </v-col>
-        </v-row>
-        <v-row dense>
-          <v-col cols="12">
-            <label class="v-label text-body-2 font-weight-bold">
-              Materials type
+            <label class="v-label text-body-2 font-weight-bold text-capitalize"
+              >{{ name }}
             </label>
           </v-col>
           <v-col cols="12">
             <v-row>
               <v-col cols="auto">
-                <v-chip class="mx-2" size="large" closable label rounded="lg">
-                  B1
+                <v-chip
+                  class="mx-2"
+                  size="large"
+                  closable
+                  label
+                  rounded="lg"
+                  v-for="(item, ix) in items[name]"
+                  :key="ix"
+                  @click="
+                    editItems[name] = item;
+                    (formData[name] = item.name), (isvisible[name] = true);
+                  "
+                  close
+                  @click:close="deleteData(name, item.id)"
+                >
+                  {{ item.name }}
                 </v-chip>
               </v-col>
 
-              <v-col cols="4" v-if="isvisible.materialsType">
+              <v-col cols="6" v-if="isvisible[name]">
                 <div class="d-flex">
                   <v-text-field
+                    v-model="formData[name]"
                     dense
                     outlined
                     single-line
                     hide-details="auto"
-                    placeholder="Enter Materials type"
+                    :placeholder="`Enter ${name}`"
                   />
                   <v-btn
                     color="success"
                     class="mx-1"
-                    @click="isvisible.materialsType = !isvisible.materialsType"
+                    @click="saveData(name, formData[name], editItems[name]?.id)"
                     >save</v-btn
                   >
-                </div>
-              </v-col>
-              <v-col cols="auto" v-else>
-                <v-btn
-                  color="info"
-                  fab
-                  dark
-                  x-small
-                  depressed
-                  @click="isvisible.materialsType = !isvisible.materialsType"
-                >
-                  <v-icon>mdi-plus</v-icon>
-                </v-btn>
-              </v-col>
-            </v-row>
-          </v-col>
-        </v-row>
-        <v-row dense>
-          <v-col cols="12">
-            <label class="v-label text-body-2 font-weight-bold">
-              Class type
-            </label>
-          </v-col>
-          <v-col cols="12">
-            <v-row>
-              <v-col cols="auto">
-                <v-chip class="mx-2" size="large" closable label rounded="lg">
-                  B1
-                </v-chip>
-              </v-col>
-
-              <v-col cols="4" v-if="isvisible.classType">
-                <div class="d-flex">
-                  <v-text-field
-                    dense
-                    outlined
-                    single-line
-                    hide-details="auto"
-                    placeholder="Enter Class type"
-                  />
-                  <v-btn
-                    color="success"
-                    class="mx-1"
-                    @click="isvisible.classType = !isvisible.classType"
-                    >save</v-btn
-                  >
-                </div>
-              </v-col>
-              <v-col cols="auto" v-else>
-                <v-btn
-                  color="info"
-                  fab
-                  dark
-                  x-small
-                  depressed
-                  @click="isvisible.classType = !isvisible.classType"
-                >
-                  <v-icon>mdi-plus</v-icon>
-                </v-btn>
-              </v-col>
-            </v-row>
-          </v-col>
-        </v-row>
-        <v-row dense>
-          <v-col cols="12">
-            <label class="v-label text-body-2 font-weight-bold">
-              Student type
-            </label>
-          </v-col>
-          <v-col cols="12">
-            <v-row>
-              <v-col cols="auto">
-                <v-chip class="mx-2" size="large" closable label rounded="lg">
-                  B1
-                </v-chip>
-              </v-col>
-
-              <v-col cols="4" v-if="isvisible.studentType">
-                <div class="d-flex">
-                  <v-text-field
-                    dense
-                    outlined
-                    single-line
-                    hide-details="auto"
-                    placeholder="Enter Student type"
-                  />
-                  <v-btn
-                    color="success"
-                    class="mx-1"
-                    @click="isvisible.studentType = !isvisible.studentType"
-                    >save</v-btn
-                  >
-                </div>
-              </v-col>
-              <v-col cols="auto" v-else>
-                <v-btn
-                  color="info"
-                  fab
-                  dark
-                  x-small
-                  depressed
-                  @click="isvisible.studentType = !isvisible.studentType"
-                >
-                  <v-icon>mdi-plus</v-icon>
-                </v-btn>
-              </v-col>
-            </v-row>
-          </v-col>
-        </v-row>
-        <v-row dense>
-          <v-col cols="12">
-            <label class="v-label text-body-2 font-weight-bold">
-              Teacher type
-            </label>
-          </v-col>
-          <v-col cols="12">
-            <v-row>
-              <v-col cols="auto">
-                <v-chip class="mx-2" size="large" closable label rounded="lg">
-                  B1
-                </v-chip>
-              </v-col>
-
-              <v-col cols="4" v-if="isvisible.teacherType">
-                <div class="d-flex">
-                  <v-text-field
-                    dense
-                    outlined
-                    single-line
-                    hide-details="auto"
-                    placeholder="Enter Teacher type"
-                  />
-                  <v-btn
-                    color="success"
-                    class="mx-1"
-                    @click="isvisible.teacherType = !isvisible.teacherType"
-                    >save</v-btn
-                  >
-                </div>
-              </v-col>
-              <v-col cols="auto" v-else>
-                <v-btn
-                  color="info"
-                  fab
-                  dark
-                  x-small
-                  depressed
-                  @click="isvisible.teacherType = !isvisible.teacherType"
-                >
-                  <v-icon>mdi-plus</v-icon>
-                </v-btn>
-              </v-col>
-            </v-row>
-          </v-col>
-        </v-row>
-        <v-row dense>
-          <v-col cols="12">
-            <label class="v-label text-body-2 font-weight-bold">
-              Materials for
-            </label>
-          </v-col>
-          <v-col cols="12">
-            <v-row>
-              <v-col cols="auto">
-                <v-chip class="mx-2" size="large" closable label rounded="lg">
-                  B1
-                </v-chip>
-              </v-col>
-
-              <v-col cols="4" v-if="isvisible.materialsFor">
-                <div class="d-flex">
-                  <v-text-field
-                    dense
-                    outlined
-                    single-line
-                    hide-details="auto"
-                    placeholder="Enter Materials for"
-                  />
-                  <v-btn
-                    color="success"
-                    class="mx-1"
-                    @click="isvisible.materialsFor = !isvisible.materialsFor"
-                    >save</v-btn
-                  >
-                </div>
-              </v-col>
-              <v-col cols="auto" v-else>
-                <v-btn
-                  color="info"
-                  fab
-                  dark
-                  x-small
-                  depressed
-                  @click="isvisible.materialsFor = !isvisible.materialsFor"
-                >
-                  <v-icon>mdi-plus</v-icon>
-                </v-btn>
-              </v-col>
-            </v-row>
-          </v-col>
-        </v-row>
-        <v-row dense>
-          <v-col cols="12">
-            <label class="v-label text-body-2 font-weight-bold">
-              Materials category
-            </label>
-          </v-col>
-          <v-col cols="12">
-            <v-row>
-              <v-col cols="auto">
-                <v-chip class="mx-2" size="large" closable label rounded="lg">
-                  B1
-                </v-chip>
-              </v-col>
-
-              <v-col cols="4" v-if="isvisible.materialsCategory">
-                <div class="d-flex">
-                  <v-text-field
-                    dense
-                    outlined
-                    single-line
-                    hide-details="auto"
-                    placeholder="Enter Materials category"
-                  />
-                  <v-btn
-                    color="success"
-                    class="mx-1"
-                    @click="
-                      isvisible.materialsCategory = !isvisible.materialsCategory
-                    "
-                    >save</v-btn
+                  <v-btn color="error" @click="isvisible[name] = false"
+                    >cancle</v-btn
                   >
                 </div>
               </v-col>
@@ -381,54 +136,9 @@
                   x-small
                   depressed
                   @click="
-                    isvisible.materialsCategory = !isvisible.materialsCategory
+                    ((formData[name] = ''), (editItems[name] = '')),
+                      (isvisible[name] = !isvisible[name])
                   "
-                >
-                  <v-icon>mdi-plus</v-icon>
-                </v-btn>
-              </v-col>
-            </v-row>
-          </v-col>
-        </v-row>
-        <v-row dense>
-          <v-col cols="12">
-            <label class="v-label text-body-2 font-weight-bold">
-              Currency
-            </label>
-          </v-col>
-          <v-col cols="12">
-            <v-row>
-              <v-col cols="auto">
-                <v-chip class="mx-2" size="large" closable label rounded="lg">
-                  B1
-                </v-chip>
-              </v-col>
-
-              <v-col cols="4" v-if="isvisible.currency">
-                <div class="d-flex">
-                  <v-text-field
-                    dense
-                    outlined
-                    single-line
-                    hide-details="auto"
-                    placeholder="Enter currency"
-                  />
-                  <v-btn
-                    color="success"
-                    class="mx-1"
-                    @click="isvisible.currency = !isvisible.currency"
-                    >save</v-btn
-                  >
-                </div>
-              </v-col>
-              <v-col cols="auto" v-else>
-                <v-btn
-                  color="info"
-                  fab
-                  dark
-                  x-small
-                  depressed
-                  @click="isvisible.currency = !isvisible.currency"
                 >
                   <v-icon>mdi-plus</v-icon>
                 </v-btn>
@@ -449,17 +159,164 @@ export default {
   name: "SettingPage",
   data() {
     return {
+      formInput: {
+        file: null,
+        logo: "",
+        academyName: "",
+      },
+      editItems: {
+        branch: "",
+        materialType: "",
+        classType: "",
+        studentType: "",
+        teacherType: "",
+        materialFor: "",
+        materialCategory: "",
+        currency: "",
+      },
+      formData: {
+        branch: "",
+        materialType: "",
+        classType: "",
+        studentType: "",
+        teacherType: "",
+        materialFor: "",
+        materialCategory: "",
+        currency: "",
+      },
       isvisible: {
-        createBranch: false,
-        materialsType: false,
+        branch: false,
+        materialType: false,
         classType: false,
         studentType: false,
         teacherType: false,
-        materialsFor: false,
-        materialsCategory: false,
+        materialFor: false,
+        materialCategory: false,
         currency: false,
       },
+      items: {
+        branch: [],
+        materialType: [],
+        classType: [],
+        studentType: [],
+        teacherType: [],
+        materialFor: [],
+        materialCategory: [],
+        currency: [],
+      },
     };
+  },
+  watch: {
+    "formInput.file": function (val) {
+      if (val) {
+        this.formInput.logo = URL.createObjectURL(val);
+      }
+    },
+  },
+  mounted() {
+    this.fetchSetting();
+
+    this.fetchData("branch", "branch");
+    this.fetchData("materialType", "materialType");
+    this.fetchData("classType", "classType");
+    this.fetchData("studentType", "studentType");
+    this.fetchData("teacherType", "teacherType");
+    this.fetchData("materialFor", "materialFor");
+    this.fetchData("materialCategory", "materialCategory");
+    this.fetchData("currency", "currency");
+  },
+  methods: {
+    async fetchSetting() {
+      // fetch data from api
+      try {
+        const { data } = await this.axios.get(`/setting`);
+
+        console.log("🚀 ~ fetchSetting ~ data:", data);
+        if (data.length) {
+          if (data[0].logo)
+            this.formInput.logo = process.env.VUE_APP_API_IMAGE + data[0].logo;
+          this.formInput.academyName = data[0].academyName;
+        } else {
+          this.formInput.logo = null;
+          this.formInput.academyName = "";
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async saveSetting() {
+      try {
+        const formData = new FormData();
+        formData.append("logo", this.formInput.file);
+        formData.append("academyName", this.formInput.academyName);
+
+        await this.axios.post(`/setting`, formData);
+        this.fetchSetting();
+      } catch (error) {
+        console.log("🚀 ~ saveSetting ~ error:", error);
+      }
+    },
+    async deleteLogo() {
+      // confirm delete
+      const { isDismissed } = await this.$swal({
+        title: "Are you sure?",
+        text: "Once deleted, you will not be able to recover this data!",
+        icon: "warning",
+        buttons: true,
+      });
+
+      if (isDismissed) return;
+      try {
+        await this.axios.delete(`/setting/logo`);
+        this.fetchSetting();
+      } catch (error) {
+        console.log("🚀 ~ deleteLogo ~ error:", error);
+      }
+    },
+    async fetchData(uri, items) {
+      // fetch data from api
+      try {
+        const { data } = await this.axios.get(`/${uri}`);
+        this.items[items] = data;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async saveData(key, payload, id) {
+      // save data to api
+      try {
+        if (id) {
+          await this.axios.put(`/${key}/${id}`, { name: payload });
+        } else {
+          await this.axios.post(`/${key}`, { name: payload });
+        }
+        this.fetchData(key, key);
+        this.isvisible[key] = !this.isvisible[key];
+        this.formData[key] = "";
+        this.editItems[key] = "";
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async deleteData(key, id) {
+      // confirm delete
+      const { isDismissed } = await this.$swal({
+        title: "Are you sure?",
+        text: "Once deleted, you will not be able to recover this data!",
+        icon: "warning",
+        buttons: true,
+      });
+
+      if (isDismissed) return;
+
+      // delete data from api
+      try {
+        await this.axios.delete(`/${key}/${id}`);
+        this.fetchData(key, key);
+      } catch (error) {
+        console.log(error);
+      }
+    },
   },
 };
 </script>

@@ -72,7 +72,7 @@ export default {
     }),
   },
   mounted() {
-    if (this.userInfo?.role === "admin") {
+    if (["admin", "superadmin"].includes(this.userInfo?.role)) {
       this.menus = [
         {
           text: "Dashboard",

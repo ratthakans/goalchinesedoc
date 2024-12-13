@@ -6,11 +6,14 @@ const router = express.Router();
 const settingsController = require("../controllers/settingsController");
 
 router.post(
-  "/upload-settings",
+  "/",
   upload.fields([
-    { name: "settings", maxCount: 1 }, // Accept single photo
+    { name: "logo", maxCount: 1 }, // Accept single photo
   ]),
   settingsController.create
 );
+
+router.get("/", settingsController.findAll);
+router.delete("/logo", settingsController.deleteImage);
 
 module.exports = router;

@@ -7,7 +7,6 @@ const Permission = sequelize.define(
     accountID: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      unique: true,
     },
     name: {
       type: DataTypes.STRING,

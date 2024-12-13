@@ -10,11 +10,8 @@
         </v-list-item-avatar>
 
         <v-list-item-content>
-          <v-list-item-title
-            >{{ userInfo?.firstName }}
-            {{ userInfo?.lastName }}</v-list-item-title
-          >
-          <v-list-item-subtitle>{{ userInfo?.username }}</v-list-item-subtitle>
+          <v-list-item-title>{{ userInfo?.username }}</v-list-item-title>
+          <v-list-item-subtitle>{{ userInfo?.role }}</v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
     </v-list>

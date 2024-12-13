@@ -7,7 +7,6 @@ const FeeStucture = sequelize.define(
     accountID: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      unique: true,
     },
     updateDate: {
       type: DataTypes.STRING,

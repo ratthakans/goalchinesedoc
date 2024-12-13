@@ -12,7 +12,16 @@ const ensureDirectoryExistence = (dir) => {
 // Configure multer storage
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const subdirectory = `uploads/${file.fieldname}`; // Create subdirectory for each field
+    let subdirectory = "uploads/default"; // Default directory
+
+    // Dynamically assign directory based on field name
+    if (file.fieldname === "logo") {
+      subdirectory = "uploads/settings";
+    } else if (file.fieldname === "photos") {
+      subdirectory = "uploads/photos";
+    } else if (file.fieldname === "documents") {
+      subdirectory = "uploads/materials";
+    }
     ensureDirectoryExistence(subdirectory);
     cb(null, subdirectory);
   },
@@ -27,7 +36,7 @@ const storage = multer.diskStorage({
 const fileFilter = (req, file, cb) => {
   if (
     file.fieldname === "photos" ||
-    (file.fieldname === "settings" && file.mimetype.startsWith("image/"))
+    (file.fieldname === "logo" && file.mimetype.startsWith("image/"))
   ) {
     cb(null, true);
   } else if (

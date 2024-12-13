@@ -40,6 +40,20 @@
       </v-row>
       <v-row justify="center">
         <v-col cols="6">
+          <v-alert
+            v-if="error"
+            dense
+            outlined
+            color="error"
+            border="left"
+            icon="mdi-alert"
+          >
+            {{ error }}
+          </v-alert>
+        </v-col>
+      </v-row>
+      <v-row justify="center">
+        <v-col cols="6">
           <v-btn block color="primary" depressed @click="loginUser">
             Sign In
           </v-btn>
@@ -71,18 +85,18 @@ export default {
           password: this.password,
         });
 
-        this.setUserInfo(data);
-        localStorage.setItem("token", data.token);
+        this.setUserInfo(data.user);
+        localStorage.setItem("token", data.user.token);
 
-        if (data.role === "admin") {
+        if (data.user.role === "admin" || data.user.role === "superadmin") {
           this.$router.push({ name: "dashboard" });
-        } else if (data.role === "teacher") {
+        } else if (data.user.role === "teacher") {
           this.$router.push({ name: "teacherClass" });
-        } else if (data.role === "student") {
+        } else if (data.user.role === "student") {
           this.$router.push({ name: "studentClass" });
         }
       } catch (error) {
-        console.error("Error logging in:", error);
+        this.error = error.response?.data?.error;
       }
     },
   },

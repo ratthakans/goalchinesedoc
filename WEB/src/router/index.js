@@ -67,7 +67,7 @@ const routes = [
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
       auth: {
-        roles: ["user", "admin"],
+        roles: ["user", "admin", "superadmin"],
       },
     },
     component: Dashboard,
@@ -79,7 +79,7 @@ const routes = [
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
       auth: {
-        roles: ["user", "admin"],
+        roles: ["user", "admin", "superadmin"],
       },
     },
     component: classesCalenday,
@@ -90,7 +90,7 @@ const routes = [
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
       auth: {
-        roles: ["user", "admin"],
+        roles: ["user", "admin", "superadmin"],
       },
     },
     component: classesAll,
@@ -101,7 +101,7 @@ const routes = [
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
       auth: {
-        roles: ["user", "admin"],
+        roles: ["user", "admin", "superadmin"],
       },
     },
     component: classesCreate,
@@ -112,7 +112,7 @@ const routes = [
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
       auth: {
-        roles: ["user", "admin"],
+        roles: ["user", "admin", "superadmin"],
       },
     },
     component: classesEdit,
@@ -123,7 +123,7 @@ const routes = [
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
       auth: {
-        roles: ["user", "admin"],
+        roles: ["user", "admin", "superadmin"],
       },
     },
     component: classesView,
@@ -134,7 +134,7 @@ const routes = [
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
       auth: {
-        roles: ["user", "admin"],
+        roles: ["user", "admin", "superadmin"],
       },
     },
     component: classesAttendance,
@@ -145,7 +145,7 @@ const routes = [
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
       auth: {
-        roles: ["user", "admin"],
+        roles: ["user", "admin", "superadmin"],
       },
     },
     component: Student,
@@ -156,7 +156,7 @@ const routes = [
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
       auth: {
-        roles: ["user", "admin"],
+        roles: ["user", "admin", "superadmin"],
       },
     },
     component: StudentCreate,
@@ -167,7 +167,7 @@ const routes = [
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
       auth: {
-        roles: ["user", "admin"],
+        roles: ["user", "admin", "superadmin"],
       },
     },
     component: StudentView,
@@ -178,7 +178,7 @@ const routes = [
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
       auth: {
-        roles: ["user", "admin"],
+        roles: ["user", "admin", "superadmin"],
       },
     },
     component: StudentEdit,
@@ -189,7 +189,7 @@ const routes = [
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
       auth: {
-        roles: ["user", "admin"],
+        roles: ["user", "admin", "superadmin"],
       },
     },
     component: StudentMaterials,
@@ -200,7 +200,7 @@ const routes = [
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
       auth: {
-        roles: ["user", "admin"],
+        roles: ["user", "admin", "superadmin"],
       },
     },
     component: Teacher,
@@ -211,7 +211,7 @@ const routes = [
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
       auth: {
-        roles: ["user", "admin"],
+        roles: ["user", "admin", "superadmin"],
       },
     },
     component: TeacherCreate,
@@ -222,7 +222,7 @@ const routes = [
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
       auth: {
-        roles: ["user", "admin"],
+        roles: ["user", "admin", "superadmin"],
       },
     },
     component: TeacherView,
@@ -233,7 +233,7 @@ const routes = [
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
       auth: {
-        roles: ["user", "admin"],
+        roles: ["user", "admin", "superadmin"],
       },
     },
     component: TeacherEdit,
@@ -244,7 +244,7 @@ const routes = [
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
       auth: {
-        roles: ["user", "admin"],
+        roles: ["user", "admin", "superadmin"],
       },
     },
     component: TeacherMaterials,
@@ -255,7 +255,7 @@ const routes = [
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
       auth: {
-        roles: ["user", "admin"],
+        roles: ["user", "admin", "superadmin"],
       },
     },
     component: Users,
@@ -266,7 +266,7 @@ const routes = [
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
       auth: {
-        roles: ["user", "admin"],
+        roles: ["user", "admin", "superadmin"],
       },
     },
     component: UsersCreate,
@@ -277,7 +277,7 @@ const routes = [
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
       auth: {
-        roles: ["user", "admin"],
+        roles: ["user", "admin", "superadmin"],
       },
     },
     component: UsersEdit,
@@ -288,7 +288,7 @@ const routes = [
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
       auth: {
-        roles: ["user", "admin"],
+        roles: ["user", "admin", "superadmin"],
       },
     },
     component: Materials,
@@ -299,7 +299,7 @@ const routes = [
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
       auth: {
-        roles: ["user", "admin"],
+        roles: ["user", "admin", "superadmin"],
       },
     },
     component: MaterialsCreate,
@@ -310,7 +310,7 @@ const routes = [
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
       auth: {
-        roles: ["user", "admin"],
+        roles: ["user", "admin", "superadmin"],
       },
     },
     component: MaterialsEdit,
@@ -321,7 +321,7 @@ const routes = [
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
       auth: {
-        roles: ["user", "admin"],
+        roles: ["user", "admin", "superadmin"],
       },
     },
     component: Library,
@@ -332,7 +332,7 @@ const routes = [
     meta: {
       layout: DefaultLayout, // we add new meta layout here to use it later
       auth: {
-        roles: ["user", "admin"],
+        roles: ["user", "admin", "superadmin"],
       },
     },
     component: Setting,
