@@ -102,6 +102,11 @@ Account.associate = (models) => {
   Account.belongsTo(models.StudentType, { foreignKey: "studentTypeID" });
   Account.belongsTo(models.ClassType, { foreignKey: "classTypeID" });
   Account.belongsTo(models.Branch, { foreignKey: "branchID" });
+  Account.hasOne(models.User, { foreignKey: "accountID", as: "user" });
+  Account.hasMany(models.Permission, {
+    foreignKey: "accountID",
+    as: "permissions",
+  });
 };
 
 module.exports = Account;

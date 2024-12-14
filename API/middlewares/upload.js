@@ -21,6 +21,8 @@ const storage = multer.diskStorage({
       subdirectory = "uploads/photos";
     } else if (file.fieldname === "document") {
       subdirectory = "uploads/materials";
+    } else if (file.fieldname === "profile") {
+      subdirectory = "uploads/profiles";
     }
     ensureDirectoryExistence(subdirectory);
     cb(null, subdirectory);
@@ -35,8 +37,8 @@ const storage = multer.diskStorage({
 // File filter to allow only specific file types
 const fileFilter = (req, file, cb) => {
   if (
-    file.fieldname === "photo" ||
-    (file.fieldname === "logo" && file.mimetype.startsWith("image/"))
+    ["profile", "logo", "photo"].includes(file.fieldname) &&
+    file.mimetype.startsWith("image/")
   ) {
     cb(null, true);
   } else if (

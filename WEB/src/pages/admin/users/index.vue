@@ -45,20 +45,20 @@
         <v-data-table
           :headers="headers"
           :filter-keys="['title', 'category', 'type']"
-          :items="itemsMaterials"
+          :items="items"
           show-select
         >
           <template #[`item.name`]="{ item }">
             <div class="d-flex align-center">
               <v-avatar
                 size="45"
-                :color="item.avatar ? '' : 'grey lighten-4'"
-                :class="item.avatar ? '' : 'v-avatar-light-bg primary--text'"
-                :variant="!item.avatar ? 'tonal' : undefined"
+                :color="item.photo ? '' : 'grey lighten-4'"
+                :class="item.photo ? '' : 'v-avatar-light-bg primary--text'"
+                :variant="!item.photo ? 'tonal' : undefined"
                 tile
                 rounded="lg"
               >
-                <v-img v-if="item.avatar" :src="item.avatar" />
+                <v-img v-if="item.photo" :src="`${baseUrl}${item.photo}`" />
                 <v-icon>mdi-account</v-icon>
               </v-avatar>
               <div class="d-flex flex-column ms-3">
@@ -69,13 +69,15 @@
               </div>
             </div>
           </template>
-
+          <template #[`item.age`]="{ item }">
+            {{ calulateAge(item.dateOfBirth) }}
+          </template>
           <template #[`item.action`]="{ item }">
             <div class="d-flex">
-              <v-btn color="primary" icon :to="`/admin/users/edit/${item.no}`">
+              <v-btn color="primary" icon :to="`/admin/users/edit/${item.id}`">
                 <v-icon>mdi-pencil</v-icon>
               </v-btn>
-              <v-btn color="error" icon>
+              <v-btn color="error" icon @click="deleteData(item.id)">
                 <v-icon>mdi-trash-can</v-icon>
               </v-btn>
             </div>
@@ -91,35 +93,59 @@ export default {
   name: "UsersPage",
   data() {
     return {
+      baseUrl: process.env.VUE_APP_API_IMAGE,
       search: "",
       headers: [
-        {
-          align: "start",
-          value: "no",
-          sortable: false,
-          text: "Admission No.",
-        },
-        { value: "name", text: "Student Name", width: "30%" },
-        { value: "parentsPhone", text: "Parents mobile No." },
-        { value: "poits", text: "Poits" },
-        { value: "studentType", text: "Student Type" },
-        { value: "classType", text: "Class Type" },
+        { value: "name", text: "User Name", width: "30%" },
+        { value: "phone", text: "Phone" },
+        { value: "duty", text: "Duty" },
         { value: "age", text: "Age" },
         { value: "gender", text: "Gender" },
         { value: "action", text: "Action" },
       ],
-      itemsMaterials: [
-        {
-          no: "M001",
-          name: "student name",
-          parentsPhone: "+666666",
-          poits: "150",
-          classType: "Class 1",
-          age: "15",
-          gender: "Male",
-        },
-      ],
+      items: [],
     };
+  },
+  mounted() {
+    this.fetchData();
+  },
+  methods: {
+    async fetchData() {
+      try {
+        const { data } = await this.axios.get(`/account?role=user`);
+        this.items = data;
+      } catch (error) {
+        this.$swal.fire({
+          title: error.response.data.error,
+          text: error.response.data.details,
+          icon: "error",
+        });
+      }
+    },
+    async deleteData(id) {
+      // confirm delete
+      const { isDismissed } = await this.$swal({
+        title: "Are you sure?",
+        text: "Once deleted, you will not be able to recover this data!",
+        icon: "warning",
+        buttons: true,
+      });
+
+      if (isDismissed) return;
+
+      //delete data from api
+      try {
+        await this.axios.delete(`/account/${id}`);
+        this.$swal("Material deleted successfully", "", "success");
+        this.fetchData();
+      } catch (error) {
+        this.$swal.fire({
+          title: error.response.data.error,
+          text: error.response.data.details,
+          icon: "error",
+        });
+      }
+    },
   },
 };
 </script>
