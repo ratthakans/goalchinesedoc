@@ -8,8 +8,8 @@ const router = express.Router();
 router.post(
   "/",
   upload.fields([
-    { name: "photos", maxCount: 1 }, // Accept single photo
-    { name: "documents", maxCount: 1 }, // Accept single document
+    { name: "photo", maxCount: 1 }, // Accept single photo
+    { name: "document", maxCount: 1 }, // Accept single document
   ]),
   materialsController.create
 );
@@ -18,8 +18,8 @@ router.post(
 router.put(
   "/:id",
   upload.fields([
-    { name: "photos", maxCount: 1 }, // Accept single photo
-    { name: "documents", maxCount: 1 }, // Accept single document
+    { name: "photo", maxCount: 1 }, // Accept single photo
+    { name: "document", maxCount: 1 }, // Accept single document
   ]),
   materialsController.update
 );

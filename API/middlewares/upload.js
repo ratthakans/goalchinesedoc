@@ -17,9 +17,9 @@ const storage = multer.diskStorage({
     // Dynamically assign directory based on field name
     if (file.fieldname === "logo") {
       subdirectory = "uploads/settings";
-    } else if (file.fieldname === "photos") {
+    } else if (file.fieldname === "photo") {
       subdirectory = "uploads/photos";
-    } else if (file.fieldname === "documents") {
+    } else if (file.fieldname === "document") {
       subdirectory = "uploads/materials";
     }
     ensureDirectoryExistence(subdirectory);
@@ -35,13 +35,17 @@ const storage = multer.diskStorage({
 // File filter to allow only specific file types
 const fileFilter = (req, file, cb) => {
   if (
-    file.fieldname === "photos" ||
+    file.fieldname === "photo" ||
     (file.fieldname === "logo" && file.mimetype.startsWith("image/"))
   ) {
     cb(null, true);
   } else if (
-    file.fieldname === "documents" &&
-    file.mimetype === "application/pdf"
+    file.fieldname === "document" &&
+    [
+      "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+      "application/pdf",
+      "video/mp4",
+    ].includes(file.mimetype)
   ) {
     cb(null, true);
   } else {

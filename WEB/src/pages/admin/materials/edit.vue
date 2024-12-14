@@ -9,11 +9,12 @@
       </v-col>
     </v-row>
 
-    <FormMaterial />
-
+    <v-form ref="form" lazy-validation>
+      <FormMaterial v-model="formInput" :editItems="editItems" />
+    </v-form>
     <v-row justify="end">
       <v-col cols="auto">
-        <v-btn color="primary" depressed class="text-none">
+        <v-btn color="primary" depressed class="text-none" @click="update">
           <v-icon start> mdi-content-save </v-icon>
           Save
         </v-btn>
@@ -28,6 +29,55 @@ export default {
   name: "EditMaterial",
   components: {
     FormMaterial,
+  },
+  data() {
+    return {
+      formInput: null,
+      editItems: null,
+    };
+  },
+  created() {
+    this.fetchDataById();
+  },
+  methods: {
+    async fetchDataById() {
+      try {
+        const { data } = await this.axios.get(
+          `/materials/${this.$route.params.id}`
+        );
+        this.editItems = data;
+      } catch (error) {
+        this.$swal.fire({
+          title: error.response.data.error,
+          text: error.response.data.details,
+          icon: "error",
+        });
+      }
+    },
+    async update() {
+      if (!this.$refs.form.validate()) return;
+      try {
+        let formData = new FormData();
+        for (let key in this.formInput) {
+          if (this.formInput[key]) {
+            formData.append(key, this.formInput[key]);
+          }
+        }
+        const { data } = await this.axios.put(
+          `/materials/${this.$route.params.id}`,
+          formData
+        );
+
+        this.$swal(data?.message, "", "success");
+        this.$router.push({ name: "materials" });
+      } catch (error) {
+        this.$swal.fire({
+          title: error.response.data.error,
+          text: error.response.data.details,
+          icon: "error",
+        });
+      }
+    },
   },
 };
 </script>

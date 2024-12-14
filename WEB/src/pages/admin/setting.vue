@@ -231,7 +231,6 @@ export default {
       try {
         const { data } = await this.axios.get(`/setting`);
 
-        console.log("🚀 ~ fetchSetting ~ data:", data);
         if (data.length) {
           if (data[0].logo)
             this.formInput.logo = process.env.VUE_APP_API_IMAGE + data[0].logo;
@@ -241,7 +240,11 @@ export default {
           this.formInput.academyName = "";
         }
       } catch (error) {
-        console.log(error);
+        this.$swal.fire({
+          title: error.response.data.error,
+          text: error.response.data.details,
+          icon: "error",
+        });
       }
     },
     async saveSetting() {
@@ -253,7 +256,11 @@ export default {
         await this.axios.post(`/setting`, formData);
         this.fetchSetting();
       } catch (error) {
-        console.log("🚀 ~ saveSetting ~ error:", error);
+        this.$swal.fire({
+          title: error.response.data.error,
+          text: error.response.data.details,
+          icon: "error",
+        });
       }
     },
     async deleteLogo() {
@@ -270,7 +277,11 @@ export default {
         await this.axios.delete(`/setting/logo`);
         this.fetchSetting();
       } catch (error) {
-        console.log("🚀 ~ deleteLogo ~ error:", error);
+        this.$swal.fire({
+          title: error.response.data.error,
+          text: error.response.data.details,
+          icon: "error",
+        });
       }
     },
     async fetchData(uri, items) {
@@ -279,7 +290,11 @@ export default {
         const { data } = await this.axios.get(`/${uri}`);
         this.items[items] = data;
       } catch (error) {
-        console.log(error);
+        this.$swal.fire({
+          title: error.response.data.error,
+          text: error.response.data.details,
+          icon: "error",
+        });
       }
     },
     async saveData(key, payload, id) {
@@ -295,7 +310,11 @@ export default {
         this.formData[key] = "";
         this.editItems[key] = "";
       } catch (error) {
-        console.log(error);
+        this.$swal.fire({
+          title: error.response.data.error,
+          text: error.response.data.details,
+          icon: "error",
+        });
       }
     },
     async deleteData(key, id) {
@@ -314,7 +333,11 @@ export default {
         await this.axios.delete(`/${key}/${id}`);
         this.fetchData(key, key);
       } catch (error) {
-        console.log(error);
+        this.$swal.fire({
+          title: error.response.data.error,
+          text: error.response.data.details,
+          icon: "error",
+        });
       }
     },
   },

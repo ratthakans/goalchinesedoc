@@ -8,13 +8,14 @@
         <h5 class="text-h5">Add Materials</h5>
       </v-col>
     </v-row>
-
-    <FormMaterial />
+    <v-form ref="form" lazy-validation>
+      <FormMaterial v-model="formInput" />
+    </v-form>
 
     <v-row justify="end">
       <v-col cols="auto">
-        <v-btn color="primary" depressed class="text-none">
-          <v-icon start> mdi-content-save </v-icon>
+        <v-btn color="primary" depressed class="text-none" @click="create">
+          <v-icon left> mdi-content-save </v-icon>
           Save
         </v-btn>
       </v-col>
@@ -31,13 +32,31 @@ export default {
   },
   data() {
     return {
-      formInput: {
-        title: "",
-        category: "",
-        type: "",
-        image: "",
-      },
+      formInput: null,
     };
+  },
+  methods: {
+    async create() {
+      if (!this.$refs.form.validate()) return;
+      try {
+        let formData = new FormData();
+        for (let key in this.formInput) {
+          if (this.formInput[key]) {
+            formData.append(key, this.formInput[key]);
+          }
+        }
+        const { data } = await this.axios.post(`/materials`, formData);
+
+        this.$swal(data?.message, "", "success");
+        this.$router.push({ name: "materials" });
+      } catch (error) {
+        this.$swal.fire({
+          title: error.response.data.error,
+          text: error.response.data.details,
+          icon: "error",
+        });
+      }
+    },
   },
 };
 </script>

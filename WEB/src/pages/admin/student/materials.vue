@@ -97,14 +97,19 @@
           :items="itemsMaterials"
           show-select
         >
-          <template #item.image="{ item }">
-            <v-card class="my-2" elevation="2" rounded height="64" width="100">
+          <template #item.photo="{ item }">
+            <v-avatar size="64" rounded color="grey lighten-4" class="my-2">
               <v-img
-                :src="`https://cdn.vuetifyjs.com/docs/images/graphics/gpus/${item.image}`"
                 height="64"
+                width="64"
                 cover
+                v-if="item.photo"
+                :src="`${baseUrl}${item.photo}`"
               />
-            </v-card>
+              <v-icon color="primary" v-else size="45"
+                >mdi-notebook-edit</v-icon
+              >
+            </v-avatar>
           </template>
         </v-data-table>
       </v-col>
@@ -160,7 +165,7 @@ export default {
           sortable: false,
           text: "Materials No.",
         },
-        { value: "image", text: "Photo" },
+        { value: "photo", text: "Photo" },
         { value: "title", text: "Title", width: "40%" },
         { value: "category", text: "Materials Category" },
         { value: "materialFor", text: "Materials for teacher/student" },

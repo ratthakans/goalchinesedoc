@@ -1,4 +1,6 @@
 const { Materials } = require("../models"); // Ensure the path to your models is correct
+const fs = require("fs");
+const path = require("path");
 
 // Create a new Material with optional photo and document upload
 exports.create = async (req, res) => {
@@ -34,12 +36,12 @@ exports.create = async (req, res) => {
       .status(201)
       .json({ message: "Material created successfully", material });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    next(error); // Pass the error to the centralized error handler
   }
 };
 
 // Update a Material by ID with optional photo and document upload
-exports.update = async (req, res) => {
+exports.update = async (req, res, next) => {
   try {
     const { id } = req.params;
     const {
@@ -80,22 +82,37 @@ exports.update = async (req, res) => {
       .status(200)
       .json({ message: "Material updated successfully", material });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    next(error); // Pass the error to the centralized error handler
   }
 };
 
 // Get all Materials
-exports.findAll = async (req, res) => {
+exports.findAll = async (req, res, next) => {
   try {
-    const materials = await Materials.findAll();
+    const materials = await Materials.findAll({
+      include: [
+        {
+          association: "materialCategory",
+          attributes: ["id", "name"],
+        },
+        {
+          association: "materialFor",
+          attributes: ["id", "name"],
+        },
+        {
+          association: "materialType",
+          attributes: ["id", "name"],
+        },
+      ],
+    });
     res.status(200).json(materials);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    next(error); // Pass the error to the centralized error handler
   }
 };
 
 // Get a specific Material by ID
-exports.findOne = async (req, res) => {
+exports.findOne = async (req, res, next) => {
   try {
     const { id } = req.params;
     const material = await Materials.findByPk(id);
@@ -104,20 +121,46 @@ exports.findOne = async (req, res) => {
     }
     res.status(200).json(material);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    next(error); // Pass the error to the centralized error handler
   }
 };
 
 // Delete a Material by ID
-exports.delete = async (req, res) => {
+exports.delete = async (req, res, next) => {
   try {
     const { id } = req.params;
+
+    let material = await Materials.findByPk(id);
+    if (!material) {
+      return res.status(404).json({ error: "Material not found" });
+    }
+
+    if (material.photo) {
+      const imagePath = path.resolve(material.photo);
+      // Remove the image file
+      fs.unlink(imagePath, (err) => {
+        if (err) {
+          console.error(err);
+        }
+      });
+    }
+
+    if (material.document) {
+      const documentPath = path.resolve(material.document);
+      // Remove the document file
+      fs.unlink(documentPath, (err) => {
+        if (err) {
+          console.error(err);
+        }
+      });
+    }
+
     const deleted = await Materials.destroy({ where: { id } });
     if (!deleted) {
       return res.status(404).json({ error: "Material not found" });
     }
     res.status(204).send();
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    next(error); // Pass the error to the centralized error handler
   }
 };

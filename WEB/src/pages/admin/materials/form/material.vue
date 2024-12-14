@@ -1,46 +1,86 @@
 <template>
   <div>
-    <v-row>
-      <v-col cols="12" md="6" class="d-flex ga-2 align-center">
+    <v-row dense>
+      <v-col cols="12" class="d-flex ga-2 align-center">
         <h6 class="text-h6">Materials Information</h6>
       </v-col>
-      <v-col cols="12" md="auto" class="d-flex align-center">
-        <label class="v-label text-body-1 pr-10">Type </label>
-        <v-radio-group v-model="type" row hide-details="auto">
-          <v-radio label="Study / Teaching Materials" value="Study" />
-          <v-radio label="Library Materials" value="Library" />
-        </v-radio-group>
-      </v-col>
+
       <v-col cols="12" md="6">
-        <v-text-field dense hide-details="auto" persistent-placeholder outlined>
-          <template #label>
-            <span class="red--text">*</span> Materials title :
-          </template>
+        <label class="v-label mb-2 text-subtitle-2">
+          <span class="red--text mr-2">*</span>Materials title :
+        </label>
+        <v-text-field
+          v-model="formInput.title"
+          dense
+          hide-details="auto"
+          persistent-placeholder
+          outlined
+          :rules="[(v) => !!v || 'Title is required']"
+        >
         </v-text-field>
       </v-col>
       <v-col cols="12" md="6">
-        <v-select dense outlined hide-details="auto" persistent-placeholder>
-          <template #label>
-            <span class="red--text">*</span> Materials category :
-          </template>
+        <label class="v-label mb-2 text-subtitle-2">
+          <span class="red--text mr-2">*</span>Materials type :
+        </label>
+        <v-select
+          v-model="formInput.materialTypeID"
+          :items="items.materialType"
+          item-text="name"
+          item-value="id"
+          dense
+          outlined
+          hide-details="auto"
+          persistent-placeholder
+          :rules="[(v) => !!v || 'Type is required']"
+        >
         </v-select>
       </v-col>
       <v-col cols="12" md="6">
-        <v-select dense outlined hide-details="auto" persistent-placeholder>
-          <template #label>
-            <span class="red--text">*</span> Materials for :
-          </template>
+        <label class="v-label mb-2 text-subtitle-2">
+          <span class="red--text mr-2">*</span>Materials category :
+        </label>
+        <v-select
+          v-model="formInput.categoryID"
+          :items="items.materialCategory"
+          item-text="name"
+          item-value="id"
+          dense
+          outlined
+          hide-details="auto"
+          persistent-placeholder
+          :rules="[(v) => !!v || 'Category is required']"
+        >
         </v-select>
       </v-col>
       <v-col cols="12" md="6">
+        <label class="v-label mb-2 text-subtitle-2">
+          <span class="red--text mr-2">*</span>Materials for :
+        </label>
+        <v-select
+          v-model="formInput.materialForID"
+          :items="items.materialFor"
+          item-text="name"
+          item-value="id"
+          dense
+          outlined
+          hide-details="auto"
+          persistent-placeholder
+          :rules="[(v) => !!v || 'Materials for is required']"
+        >
+        </v-select>
+      </v-col>
+      <v-col cols="12" md="6">
+        <label class="v-label mb-2 text-subtitle-2"> Upload Photo : </label>
         <v-file-input
+          v-model="formInput.photo"
           dense
           outlined
           hide-details="auto"
           placeholder="No file chosen"
           persistent-placeholder
+          accept="image/*"
         >
-          <template #label> Upload Photo : </template>
         </v-file-input>
       </v-col>
     </v-row>
@@ -51,51 +91,68 @@
       </v-col>
 
       <v-col cols="12" md="6">
-        <v-text-field dense hide-details="auto" persistent-placeholder outlined>
-          <template #label>
-            <span class="red--text">*</span> Materials No, :
-          </template>
+        <label class="v-label mb-2 text-subtitle-2">
+          <span class="red--text mr-2">*</span>Materials No :
+        </label>
+        <v-text-field
+          v-model="formInput.no"
+          dense
+          hide-details="auto"
+          persistent-placeholder
+          outlined
+          :rules="[(v) => !!v || 'Materials No is required']"
+        >
         </v-text-field>
       </v-col>
       <v-col cols="12" md="6">
+        <label class="v-label mb-2 text-subtitle-2">
+          Materials Document :
+        </label>
         <v-file-input
+          v-model="formInput.document"
           dense
           outlined
           hide-details="auto"
           placeholder="No file chosen"
           persistent-placeholder
         >
-          <template #label>
-            <span class="red--text">*</span> Materials Document :
-          </template>
         </v-file-input>
       </v-col>
       <v-col cols="12" md="6">
+        <label class="v-label mb-2 text-subtitle-2">
+          <span class="red--text mr-2">*</span>Materials Document Type :
+        </label>
         <v-select
+          v-model="formInput.documentType"
           dense
           hide-details="auto"
           persistent-placeholder
           outlined
-          label="Materials Link Type :"
+          single-line
           :items="['pptx', 'pdf', 'mp4', 'youtube', 'canva']"
+          :rules="[(v) => !!v || 'Materials Document Type is required']"
         />
       </v-col>
       <v-col cols="12" md="6">
+        <label class="v-label mb-2 text-subtitle-2">Materials Link : </label>
         <v-text-field
+          v-model="formInput.link"
           dense
           hide-details="auto"
           persistent-placeholder
           outlined
-          label="Materials Link :"
+          single-line
         />
       </v-col>
       <v-col cols="12" md="6">
+        <label class="v-label mb-2 text-subtitle-2">Description : </label>
         <v-textarea
+          v-model="formInput.description"
           dense
           hide-details="auto"
           persistent-placeholder
-          label="Description"
           outlined
+          rows="2"
         />
       </v-col>
     </v-row>
@@ -105,15 +162,61 @@
 <script>
 export default {
   name: "FormMaterial",
+  props: {
+    editItems: Object,
+  },
   data() {
     return {
       formInput: {
         title: "",
-        category: "",
-        type: "",
-        image: "",
+        categoryID: "",
+        materialForID: "",
+        materialTypeID: "",
+        no: "",
+        document: null,
+        description: "",
+        link: "",
+        photo: null,
+        documentType: "",
+      },
+      items: {
+        materialType: [],
+        materialFor: [],
+        materialCategory: [],
       },
     };
+  },
+  watch: {
+    formInput: {
+      handler() {
+        this.$emit("input", this.formInput);
+      },
+      deep: true,
+    },
+    editItems: {
+      handler() {
+        if (this.editItems) {
+          this.formInput = { ...this.editItems };
+        }
+      },
+      deep: true,
+    },
+  },
+  mounted() {
+    this.fetchData("materialType", "materialType");
+    this.fetchData("materialFor", "materialFor");
+    this.fetchData("materialCategory", "materialCategory");
+  },
+  methods: {
+    async fetchData(uri, items) {
+      // fetch data from api
+      try {
+        const { data } = await this.axios.get(`/${uri}`);
+        this.items[items] = data;
+      } catch (error) {
+        console.log(error);
+      }
+    },
   },
 };
 </script>

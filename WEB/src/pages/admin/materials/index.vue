@@ -49,14 +49,25 @@
           :items="itemsMaterials"
           show-select
         >
-          <template #[`item.image`]="{ item }">
-            <v-card class="my-2" elevation="2" rounded height="64" width="70">
+          <template #[`item.photo`]="{ item }">
+            <v-avatar size="64" rounded color="grey lighten-4" class="my-2">
               <v-img
-                :src="`https://cdn.vuetifyjs.com/docs/images/graphics/gpus/${item.image}`"
                 height="64"
+                width="64"
                 cover
+                v-if="item.photo"
+                :src="`${baseUrl}${item.photo}`"
               />
-            </v-card>
+              <v-icon color="primary" v-else size="45"
+                >mdi-notebook-edit</v-icon
+              >
+            </v-avatar>
+          </template>
+          <template #[`item.date`]="{ item }">
+            {{ new Date(item.createdAt).toLocaleDateString() }}
+          </template>
+          <template #[`item.description`]="{ item }">
+            {{ item.description || "N/A" }}
           </template>
           <template #[`item.action`]="{ item }">
             <div class="d-flex">
@@ -66,11 +77,11 @@
                 dark
                 small
                 depressed
-                :to="`/admin/materials/edit/${item.no}`"
+                :to="`/admin/materials/edit/${item.id}`"
               >
                 <v-icon> mdi-pencil</v-icon>
               </v-btn>
-              <v-btn color="error" icon dark small>
+              <v-btn color="error" icon dark small @click="deleteData(item.id)">
                 <v-icon>mdi-trash-can</v-icon>
               </v-btn>
             </div>
@@ -86,6 +97,7 @@ export default {
   name: "MaterialsPage",
   data() {
     return {
+      baseUrl: process.env.VUE_APP_API_IMAGE,
       search: "",
       headersMaterials: [
         {
@@ -95,30 +107,63 @@ export default {
           text: "Materials No.",
           width: "3%",
         },
-        { value: "image", text: "Photo" },
-        { value: "title", text: "Title", width: "40%" },
-        { value: "category", text: "Materials Category" },
-        { value: "materialFor", text: "Materials for teacher/student" },
-        { value: "type", text: "Type" },
-        { value: "fileType", text: "File type" },
+        { value: "photo", text: "Photo" },
+        { value: "title", text: "Title", width: "25%" },
+        {
+          value: "materialCategory.name",
+          text: "Materials Category",
+          width: "",
+        },
+        { value: "materialFor.name", text: "Materials for teacher/student" },
+        { value: "materialType.name", text: "Type" },
+        { value: "documentType", text: "File type" },
         { value: "date", text: "Date" },
         { value: "description", text: "Description" },
         { value: "action", text: "Action", sortable: false },
       ],
-      itemsMaterials: [
-        {
-          no: "M001",
-          image: "1.png",
-          title: "Book",
-          category: "Class 1",
-          materialFor: "Student",
-          type: "Study",
-          fileType: "MP4",
-          date: "2024/11/12",
-          description: "N/A",
-        },
-      ],
+      itemsMaterials: [],
     };
+  },
+  mounted() {
+    this.fetchData();
+  },
+  methods: {
+    async fetchData() {
+      try {
+        const { data } = await this.axios.get(`/materials`);
+        this.itemsMaterials = data;
+      } catch (error) {
+        this.$swal.fire({
+          title: error.response.data.error,
+          text: error.response.data.details,
+          icon: "error",
+        });
+      }
+    },
+    async deleteData(id) {
+      // confirm delete
+      const { isDismissed } = await this.$swal({
+        title: "Are you sure?",
+        text: "Once deleted, you will not be able to recover this data!",
+        icon: "warning",
+        buttons: true,
+      });
+
+      if (isDismissed) return;
+
+      //delete data from api
+      try {
+        await this.axios.delete(`/materials/${id}`);
+        this.$swal("Material deleted successfully", "", "success");
+        this.fetchData();
+      } catch (error) {
+        this.$swal.fire({
+          title: error.response.data.error,
+          text: error.response.data.details,
+          icon: "error",
+        });
+      }
+    },
   },
 };
 </script>

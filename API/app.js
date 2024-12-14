@@ -5,6 +5,7 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const { sequelize } = require("./models");
 const apiRoutes = require("./routes"); // The index.js file in the `routes` folder
+const errorHandler = require("./middlewares/errorHandler");
 
 dotenv.config();
 
@@ -21,6 +22,9 @@ app.use("/uploads", express.static("uploads")); // Serve uploaded files as stati
 
 // Set a single `/api` prefix for all routes
 app.use("/api", apiRoutes);
+
+// Error Handling Middleware (must be after routes)
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 3000;
 
