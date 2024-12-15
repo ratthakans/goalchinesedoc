@@ -1,3 +1,4 @@
+const logger = require("../logger");
 const { MaterialCategory } = require("../models"); // Ensure the path to your models is correct
 
 // Create a new MaterialCategory
@@ -5,6 +6,10 @@ exports.create = async (req, res, next) => {
   try {
     const materialCategory = await MaterialCategory.create(req.body);
     res.status(201).json(materialCategory);
+
+    logger.info(
+      `MaterialCategory created: ${materialCategory.id} by [${req.user.id}]${req.user.username}`
+    );
   } catch (error) {
     next(error); // Pass the error to the centralized error handler
   }
@@ -46,6 +51,10 @@ exports.update = async (req, res, next) => {
     }
     const updatedMaterialCategory = await MaterialCategory.findByPk(id);
     res.status(200).json(updatedMaterialCategory);
+
+    logger.info(
+      `MaterialCategory updated: ${id} by [${req.user.id}]${req.user.username}`
+    );
   } catch (error) {
     next(error); // Pass the error to the centralized error handler
   }
@@ -60,6 +69,10 @@ exports.delete = async (req, res, next) => {
       return res.status(404).json({ error: "MaterialCategory not found" });
     }
     res.status(204).send();
+
+    logger.info(
+      `MaterialCategory deleted: ${id} by [${req.user.id}]${req.user.username}`
+    );
   } catch (error) {
     next(error); // Pass the error to the centralized error handler
   }

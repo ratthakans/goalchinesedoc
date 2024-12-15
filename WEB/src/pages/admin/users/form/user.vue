@@ -65,7 +65,7 @@
                   <template v-slot:activator="{ on, attrs }">
                     <v-text-field
                       v-model="formInput.dateOfBirth"
-                      label="Birthday date"
+                      placeholder="Birthday date"
                       append-icon="mdi-calendar"
                       dense
                       outlined
@@ -141,7 +141,7 @@
                       @click:append="showPassword = !showPassword"
                       :rules="[
                         (v) =>
-                          flagEdit ? true : !!v || 'User Name is required',
+                          flagEdit ? true : !!v || 'Password is required',
                       ]"
                     />
                   </v-col>

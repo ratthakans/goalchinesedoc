@@ -1,3 +1,4 @@
+const logger = require("../logger");
 const { MaterialFor } = require("../models"); // Ensure the path to your models is correct
 
 // Create a new MaterialFor
@@ -5,6 +6,10 @@ exports.create = async (req, res) => {
   try {
     const materialFor = await MaterialFor.create(req.body);
     res.status(201).json(materialFor);
+
+    logger.info(
+      `MaterialFor created: ${materialFor.id} by [${req.user.id}]${req.user.username}`
+    );
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -44,6 +49,10 @@ exports.update = async (req, res) => {
     }
     const updatedMaterialFor = await MaterialFor.findByPk(id);
     res.status(200).json(updatedMaterialFor);
+
+    logger.info(
+      `MaterialFor updated: ${id} by [${req.user.id}]${req.user.username}`
+    );
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -58,6 +67,10 @@ exports.delete = async (req, res) => {
       return res.status(404).json({ error: "MaterialFor not found" });
     }
     res.status(204).send();
+
+    logger.info(
+      `MaterialFor deleted: ${id} by [${req.user.id}]${req.user.username}`
+    );
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

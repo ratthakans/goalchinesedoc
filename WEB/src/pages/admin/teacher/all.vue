@@ -52,14 +52,14 @@
             <div class="d-flex align-center">
               <v-avatar
                 size="45"
-                :color="item.avatar ? '' : 'grey lighten-4'"
-                :class="item.avatar ? '' : 'v-avatar-light-bg primary--text'"
-                :variant="!item.avatar ? 'tonal' : undefined"
+                :color="item.photo ? '' : 'grey lighten-4'"
+                :class="item.photo ? '' : 'v-avatar-light-bg primary--text'"
+                :variant="!item.photo ? 'tonal' : undefined"
                 tile
                 rounded="lg"
               >
-                <v-img v-if="item.avatar" :src="item.avatar" />
-                <v-icon>mdi-account</v-icon>
+                <v-img v-if="item.photo" :src="`${baseUrl}${item.photo}`" />
+                <v-icon v-else>mdi-account</v-icon>
               </v-avatar>
               <div class="d-flex flex-column ms-3">
                 <span
@@ -69,7 +69,13 @@
               </div>
             </div>
           </template>
+          <template #[`item.age`]="{ item }">
+            {{ calulateAge(item.dateOfBirth) }}
+          </template>
 
+          <template #[`item.registerDate`]="{ item }">
+            {{ new Date(item.registerDate).toLocaleDateString("en-GB") }}
+          </template>
           <template #item.action="{ item }">
             <v-menu bottom left>
               <template v-slot:activator="{ on, attrs }">
@@ -81,8 +87,8 @@
               <v-list dense>
                 <v-list-item
                   v-for="(menu, i) in [
-                    { title: 'View', to: `./view/${item.no}` },
-                    { title: 'Edit', to: `./edit/${item.no}` },
+                    { title: 'View', to: `./view/${item.id}` },
+                    { title: 'Edit', to: `./edit/${item.id}` },
                   ]"
                   :key="i"
                   link
@@ -111,32 +117,62 @@ export default {
       headers: [
         {
           align: "start",
-          value: "no",
+          value: "id",
           sortable: false,
           text: "Teacher No.",
         },
-        { value: "name", text: "Teacher Name", width: "20%" },
-        { value: "teachingDate", text: "Start teaching date" },
-        { value: "availableFor", text: "Available for" },
+        { value: "name", text: "Teacher Name", width: "30%" },
+        { value: "registerDate", text: "Start teaching date" },
+        { value: "avaliableForClass", text: "Available for" },
         { value: "language", text: "Language" },
         { value: "score", text: "Teacher score" },
         { value: "age", text: "Age" },
         { value: "gender", text: "Gender" },
         { value: "action", text: "Action" },
       ],
-      items: [
-        {
-          no: "M001",
-          name: "Teacher name",
-          teachingDate: "2021-09-01",
-          availableFor: "Adults",
-          language: "Thai",
-          score: "Test",
-          age: "25",
-          gender: "Male",
-        },
-      ],
+      items: [],
     };
+  },
+  mounted() {
+    this.fetchData();
+  },
+  methods: {
+    async fetchData() {
+      try {
+        const { data } = await this.axios.get(`/account?role=teacher`);
+        this.items = data || [];
+      } catch (error) {
+        this.$swal.fire({
+          title: error.response.data.error,
+          text: error.response.data.details,
+          icon: "error",
+        });
+      }
+    },
+    async deleteData(id) {
+      // confirm delete
+      const { isDismissed } = await this.$swal({
+        title: "Are you sure?",
+        text: "Once deleted, you will not be able to recover this data!",
+        icon: "warning",
+        buttons: true,
+      });
+
+      if (isDismissed) return;
+
+      //delete data from api
+      try {
+        await this.axios.delete(`/account/${id}`);
+        this.$swal("Material deleted successfully", "", "success");
+        this.fetchData();
+      } catch (error) {
+        this.$swal.fire({
+          title: error.response.data.error,
+          text: error.response.data.details,
+          icon: "error",
+        });
+      }
+    },
   },
 };
 </script>

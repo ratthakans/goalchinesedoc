@@ -1,3 +1,4 @@
+const logger = require("../logger");
 const { Materials } = require("../models"); // Ensure the path to your models is correct
 const fs = require("fs");
 const path = require("path");
@@ -35,6 +36,10 @@ exports.create = async (req, res) => {
     res
       .status(201)
       .json({ message: "Material created successfully", material });
+
+    logger.info(
+      `Material created: ${material.id} by [${req.user.id}] ${req.user.username}`
+    );
   } catch (error) {
     next(error); // Pass the error to the centralized error handler
   }
@@ -81,6 +86,10 @@ exports.update = async (req, res, next) => {
     res
       .status(200)
       .json({ message: "Material updated successfully", material });
+
+    logger.info(
+      `Material updated: ${material.id} by [${req.user.id}] ${req.user.username}`
+    );
   } catch (error) {
     next(error); // Pass the error to the centralized error handler
   }
@@ -160,6 +169,10 @@ exports.delete = async (req, res, next) => {
       return res.status(404).json({ error: "Material not found" });
     }
     res.status(204).send();
+
+    logger.info(
+      `Material deleted: ${id} by [${req.user.id}] ${req.user.username}`
+    );
   } catch (error) {
     next(error); // Pass the error to the centralized error handler
   }

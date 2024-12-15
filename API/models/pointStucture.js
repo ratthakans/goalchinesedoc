@@ -1,12 +1,16 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
 
-const PointStucture = sequelize.define(
-  "PointStucture",
+const PointStructure = sequelize.define(
+  "PointStructure",
   {
     accountID: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      references: {
+        model: "Account", // Name of the related table
+        key: "id",
+      },
     },
     updateDate: {
       type: DataTypes.STRING,
@@ -32,6 +36,10 @@ const PointStucture = sequelize.define(
     updateBy: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      references: {
+        model: "Account", // Name of the related table
+        key: "id",
+      },
     },
   },
   {
@@ -39,8 +47,8 @@ const PointStucture = sequelize.define(
   }
 );
 
-PointStucture.associate = (models) => {
-  PointStucture.belongsTo(models.Account, { foreignKey: "updateBy" });
+PointStructure.associate = (models) => {
+  PointStructure.belongsTo(models.Account, { foreignKey: "updateBy" });
 };
 
-module.exports = PointStucture;
+module.exports = PointStructure;

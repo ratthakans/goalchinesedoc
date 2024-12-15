@@ -1,3 +1,4 @@
+const logger = require("../logger");
 const { User } = require("../models"); // Ensure correct path
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -29,6 +30,7 @@ exports.login = async (req, res) => {
     const token = jwt.sign(
       {
         id: user.id,
+        accountID: user.accountID,
         username: user.username,
         role: user.role,
       },
@@ -40,11 +42,14 @@ exports.login = async (req, res) => {
       message: "Login successful",
       user: {
         id: user.id,
+        accountID: user.accountID,
         username: user.username,
         role: user.role,
         token,
       },
     });
+
+    logger.info(`User ${user.username} logged in`);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

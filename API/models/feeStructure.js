@@ -1,12 +1,16 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
 
-const FeeStucture = sequelize.define(
-  "FeeStucture",
+const FeeStructure = sequelize.define(
+  "FeeStructure",
   {
     accountID: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      references: {
+        model: "Account", // Name of the related table
+        key: "id",
+      },
     },
     updateDate: {
       type: DataTypes.STRING,
@@ -44,4 +48,4 @@ const FeeStucture = sequelize.define(
   }
 );
 
-module.exports = FeeStucture;
+module.exports = FeeStructure;

@@ -30,11 +30,7 @@ export default {
       userInfo: "getUserinfo",
     }),
   },
-  watch: {
-    userInfo(v) {
-      console.log("v :>> ", v);
-    },
-  },
+  watch: {},
   mounted() {},
   methods: {
     ...mapActions(useAppStore, { setUserInfo: "setUserInfo" }),

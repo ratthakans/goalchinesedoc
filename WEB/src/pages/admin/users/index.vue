@@ -59,7 +59,7 @@
                 rounded="lg"
               >
                 <v-img v-if="item.photo" :src="`${baseUrl}${item.photo}`" />
-                <v-icon>mdi-account</v-icon>
+                <v-icon v-else>mdi-account</v-icon>
               </v-avatar>
               <div class="d-flex flex-column ms-3">
                 <span
@@ -93,7 +93,6 @@ export default {
   name: "UsersPage",
   data() {
     return {
-      baseUrl: process.env.VUE_APP_API_IMAGE,
       search: "",
       headers: [
         { value: "name", text: "User Name", width: "30%" },

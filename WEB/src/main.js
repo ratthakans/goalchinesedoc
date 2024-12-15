@@ -19,9 +19,33 @@ pinia.use(piniaPluginPersistedstate);
 Vue.use(PiniaVuePlugin);
 Vue.use(pinia);
 
-axios.defaults.baseURL = process.env.VUE_APP_API_URL;
-axios.defaults.headers.common["Authorization"] =
-  `Bearer ` + localStorage.getItem("token");
+axios.interceptors.request.use(
+  (config) => {
+    config.baseURL = process.env.VUE_APP_API_URL;
+    const token = localStorage.getItem("token");
+    if (token) {
+      config.headers.common["Authorization"] = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+axios.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error) => {
+    console.log("🚀 ~ error:", error);
+    if (error.response.status === 401) {
+      localStorage.removeItem("token");
+      router.push({ name: "login" });
+    }
+    return Promise.reject(error);
+  }
+);
 
 Vue.use(VueAxios, axios);
 
@@ -35,6 +59,9 @@ const options = {
 Vue.use(VueSweetalert2, options);
 
 Vue.mixin({
+  data: () => ({
+    baseUrl: process.env.VUE_APP_API_IMAGE,
+  }),
   methods: {
     calulateAge(date) {
       const today = new Date();

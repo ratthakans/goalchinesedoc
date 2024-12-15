@@ -10,4 +10,7 @@ router.get("/:id", myMaterialController.findOne); // Read one
 router.put("/:id", myMaterialController.update); // Update
 router.delete("/:id", myMaterialController.delete); // Delete
 
+// Custom routes
+router.get("/account/:accountID", myMaterialController.getMaterialsByAccountId); // Read all by accountId
+
 module.exports = router;

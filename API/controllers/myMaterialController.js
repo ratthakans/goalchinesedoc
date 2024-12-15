@@ -1,98 +1,138 @@
-const { AccountMaterial } = require("../models"); // Ensure correct path to your models
+const logger = require("../logger");
+const { MyMaterial, Materials } = require("../models"); // Ensure correct path to your models
 
-// Create a new AccountMaterial record
+// Create a new MyMaterial record
 exports.create = async (req, res) => {
   try {
-    const { accountID, materialID } = req.body;
+    const { teacherId, materials } = req.body;
 
-    if (!accountID || !materialID) {
+    if (!teacherId.length || !materials.length) {
       return res
         .status(400)
         .json({ error: "Both accountID and materialID are required" });
     }
 
-    const accountMaterial = await AccountMaterial.create({
-      accountID,
-      materialID,
+    for (let i = 0; i < teacherId.length; i++) {
+      for (let j = 0; j < materials.length; j++) {
+        await MyMaterial.findOrCreate({
+          where: {
+            accountID: teacherId[i],
+            materialID: materials[j],
+          },
+          defaults: {
+            accountID: teacherId[i],
+            materialID: materials[j],
+          },
+        });
+      }
+    }
+
+    res.status(201).json({
+      message: "MyMaterial created successfully",
     });
 
-    res
-      .status(201)
-      .json({
-        message: "AccountMaterial created successfully",
-        accountMaterial,
-      });
+    logger.info(`MyMaterial created: by [${req.user.id}]${req.user.username}`);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };
 
-// Get all AccountMaterial records
+// Get all MyMaterial records
 exports.findAll = async (req, res) => {
   try {
-    const accountMaterials = await AccountMaterial.findAll();
-    res.status(200).json(accountMaterials);
+    const myMaterials = await MyMaterial.findAll();
+    res.status(200).json(myMaterials);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
 
-// Get a specific AccountMaterial by ID
+// Get a specific MyMaterial by ID
 exports.findOne = async (req, res) => {
   try {
     const { id } = req.params;
-    const accountMaterial = await AccountMaterial.findByPk(id);
+    const myMaterial = await MyMaterial.findByPk(id);
 
-    if (!accountMaterial) {
-      return res.status(404).json({ error: "AccountMaterial not found" });
+    if (!myMaterial) {
+      return res.status(404).json({ error: "MyMaterial not found" });
     }
 
-    res.status(200).json(accountMaterial);
+    res.status(200).json(myMaterial);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
 
-// Update an AccountMaterial by ID
+// get all materials for a specific account by accountId
+exports.getMaterialsByAccountId = async (req, res) => {
+  try {
+    const { accountID } = req.params;
+
+    const myMaterials = await MyMaterial.findAll({
+      where: { accountID },
+      include: {
+        model: Materials,
+        as: "material",
+        attributes: { exclude: ["updatedAt"] },
+      },
+    });
+
+    if (!myMaterials.length) {
+      return res.status(404).json({ error: "MyMaterial not found" });
+    }
+
+    res.status(200).json(myMaterials);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Update an MyMaterial by ID
 exports.update = async (req, res) => {
   try {
     const { id } = req.params;
     const { accountID, materialID } = req.body;
 
-    const accountMaterial = await AccountMaterial.findByPk(id);
+    const myMaterial = await MyMaterial.findByPk(id);
 
-    if (!accountMaterial) {
-      return res.status(404).json({ error: "AccountMaterial not found" });
+    if (!myMaterial) {
+      return res.status(404).json({ error: "MyMaterial not found" });
     }
 
-    if (accountID) accountMaterial.accountID = accountID;
-    if (materialID) accountMaterial.materialID = materialID;
+    if (accountID) myMaterial.accountID = accountID;
+    if (materialID) myMaterial.materialID = materialID;
 
-    await accountMaterial.save();
+    await myMaterial.save();
 
-    res
-      .status(200)
-      .json({
-        message: "AccountMaterial updated successfully",
-        accountMaterial,
-      });
+    res.status(200).json({
+      message: "MyMaterial updated successfully",
+      myMaterial,
+    });
+
+    logger.info(
+      `MyMaterial updated: ${myMaterial.id} by [${req.user.id}]${req.user.username}`
+    );
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };
 
-// Delete an AccountMaterial by ID
+// Delete an MyMaterial by ID
 exports.delete = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const deleted = await AccountMaterial.destroy({ where: { id } });
+    const deleted = await MyMaterial.destroy({ where: { id } });
 
     if (!deleted) {
-      return res.status(404).json({ error: "AccountMaterial not found" });
+      return res.status(404).json({ error: "MyMaterial not found" });
     }
 
     res.status(204).send();
+
+    logger.info(
+      `MyMaterial deleted: ${id} by [${req.user.id}]${req.user.username}`
+    );
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

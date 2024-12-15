@@ -7,6 +7,10 @@ const ClassStudy = sequelize.define(
     classID: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      references: {
+        model: "Class", // Name of the related table
+        key: "id",
+      },
     },
     day: {
       type: DataTypes.STRING,

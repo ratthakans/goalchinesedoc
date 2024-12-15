@@ -2,6 +2,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 
+const logger = require("./logger");
+
 const dotenv = require("dotenv");
 const { sequelize } = require("./models");
 const apiRoutes = require("./routes"); // The index.js file in the `routes` folder
@@ -10,7 +12,10 @@ const errorHandler = require("./middlewares/errorHandler");
 dotenv.config();
 
 const app = express();
-console.log("process.env.NODE_ENV :>> ", process.env.NODE_ENV);
+
+// Log application startup
+logger.info("Application is starting...");
+
 if (process.env.NODE_ENV === "development") {
   console.log("Running in development mode");
   app.use(cors()); // Allow unrestricted CORS in development

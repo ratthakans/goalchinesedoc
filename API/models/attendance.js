@@ -1,12 +1,16 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
 
-const TeacherType = sequelize.define(
-  "TeacherType",
+const Attendance = sequelize.define(
+  "Attendance",
   {
     classId: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      references: {
+        model: "Class", // Name of the related table
+        key: "id",
+      },
     },
     studyDate: {
       type: DataTypes.DATE,
@@ -23,4 +27,4 @@ const TeacherType = sequelize.define(
   }
 );
 
-module.exports = TeacherType;
+module.exports = Attendance;

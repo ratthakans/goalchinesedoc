@@ -15,10 +15,18 @@ const Class = sequelize.define(
     branchID: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      references: {
+        model: "Branch", // Name of the related table
+        key: "id",
+      },
     },
     classTypeID: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      references: {
+        model: "ClassType", // Name of the related table
+        key: "id",
+      },
     },
     numberOfStudent: {
       type: DataTypes.INTEGER,
@@ -43,6 +51,10 @@ const Class = sequelize.define(
     teacherID: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      references: {
+        model: "Account", // Name of the related table
+        key: "id",
+      },
     },
     status: {
       type: DataTypes.STRING,
@@ -50,6 +62,10 @@ const Class = sequelize.define(
     materialTypeID: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      references: {
+        model: "MaterialType", // Name of the related table
+        key: "id",
+      },
     },
     registeredTimes: {
       type: DataTypes.INTEGER,
@@ -77,6 +93,10 @@ const Class = sequelize.define(
     },
     updateBy: {
       type: DataTypes.INTEGER,
+      references: {
+        model: "Account", // Name of the related table
+        key: "id",
+      },
     },
     note: {
       type: DataTypes.STRING,
@@ -86,6 +106,10 @@ const Class = sequelize.define(
     },
     currencyID: {
       type: DataTypes.INTEGER,
+      references: {
+        model: "Currency", // Name of the related table
+        key: "id",
+      },
     },
     regular: {
       type: DataTypes.INTEGER,

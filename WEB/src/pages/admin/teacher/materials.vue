@@ -35,6 +35,7 @@
     <v-row dense>
       <v-col cols="12">
         <v-data-table
+          v-model="selectedTeacher"
           :headers="headers"
           :filter-keys="['title', 'category', 'type']"
           :items="items"
@@ -44,14 +45,14 @@
             <div class="d-flex align-center">
               <v-avatar
                 size="45"
-                :color="item.avatar ? '' : 'grey lighten-4'"
-                :class="item.avatar ? '' : 'v-avatar-light-bg primary--text'"
-                :variant="!item.avatar ? 'tonal' : undefined"
+                :color="item.photo ? '' : 'grey lighten-4'"
+                :class="item.photo ? '' : 'v-avatar-light-bg primary--text'"
+                :variant="!item.photo ? 'tonal' : undefined"
                 tile
                 rounded="lg"
               >
-                <v-img v-if="item.avatar" :src="item.avatar" />
-                <v-icon>mdi-account</v-icon>
+                <v-img v-if="item.photo" :src="`${baseUrl}${item.photo}`" />
+                <v-icon v-else>mdi-account</v-icon>
               </v-avatar>
               <div class="d-flex flex-column ms-3">
                 <span
@@ -61,9 +62,38 @@
               </div>
             </div>
           </template>
+          <template #[`item.age`]="{ item }">
+            {{ calulateAge(item.dateOfBirth) }}
+          </template>
 
-          <template #item.action="{}">
-            <v-btn color="info" class="text-none"> view </v-btn>
+          <template #[`item.registerDate`]="{ item }">
+            {{ new Date(item.registerDate).toLocaleDateString("en-GB") }}
+          </template>
+          <template #item.action="{ item }">
+            <v-menu bottom left>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn icon v-bind="attrs" v-on="on">
+                  <v-icon>mdi-dots-vertical</v-icon>
+                </v-btn>
+              </template>
+
+              <v-list dense>
+                <v-list-item
+                  v-for="(menu, i) in [
+                    { title: 'View', to: `./view/${item.id}` },
+                    { title: 'Edit', to: `./edit/${item.id}` },
+                  ]"
+                  :key="i"
+                  link
+                  :to="menu.to"
+                >
+                  <v-list-item-title>{{ menu.title }}</v-list-item-title>
+                </v-list-item>
+                <v-list-item link>
+                  <v-list-item-title>Delete</v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
           </template>
         </v-data-table>
       </v-col>
@@ -90,6 +120,7 @@
     <v-row dense>
       <v-col cols="12">
         <v-data-table
+          v-model="selectedMaterials"
           :headers="headersMaterials"
           :filter-keys="['title', 'category', 'type']"
           :items="itemsMaterials"
@@ -109,14 +140,25 @@
               >
             </v-avatar>
           </template>
+          <template #[`item.date`]="{ item }">
+            {{ new Date(item.createdAt).toLocaleDateString("en-GB") }}
+          </template>
+          <template #[`item.description`]="{ item }">
+            {{ item.description || "N/A" }}
+          </template>
         </v-data-table>
       </v-col>
     </v-row>
 
     <v-row justify="end">
       <v-col cols="auto">
-        <v-btn color="primary" class="text-none">
-          <v-icon start> mdi-content-save </v-icon>
+        <v-btn
+          color="primary"
+          class="text-none"
+          @click="update"
+          :disabled="!selectedTeacher.length || !selectedMaterials.length"
+        >
+          <v-icon left> mdi-content-save </v-icon>
           Update
         </v-btn>
       </v-col>
@@ -133,60 +175,91 @@ export default {
       headers: [
         {
           align: "start",
-          value: "no",
+          value: "id",
           sortable: false,
           text: "Teacher No.",
         },
-        { value: "name", text: "Teacher Name", width: "40%" },
-        { value: "teachingDate", text: "Start teaching date" },
-        { value: "availableFor", text: "Available for" },
+        { value: "name", text: "Teacher Name", width: "30%" },
+        { value: "registerDate", text: "Start teaching date" },
+        { value: "avaliableForClass", text: "Available for" },
         { value: "language", text: "Language" },
         { value: "score", text: "Teacher score" },
         { value: "age", text: "Age" },
         { value: "gender", text: "Gender" },
       ],
-      items: [
-        {
-          no: "M001",
-          name: "Teacher name",
-          teachingDate: "2021-09-01",
-          availableFor: "Adults",
-          language: "Thai",
-          score: "Test",
-          age: "25",
-          gender: "Male",
-        },
-      ],
+      items: [],
       headersMaterials: [
         {
           align: "start",
           value: "no",
           sortable: false,
           text: "Materials No.",
+          width: "3%",
         },
-        { value: "image", text: "Photo" },
-        { value: "title", text: "Title", width: "40%" },
-        { value: "category", text: "Materials Category" },
-        { value: "materialFor", text: "Materials for teacher/student" },
-        { value: "type", text: "Type" },
-        { value: "fileType", text: "File type" },
+        { value: "photo", text: "Photo" },
+        { value: "title", text: "Title", width: "25%" },
+        {
+          value: "materialCategory.name",
+          text: "Materials Category",
+          width: "",
+        },
+        { value: "materialFor.name", text: "Materials for teacher/student" },
+        { value: "materialType.name", text: "Type" },
+        { value: "documentType", text: "File type" },
         { value: "date", text: "Date" },
         { value: "description", text: "Description" },
       ],
-      itemsMaterials: [
-        {
-          no: "M001",
-          image: "1.png",
-          title: "Book",
-          category: "Class 1",
-          materialFor: "Student",
-          type: "Study",
-          fileType: "MP4",
-          date: "2024/11/12",
-          description: null,
-        },
-      ],
+      itemsMaterials: [],
+      selectedTeacher: [],
+      selectedMaterials: [],
     };
+  },
+  mounted() {
+    this.fetchDataTeacher();
+    this.fetchDataMaterials();
+  },
+  methods: {
+    async fetchDataTeacher() {
+      try {
+        const { data } = await this.axios.get(`/account?role=teacher`);
+        this.items = data || [];
+      } catch (error) {
+        this.$swal.fire({
+          title: error.response.data.error,
+          text: error.response.data.details,
+          icon: "error",
+        });
+      }
+    },
+    async fetchDataMaterials() {
+      try {
+        const { data } = await this.axios.get(`/materials`);
+        this.itemsMaterials = data;
+      } catch (error) {
+        this.$swal.fire({
+          title: error.response.data.error,
+          text: error.response.data.details,
+          icon: "error",
+        });
+      }
+    },
+    async update() {
+      try {
+        let body = {
+          teacherId: this.selectedTeacher.map((item) => item.id),
+          materials: this.selectedMaterials.map((item) => item.id),
+        };
+        const { data } = await this.axios.post(`/myMaterial`, body);
+
+        this.$swal(data?.message, "", "success");
+      } catch (error) {
+        this.$swal.fire({
+          title: error.response.data.error,
+          text: error.response.data.details,
+          icon: "error",
+        });
+      }
+    },
   },
 };
 </script>

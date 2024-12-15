@@ -64,7 +64,7 @@
             </v-avatar>
           </template>
           <template #[`item.date`]="{ item }">
-            {{ new Date(item.createdAt).toLocaleDateString() }}
+            {{ new Date(item.createdAt).toLocaleDateString("en-GB") }}
           </template>
           <template #[`item.description`]="{ item }">
             {{ item.description || "N/A" }}

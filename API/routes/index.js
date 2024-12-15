@@ -13,20 +13,29 @@ const materialsRoutes = require("./materialsRoutes");
 const accountRoutes = require("./accountRoutes");
 const myMaterialRoutes = require("./myMaterialRoutes");
 const settingRoutes = require("./settingRoutes");
+const feeStructureRoutes = require("./feeStructureRoutes");
+const pointStructureRoutes = require("./pointStructureRoutes");
+
+const {
+  authenticate,
+  authorizeRole,
+} = require("../middlewares/authMiddleware");
 
 // Define route groups with the `/api` prefix
 router.use("/auth", authRoutes);
-router.use("/account", accountRoutes);
-router.use("/classType", classTypeRoutes);
-router.use("/branch", branchRoutes);
-router.use("/studentType", studentTypeRoutes);
-router.use("/teacherType", teacherTypeRoutes);
-router.use("/materialCategory", materialCategoryRoutes);
-router.use("/materialFor", materialForRoutes);
-router.use("/materialType", materialTypeRoutes);
-router.use("/currency", currencyRoutes);
-router.use("/materials", materialsRoutes);
-router.use("/myMaterial", myMaterialRoutes);
-router.use("/setting", settingRoutes);
+router.use("/account", authenticate, accountRoutes);
+router.use("/classType", authenticate, classTypeRoutes);
+router.use("/branch", authenticate, branchRoutes);
+router.use("/studentType", authenticate, studentTypeRoutes);
+router.use("/teacherType", authenticate, teacherTypeRoutes);
+router.use("/materialCategory", authenticate, materialCategoryRoutes);
+router.use("/materialFor", authenticate, materialForRoutes);
+router.use("/materialType", authenticate, materialTypeRoutes);
+router.use("/currency", authenticate, currencyRoutes);
+router.use("/materials", authenticate, materialsRoutes);
+router.use("/myMaterial", authenticate, myMaterialRoutes);
+router.use("/setting", authenticate, settingRoutes);
+router.use("/feeStructure", authenticate, feeStructureRoutes);
+router.use("/pointStructure", authenticate, pointStructureRoutes);
 
 module.exports = router;

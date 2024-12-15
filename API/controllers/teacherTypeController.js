@@ -1,3 +1,4 @@
+const logger = require("../logger");
 const { TeacherType } = require("../models"); // Ensure the path to your models is correct
 
 // Create a new TeacherType
@@ -5,6 +6,10 @@ exports.create = async (req, res) => {
   try {
     const teacherType = await TeacherType.create(req.body);
     res.status(201).json(teacherType);
+
+    logger.info(
+      `TeacherType ${teacherType.name} created by [${req.user.id}]${req.user.username}`
+    );
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -44,6 +49,10 @@ exports.update = async (req, res) => {
     }
     const updatedTeacherType = await TeacherType.findByPk(id);
     res.status(200).json(updatedTeacherType);
+
+    logger.info(
+      `TeacherType ${updatedTeacherType.name} updated by [${req.user.id}]${req.user.username}`
+    );
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -58,6 +67,10 @@ exports.delete = async (req, res) => {
       return res.status(404).json({ error: "TeacherType not found" });
     }
     res.status(204).send();
+
+    logger.info(
+      `TeacherType ${id} deleted by [${req.user.id}]${req.user.username}`
+    );
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

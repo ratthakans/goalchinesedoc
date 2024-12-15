@@ -1,3 +1,4 @@
+const logger = require("../logger");
 const { ClassType } = require("../models"); // Adjust the path to your models
 
 // Create a new classType
@@ -5,6 +6,10 @@ exports.create = async (req, res, next) => {
   try {
     const newClassType = await ClassType.create(req.body);
     res.status(201).json(newClassType);
+
+    logger.info(
+      `ClassType created: ${newClassType.id} by [${req.user.id}]${req.user.username}`
+    );
   } catch (error) {
     next(error); // Pass the error to the centralized error handler
   }
@@ -44,6 +49,10 @@ exports.update = async (req, res, next) => {
     }
     const updatedClassType = await ClassType.findByPk(id);
     res.status(200).json(updatedClassType);
+
+    logger.info(
+      `ClassType updated: ${id} by [${req.user.id}]${req.user.username}`
+    );
   } catch (error) {
     next(error); // Pass the error to the centralized error handler
   }
@@ -58,6 +67,10 @@ exports.delete = async (req, res, next) => {
       return res.status(404).json({ error: "ClassType not found" });
     }
     res.status(204).send(); // No content
+
+    logger.info(
+      `ClassType deleted: ${id} by [${req.user.id}]${req.user.username}`
+    );
   } catch (error) {
     next(error); // Pass the error to the centralized error handler
   }

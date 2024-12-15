@@ -1,3 +1,4 @@
+const logger = require("../logger");
 const { Branch } = require("../models"); // Import the Branch model
 
 // Create a new branch
@@ -5,6 +6,10 @@ exports.create = async (req, res) => {
   try {
     const branch = await Branch.create(req.body);
     res.status(201).json(branch);
+
+    logger.info(
+      `Branch created: ${branch.id} by [${req.user.id}]${req.user.username}`
+    );
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -44,6 +49,10 @@ exports.update = async (req, res) => {
     }
     const updatedBranch = await Branch.findByPk(id);
     res.status(200).json(updatedBranch);
+
+    logger.info(
+      `Branch updated: ${id} by [${req.user.id}]${req.user.username}`
+    );
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -58,6 +67,10 @@ exports.delete = async (req, res) => {
       return res.status(404).json({ error: "Branch not found" });
     }
     res.status(204).send();
+
+    logger.info(
+      `Branch deleted: ${id} by [${req.user.id}]${req.user.username}`
+    );
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

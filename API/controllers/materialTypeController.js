@@ -1,3 +1,4 @@
+const logger = require("../logger");
 const { MaterialType } = require("../models"); // Ensure the path to your models is correct
 
 // Create a new MaterialType
@@ -5,6 +6,10 @@ exports.create = async (req, res) => {
   try {
     const materialType = await MaterialType.create(req.body);
     res.status(201).json(materialType);
+
+    logger.info(
+      `MaterialType created: ${materialType.id} by [${req.user.id}]${req.user.username}`
+    );
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -44,6 +49,10 @@ exports.update = async (req, res) => {
     }
     const updatedMaterialType = await MaterialType.findByPk(id);
     res.status(200).json(updatedMaterialType);
+
+    logger.info(
+      `MaterialType updated: ${id} by [${req.user.id}]${req.user.username}`
+    );
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -58,6 +67,10 @@ exports.delete = async (req, res) => {
       return res.status(404).json({ error: "MaterialType not found" });
     }
     res.status(204).send();
+
+    logger.info(
+      `MaterialType deleted: ${id} by [${req.user.id}]${req.user.username}`
+    );
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

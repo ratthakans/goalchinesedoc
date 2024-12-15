@@ -1,6 +1,8 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
+const logger = require("../logger");
+
 const { Account, User, Permission, sequelize } = require("../models"); // Ensure correct path to your models
 const { validationResult } = require("express-validator");
 
@@ -58,13 +60,14 @@ exports.create = async (req, res, next) => {
       );
     }
 
-    await t.commit();
+    logger.info(`Account created: ${account.id} ${req.body.username}`);
 
     res.status(201).json({
       message: "Account and User created successfully",
       account,
       user,
     });
+    await t.commit();
   } catch (error) {
     await t.rollback();
     next(error); // Pass the error to the centralized error handler
@@ -167,7 +170,12 @@ exports.update = async (req, res) => {
     // Update the Account with the filtered data
     await account.update({ ...filteredData });
     res.status(200).json({ message: "Account updated successfully", account });
+
+    logger.info(
+      `Account updated: ${id} by [${req.user.id}]${req.user.username}`
+    );
   } catch (error) {
+    console.log("🚀 ~ exports.update= ~ error:", error);
     res.status(400).json({ error: error.message });
   }
 };
@@ -195,6 +203,10 @@ exports.delete = async (req, res, next) => {
     await User.destroy({ where: { accountID: id } });
 
     res.status(204).send();
+
+    logger.info(
+      `Account deleted: ${id} by [${req.user.id}]${req.user.username}`
+    );
   } catch (error) {
     next(error); // Pass the error to the centralized error handler
   }

@@ -7,6 +7,10 @@ const ClassEvents = sequelize.define(
     classId: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      references: {
+        model: "Class", // Name of the related table
+        key: "id",
+      },
     },
     title: {
       type: DataTypes.STRING,

@@ -1,3 +1,4 @@
+const logger = require("../logger");
 const { Setting } = require("../models"); // Adjust the path to your models
 const fs = require("fs");
 const path = require("path");
@@ -25,6 +26,10 @@ exports.create = async (req, res) => {
     }
 
     res.status(200).json({ message: "Settings updated successfully", setting });
+
+    logger.info(
+      `Settings updated: ${setting.id} by [${req.user.id}]${req.user.username}`
+    );
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -64,6 +69,10 @@ exports.update = async (req, res) => {
     }
     const updatedSetting = await Setting.findByPk(id);
     res.status(200).json(updatedSetting);
+
+    logger.info(
+      `Setting updated: ${id} by [${req.user.id}]${req.user.username}`
+    );
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -94,6 +103,10 @@ exports.deleteImage = async (req, res) => {
 
       res.status(200).json({ message: "Image deleted successfully", setting });
     });
+
+    logger.info(
+      `Settings Logo deleted: ${setting.id} by [${req.user.id}]${req.user.username}`
+    );
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
