@@ -59,7 +59,43 @@
     </v-row>
     <v-row>
       <v-col cols="12">
-        <div ref="viewer"></div>
+        <!-- <div ref="viewer"></div>
+        <div class="pdf-container"></div> -->
+        <div class="d-flex justify-end align-center">
+          <v-btn @click="toggleFullScreen" icon>
+            <v-icon>mdi-fullscreen</v-icon>
+          </v-btn>
+        </div>
+
+        <div style="position: relative">
+          <iframe
+            :class="{ 'full-screen-iframe': isFullScreen }"
+            id="myIframe"
+            ref="myIframe"
+            :src="`https://view.officeapps.live.com/op/embed.aspx?src=https://getsamplefiles.com/download/pptx/sample-2.pptx`"
+            width="100%"
+            height="600px"
+            frameborder="0"
+            allowfullscreen
+          ></iframe>
+          <div
+            :style="{
+              position: isFullScreen ? 'fixed' : 'absolute',
+              bottom: 0,
+              left: 0,
+              width: '100%',
+              height: '30px',
+              'background-color': 'white',
+              'z-index': '10000',
+              'pointer-events': none,
+            }"
+            class="d-flex justify-center align-center"
+          >
+            <v-btn v-if="isFullScreen" @click="toggleFullScreen">
+              {{ isFullScreen ? "Exit Full Screen" : "Go Full Screen" }}
+            </v-btn>
+          </div>
+        </div>
       </v-col>
     </v-row>
   </v-container>
@@ -70,10 +106,13 @@ import { mapState } from "pinia";
 import { useAppStore } from "@/stores/app";
 
 import WebViewer from "@pdftron/webviewer";
+
 export default {
   name: "StudentMaterials",
+
   data() {
     return {
+      isFullScreen: false,
       search: "",
       headers: [
         {
@@ -107,7 +146,44 @@ export default {
   created() {
     this.fetchDataMaterials();
   },
+  mounted() {
+    // Wait for the iframe to load
+    // document.getElementById("myIframe").addEventListener("load", function () {
+    //   const iframe = document.getElementById("myIframe");
+    //   const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+    //   console.log("🚀 ~ iframeDoc:", iframeDoc);
+    //   // Hide the element with ID 'WACStatusBarContainer'
+    //   const statusBar = iframeDoc.getElementById("WACStatusBarContainer");
+    //   if (statusBar) {
+    //     statusBar.style.display = "none"; // Hides the element
+    //   }
+    // });
+  },
   methods: {
+    toggleFullScreen() {
+      // const iframe = this.$refs.myIframe;
+
+      // if (!this.isFullScreen) {
+      //   if (iframe.requestFullscreen) {
+      //     iframe.requestFullscreen();
+      //   } else if (iframe.webkitRequestFullscreen) {
+      //     iframe.webkitRequestFullscreen(); // Safari
+      //   } else if (iframe.msRequestFullscreen) {
+      //     iframe.msRequestFullscreen(); // IE/Edge
+      //   }
+      // } else {
+      //   if (document.exitFullscreen) {
+      //     document.exitFullscreen();
+      //   } else if (document.webkitExitFullscreen) {
+      //     document.webkitExitFullscreen(); // Safari
+      //   } else if (document.msExitFullscreen) {
+      //     document.msExitFullscreen(); // IE/Edge
+      //   }
+      // }
+
+      // Update the fullscreen state
+      this.isFullScreen = !this.isFullScreen;
+    },
     async fetchDataMaterials() {
       try {
         const { data } = await this.axios.get(
@@ -181,4 +257,18 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style>
+#WACStatusBarContainer {
+  display: none !important;
+}
+
+.full-screen-iframe {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999;
+  border: none;
+}
+</style>
