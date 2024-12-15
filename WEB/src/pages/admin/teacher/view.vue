@@ -166,11 +166,12 @@ export default {
         );
         this.dataMaterials = data;
       } catch (error) {
-        this.$swal.fire({
-          title: error.response.data.error,
-          text: error.response.data.details,
-          icon: "error",
-        });
+        if (error.response.status !== 404)
+          this.$swal.fire({
+            title: error.response.data.error,
+            text: error.response.data.details,
+            icon: "error",
+          });
       }
     },
   },

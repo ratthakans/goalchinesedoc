@@ -84,6 +84,10 @@ const Account = sequelize.define(
     },
     branchID: {
       type: DataTypes.INTEGER,
+      references: {
+        model: "Branch", // Name of the related table
+        key: "id",
+      },
     },
     note: {
       type: DataTypes.STRING,
@@ -99,8 +103,14 @@ const Account = sequelize.define(
 
 Account.associate = (models) => {
   Account.belongsTo(models.TeacherType, { foreignKey: "teacherTypeID" });
-  Account.belongsTo(models.StudentType, { foreignKey: "studentTypeID" });
-  Account.belongsTo(models.ClassType, { foreignKey: "classTypeID" });
+  Account.belongsTo(models.StudentType, {
+    foreignKey: "studentTypeID",
+    as: "studentType",
+  });
+  Account.belongsTo(models.ClassType, {
+    foreignKey: "classTypeID",
+    as: "classType",
+  });
   Account.belongsTo(models.Branch, { foreignKey: "branchID" });
   Account.hasOne(models.User, { foreignKey: "accountID", as: "user" });
   Account.hasMany(models.Permission, {

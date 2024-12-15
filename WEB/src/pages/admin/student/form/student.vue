@@ -8,22 +8,27 @@
             <v-row>
               <v-col cols="12" md="4">
                 <label class="v-label mb-2 text-subtitle-2">
-                  <span class="red--text mr-2">*</span> Student Name :
+                  <span class="red--text mr-2">*</span>Student Name :
                 </label>
                 <v-text-field
-                  v-model="formInput.title"
+                  v-model="formInput.name"
                   dense
                   outlined
                   single-line
                   hide-details="auto"
                   placeholder="Enter Student name"
+                  :rules="[(v) => !!v || 'Name is required']"
                 />
               </v-col>
               <v-col cols="12" md="auto">
                 <label class="v-label text-subtitle-2"
-                  ><span class="red--text mr-2">*</span> Gender :
+                  ><span class="red--text mr-2">*</span>Gender :
                 </label>
-                <v-radio-group row hide-details="auto">
+                <v-radio-group
+                  row
+                  hide-details="auto"
+                  v-model="formInput.gender"
+                >
                   <v-radio label="Male" value="Male" />
                   <v-radio label="Female" value="Female" />
                   <v-radio label="Other" value="Other" />
@@ -31,13 +36,14 @@
               </v-col>
               <v-col cols="12" md="">
                 <label class="v-label mb-2 text-subtitle-2"
-                  ><span class="red--text mr-2">*</span> Age :
+                  ><span class="red--text mr-2">*</span>Age :
                 </label>
                 <v-text-field
-                  v-model="formInput.title"
+                  v-model="age"
                   dense
                   outlined
                   single-line
+                  readonly
                   hide-details="auto"
                   persistent-placeholder
                 />
@@ -45,38 +51,51 @@
 
               <v-col cols="12" md="4">
                 <label class="v-label mb-2 text-subtitle-2">
-                  Date of Birth :
+                  <span class="red--text mr-2">*</span>Date of Birth :
                 </label>
-                <v-text-field
-                  v-model="date"
-                  placeholder="Enter date of birth"
-                  append-inner-icon="mdi-calendar"
-                  single-line
-                  dense
-                  outlined
-                  hide-details="auto"
+                <v-menu
+                  ref="menu"
+                  v-model="pickerDOB"
+                  :close-on-content-click="false"
+                  transition="scale-transition"
+                  offset-y
+                  min-width="auto"
                 >
-                  <v-menu
-                    activator="parent"
-                    :close-on-content-click="false"
-                    :nudge-right="40"
-                    transition="scale-transition"
-                    offset-y
-                    min-width="auto"
-                  >
-                    <v-date-picker
-                      v-model="date"
-                      color="primary"
-                      @input="menu = false"
-                    />
-                  </v-menu>
-                </v-text-field>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-text-field
+                      v-model="formInput.dateOfBirth"
+                      placeholder="Birthday date"
+                      append-icon="mdi-calendar"
+                      dense
+                      outlined
+                      single-line
+                      hide-details="auto"
+                      :rules="[(v) => !!v || 'Birthday is required']"
+                      readonly
+                      v-bind="attrs"
+                      v-on="on"
+                    ></v-text-field>
+                  </template>
+                  <v-date-picker
+                    v-model="formInput.dateOfBirth"
+                    :active-picker.sync="activePicker"
+                    :max="
+                      new Date(
+                        Date.now() - new Date().getTimezoneOffset() * 60000
+                      )
+                        .toISOString()
+                        .substring(0, 10)
+                    "
+                    min="1950-01-01"
+                    @change="$refs.menu.save(formInput.dateOfBirth)"
+                  ></v-date-picker>
+                </v-menu>
               </v-col>
 
               <v-col cols="12" md="4">
-                <label class="v-label mb-2 text-subtitle-2"> Address : </label>
+                <label class="v-label mb-2 text-subtitle-2">Address : </label>
                 <v-textarea
-                  v-model="formInput.title"
+                  v-model="formInput.address"
                   dense
                   outlined
                   single-line
@@ -88,7 +107,7 @@
               <v-col cols="12" md="4">
                 <label class="v-label mb-2 text-subtitle-2"> Phone : </label>
                 <v-text-field
-                  v-model="formInput.title"
+                  v-model="formInput.phone"
                   dense
                   outlined
                   single-line
@@ -100,21 +119,14 @@
               <v-col cols="12" md="4">
                 <div class="d-flex justify-space-between align-end">
                   <label class="v-label mb-2 text-subtitle-2">
-                    <span class="red--text mr-2">*</span> School name :
+                    <span class="red--text mr-2">*</span>School name :
                   </label>
-                  <v-checkbox
-                    label="not yet"
-                    hide-details="auto"
-                    dense
-                    class="my-0 py-0"
-                  />
                 </div>
                 <v-text-field
-                  v-model="formInput.title"
+                  v-model="formInput.schoolName"
                   dense
                   outlined
                   single-line
-                  type="password"
                   hide-details="auto"
                   placeholder="Enter school name"
                 />
@@ -133,59 +145,83 @@
             <v-row>
               <v-col cols="12" md="4">
                 <label class="v-label mb-2 text-subtitle-2">
-                  <span class="red--text mr-2">*</span> User Name :
+                  <span class="red--text mr-2">*</span>User Name :
                 </label>
                 <v-text-field
-                  v-model="formInput.title"
+                  v-model="formInput.username"
                   dense
                   outlined
                   single-line
+                  :filled="flagEdit"
                   hide-details="auto"
                   placeholder="Enter user name"
+                  :disabled="flagEdit"
+                  :rules="[(v) => !!v || 'User Name is required']"
                 />
               </v-col>
               <v-col cols="12" md="4">
                 <label class="v-label mb-2 text-subtitle-2">
-                  <span class="red--text mr-2">*</span> Password :
+                  <span class="red--text mr-2">*</span>Password :
                 </label>
                 <v-text-field
-                  v-model="formInput.title"
+                  v-model="formInput.password"
                   dense
                   outlined
                   single-line
-                  type="password"
+                  :type="showPassword ? 'text' : 'password'"
                   hide-details="auto"
                   placeholder="Enter password"
+                  :append-icon="showPassword ? 'mdi-eye-off' : 'mdi-eye'"
+                  @click:append="showPassword = !showPassword"
+                  :rules="[
+                    (v) => (flagEdit ? true : !!v || 'Password is required'),
+                  ]"
                 />
               </v-col>
               <v-col cols="12" md="4">
-                <label class="v-label mb-2 text-subtitle-2">
-                  <span class="red--text mr-2">*</span> Account exit date :
-                </label>
-                <v-text-field
-                  v-model="date"
-                  placeholder="Enter date "
-                  append-inner-icon="mdi-calendar"
-                  single-line
-                  dense
-                  outlined
-                  hide-details="auto"
+                <div class="d-flex justify-space-between align-end">
+                  <label class="v-label mb-2 text-subtitle-2">
+                    <span class="red--text mr-2">*</span>Account exit date :
+                  </label>
+                  <v-checkbox
+                    v-model="notExpired"
+                    label="not yet"
+                    hide-details="auto"
+                    dense
+                    class="my-0 py-0"
+                  />
+                </div>
+                <v-menu
+                  ref="menuExpired"
+                  :close-on-content-click="false"
+                  transition="scale-transition"
+                  offset-y
+                  min-width="auto"
                 >
-                  <v-menu
-                    activator="parent"
-                    :close-on-content-click="false"
-                    :nudge-right="40"
-                    transition="scale-transition"
-                    offset-y
-                    min-width="auto"
-                  >
-                    <v-date-picker
-                      v-model="date"
-                      color="primary"
-                      @input="menu = false"
-                    />
-                  </v-menu>
-                </v-text-field>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-text-field
+                      v-model="formInput.expireDate"
+                      placeholder="Expire date"
+                      append-icon="mdi-calendar"
+                      dense
+                      outlined
+                      single-line
+                      hide-details="auto"
+                      :rules="[
+                        (v) =>
+                          notExpired ? true : !!v || 'Expire date is required',
+                      ]"
+                      readonly
+                      v-bind="attrs"
+                      v-on="on"
+                    ></v-text-field>
+                  </template>
+                  <v-date-picker
+                    v-model="formInput.expireDate"
+                    :min="new Date().toISOString().substring(0, 10)"
+                    @change="$refs.menuExpired.save(formInput.expireDate)"
+                  ></v-date-picker>
+                </v-menu>
               </v-col>
             </v-row>
           </v-card-text>
@@ -201,35 +237,48 @@
             <v-row>
               <v-col cols="12" md="4">
                 <label class="v-label mb-2 text-subtitle-2">
-                  Addmission Date :
+                  <span class="red--text mr-2">*</span>Addmission Date :
                 </label>
-                <v-text-field
-                  v-model="date"
-                  placeholder="Enter addmission date"
-                  append-inner-icon="mdi-calendar"
-                  single-line
-                  dense
-                  outlined
-                  hide-details="auto"
+                <v-menu
+                  ref="menuAddmission"
+                  :close-on-content-click="false"
+                  transition="scale-transition"
+                  offset-y
+                  min-width="auto"
                 >
-                  <v-menu
-                    activator="parent"
-                    :nudge-right="40"
-                    transition="scale-transition"
-                    offset-y
-                    min-width="auto"
-                  >
-                    <v-date-picker v-model="date" color="primary" />
-                  </v-menu>
-                </v-text-field>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-text-field
+                      v-model="formInput.addmissionDate"
+                      placeholder="Addmission date"
+                      append-icon="mdi-calendar"
+                      dense
+                      outlined
+                      single-line
+                      hide-details="auto"
+                      :rules="[(v) => !!v || 'Addmission date is required']"
+                      readonly
+                      v-bind="attrs"
+                      v-on="on"
+                    ></v-text-field>
+                  </template>
+                  <v-date-picker
+                    v-model="formInput.addmissionDate"
+                    :min="new Date().toISOString().substring(0, 10)"
+                    @change="
+                      $refs.menuAddmission.save(formInput.addmissionDate)
+                    "
+                  ></v-date-picker>
+                </v-menu>
               </v-col>
               <v-col cols="12" md="4">
                 <label class="v-label mb-2 text-subtitle-2">
-                  <span class="red--text mr-2">*</span> Student type :
+                  <span class="red--text mr-2">*</span>Student type :
                 </label>
                 <v-select
-                  v-model="formInput.title"
-                  :items="[]"
+                  v-model="formInput.studentTypeID"
+                  :items="itemsOptions.studentType"
+                  item-text="name"
+                  item-value="id"
                   dense
                   outlined
                   hide-details="auto"
@@ -238,12 +287,14 @@
               </v-col>
               <v-col cols="12" md="4">
                 <label class="v-label mb-2 text-subtitle-2">
-                  <span class="red--text mr-2">*</span> Class Type :
+                  <span class="red--text mr-2">*</span>Class Type :
                 </label>
                 <v-select
-                  v-model="formInput.title"
-                  :items="[]"
+                  v-model="formInput.classTypeID"
+                  :items="itemsOptions.classType"
                   dense
+                  item-text="name"
+                  item-value="id"
                   outlined
                   hide-details="auto"
                   placeholder="Select class"
@@ -254,44 +305,55 @@
                 <label class="v-label mb-2 text-subtitle-2">
                   End Class Date :
                 </label>
-                <v-text-field
-                  v-model="date"
-                  placeholder="Enter addmission date"
-                  append-inner-icon="mdi-calendar"
-                  single-line
-                  dense
-                  outlined
-                  hide-details="auto"
+                <v-menu
+                  ref="menuEndClass"
+                  :close-on-content-click="false"
+                  transition="scale-transition"
+                  offset-y
+                  min-width="auto"
                 >
-                  <v-menu
-                    activator="parent"
-                    :nudge-right="40"
-                    transition="scale-transition"
-                    offset-y
-                    min-width="auto"
-                  >
-                    <v-date-picker v-model="date" color="primary" />
-                  </v-menu>
-                </v-text-field>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-text-field
+                      v-model="formInput.endClassDate"
+                      placeholder="EndClass date"
+                      append-icon="mdi-calendar"
+                      dense
+                      outlined
+                      single-line
+                      hide-details="auto"
+                      :rules="[(v) => !!v || 'EndClass date is required']"
+                      readonly
+                      v-bind="attrs"
+                      v-on="on"
+                    ></v-text-field>
+                  </template>
+                  <v-date-picker
+                    v-model="formInput.endClassDate"
+                    :min="new Date().toISOString().substring(0, 10)"
+                    @change="$refs.menuEndClass.save(formInput.endClassDate)"
+                  ></v-date-picker>
+                </v-menu>
               </v-col>
               <v-col cols="12" md="4">
                 <label class="v-label mb-2 text-subtitle-2">
-                  <span class="red--text mr-2">*</span> Admission No. :
+                  <span class="red--text mr-2">*</span>Admission No. :
                 </label>
                 <v-text-field
-                  v-model="formInput.title"
+                  v-model="formInput.addmissionNo"
                   dense
                   outlined
                   single-line
                   hide-details="auto"
                   placeholder="Enter addmission number"
+                  :rules="[(v) => !!v || 'Addmission number is required']"
                 />
               </v-col>
               <v-col cols="12" md="4">
                 <label class="v-label mb-2 text-subtitle-2">
-                  <span class="red--text mr-2">*</span> Upload Photo :
+                  Upload Photo :
                 </label>
                 <v-file-input
+                  v-model="formInput.photo"
                   dense
                   outlined
                   label="Choose a file..."
@@ -302,15 +364,16 @@
               <v-col cols="12" md="4">
                 <v-col cols="12">
                   <label class="v-label mb-2 text-subtitle-2">
-                    <span class="red--text mr-2">*</span> Student Status :
+                    <span class="red--text mr-2">*</span>Student Status :
                   </label>
                   <v-select
-                    v-model="formInput.title"
-                    :items="[]"
+                    v-model="formInput.status"
+                    :items="['Active', 'Inactive']"
                     dense
                     outlined
                     hide-details="auto"
                     placeholder="Select class"
+                    :rules="[(v) => !!v || 'Status is required']"
                   />
                 </v-col>
                 <v-col cols="12">
@@ -318,12 +381,14 @@
                     <span class="red--text mr-2">*</span> Branch :
                   </label>
                   <v-select
-                    v-model="formInput.title"
-                    :items="[]"
+                    v-model="formInput.branchID"
+                    :items="itemsOptions.branch"
                     dense
+                    item-text="name"
+                    item-value="id"
                     outlined
                     hide-details="auto"
-                    placeholder="Select class"
+                    placeholder="Select branch"
                   />
                 </v-col>
               </v-col>
@@ -333,7 +398,7 @@
                   extra note details :
                 </label>
                 <v-textarea
-                  v-model="formInput.title"
+                  v-model="formInput.note"
                   dense
                   outlined
                   single-line
@@ -347,141 +412,11 @@
       </v-col>
     </v-row>
 
-    <v-row justify="center" dense class="mt-6">
-      <v-col cols="12">
-        <v-card outlined>
-          <v-card-title primary-title> Student fee structure</v-card-title>
-          <v-card-text>
-            <v-card color="grey-lighten-4" variant="flat">
-              <div style="position: absolute; top: 5; right: 0">
-                <v-btn color="info" dense icon>
-                  <v-icon>mdi-content-save</v-icon>
-                </v-btn>
-                <v-btn color="error" dense icon>
-                  <v-icon>mdi-trash-can</v-icon>
-                </v-btn>
-              </div>
-              <v-card-text>
-                <v-row>
-                  <v-col cols="12" md="4">
-                    <label class="v-label mb-2 text-subtitle-2">
-                      <span class="red--text mr-2">*</span> Pay Date :
-                    </label>
-                    <v-text-field
-                      v-model="date"
-                      placeholder="Enter update date"
-                      append-inner-icon="mdi-calendar"
-                      single-line
-                      dense
-                      outlined
-                      hide-details="auto"
-                      bg-color="surface"
-                    >
-                      <v-menu
-                        activator="parent"
-                        :nudge-right="40"
-                        transition="scale-transition"
-                        offset-y
-                        min-width="auto"
-                      >
-                        <v-date-picker v-model="date" color="primary" />
-                      </v-menu>
-                    </v-text-field>
-                  </v-col>
-                  <v-col cols="12" md="2">
-                    <label class="v-label mb-2 text-subtitle-2">
-                      <span class="red--text mr-2">*</span> Class type :
-                    </label>
-                    <v-text-field
-                      v-model="formInput.title"
-                      disabled
-                      dense
-                      outlined
-                      single-line
-                      hide-details="auto"
-                      bg-color="surface"
-                    />
-                  </v-col>
-                  <v-col cols="12" md="2">
-                    <label class="v-label mb-2 text-subtitle-2">
-                      <span class="red--text mr-2">*</span> Branch :
-                    </label>
-                    <v-select
-                      v-model="formInput.title"
-                      :items="[]"
-                      dense
-                      outlined
-                      hide-details="auto"
-                      placeholder="Select class"
-                      bg-color="surface"
-                    />
-                  </v-col>
-                  <v-col cols="12" md="4">
-                    <label class="v-label mb-2 text-subtitle-2">
-                      <span class="red--text mr-2">*</span> Amount :
-                    </label>
-                    <v-text-field
-                      v-model="formInput.title"
-                      dense
-                      outlined
-                      single-line
-                      hide-details="auto"
-                      placeholder="Enter amount"
-                      bg-color="surface"
-                    />
-                  </v-col>
-                  <v-col cols="12" md="4">
-                    <label class="v-label mb-2 text-subtitle-2">
-                      <span class="red--text mr-2">*</span> Class fee [Bath] :
-                    </label>
-                    <v-text-field
-                      v-model="formInput.title"
-                      dense
-                      outlined
-                      single-line
-                      hide-details="auto"
-                      placeholder="Enter fee"
-                      bg-color="surface"
-                    />
-                  </v-col>
-                  <v-col cols="12" md="4">
-                    <label class="v-label mb-2 text-subtitle-2">
-                      Discount [Bath] :
-                    </label>
-                    <v-text-field
-                      v-model="formInput.title"
-                      dense
-                      outlined
-                      single-line
-                      hide-details="auto"
-                      placeholder="Enter discount"
-                      bg-color="surface"
-                    />
-                  </v-col>
-                  <v-col cols="12" md="4">
-                    <label class="v-label mb-2 text-subtitle-2"> Note : </label>
-                    <v-text-field
-                      v-model="formInput.title"
-                      dense
-                      outlined
-                      single-line
-                      hide-details="auto"
-                      placeholder="Enter note"
-                      bg-color="surface"
-                    />
-                  </v-col>
-                </v-row>
-              </v-card-text>
-            </v-card>
-          </v-card-text>
-          <v-btn color="info" rounded absolute right top small>
-            <v-icon>mdi-plus</v-icon>
-          </v-btn>
-        </v-card>
-      </v-col>
-    </v-row>
+    <FeeStructureComponent />
 
-    <v-row justify="center" dense class="mt-6">
+    <ScoreStructureComponent />
+
+    <!-- <v-row justify="center" dense class="mt-6">
       <v-col cols="12">
         <v-card outlined>
           <v-card-title primary-title> Student point structure</v-card-title>
@@ -615,23 +550,118 @@
           </v-btn>
         </v-card>
       </v-col>
-    </v-row>
+    </v-row> -->
   </div>
 </template>
 
 <script>
+import FeeStructureComponent from "./feeStructure.vue";
+import ScoreStructureComponent from "./scoreStructure.vue";
 export default {
   name: "FormStudent",
+  components: {
+    FeeStructureComponent,
+    ScoreStructureComponent,
+  },
+  props: {
+    editItems: {
+      type: Object,
+      default: () => ({}),
+    },
+    flagEdit: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data() {
     return {
-      date: null,
+      pickerDOB: false,
+      activePicker: null,
+      isSelectAll: false,
+      age: 0,
+      showPassword: false,
+      notExpired: false,
       formInput: {
-        title: "",
-        category: "",
-        type: "",
-        image: "",
+        name: "",
+        gender: "Male",
+        dateOfBirth: "",
+        username: "",
+        password: "",
+        expireDate: "",
+        phone: "",
+        address: "",
+        schoolName: "",
+
+        photo: null,
+        addmissionDate: "",
+        endClassDate: "",
+        studentTypeID: "",
+        classTypeID: "",
+        addmissionNo: "",
+        branchID: "",
+        note: "",
+        status: "Active",
+      },
+
+      itemsOptions: {
+        studentType: [],
+        classType: [],
+        branch: [],
       },
     };
+  },
+  watch: {
+    pickerDOB(val) {
+      val && setTimeout(() => (this.activePicker = "YEAR"));
+    },
+    "formInput.dateOfBirth": {
+      handler() {
+        if (this.formInput.dateOfBirth) {
+          this.age = this.calulateAge(this.formInput.dateOfBirth);
+        }
+      },
+    },
+    formInput: {
+      handler() {
+        this.$emit("input", this.formInput);
+      },
+      deep: true,
+    },
+    editItems: {
+      handler() {
+        if (Object.keys(this.editItems).length !== 0) {
+          this.formInput = { ...this.editItems };
+
+          if (this.editItems.expireDate === "") {
+            this.notExpired = true;
+          }
+        }
+      },
+      deep: true,
+    },
+  },
+  mounted() {
+    this.fetchOption();
+  },
+  methods: {
+    async fetchOption() {
+      try {
+        const { data: dataStudentType } = await this.axios.get(`/studentType`);
+        this.itemsOptions.studentType = dataStudentType;
+
+        const { data: dataClassType } = await this.axios.get(`/classType`);
+        this.itemsOptions.classType = dataClassType;
+
+        const { data: dataBranch } = await this.axios.get(`/branch`);
+        this.itemsOptions.branch = dataBranch;
+      } catch (error) {
+        this.$swal.fire({
+          title: error.response.data.error,
+          text: error.response.data.details,
+          icon: "error",
+        });
+      }
+    },
   },
 };
 </script>

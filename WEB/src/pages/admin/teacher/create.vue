@@ -16,7 +16,7 @@
     <v-row justify="end">
       <v-col cols="auto">
         <v-btn color="primary" depressed class="text-none" @click="create">
-          <v-icon start> mdi-content-save </v-icon>
+          <v-icon left> mdi-content-save </v-icon>
           Save
         </v-btn>
       </v-col>
@@ -43,8 +43,10 @@ export default {
         this.formInput.role = "teacher";
         let formData = new FormData();
         for (let key in this.formInput) {
-          if (this.formInput[key]) {
+          if (this.formInput[key] && key !== "photo") {
             formData.append(key, this.formInput[key]);
+          } else if (key === "photo") {
+            formData.append("profile", this.formInput[key]);
           }
         }
         const { data } = await this.axios.post(`/account`, formData);

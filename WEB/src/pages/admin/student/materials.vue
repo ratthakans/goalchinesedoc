@@ -37,6 +37,7 @@
     <v-row dense>
       <v-col cols="12">
         <v-data-table
+          v-model="selectedStudent"
           :headers="headers"
           :filter-keys="['title', 'category', 'type']"
           :items="items"
@@ -46,14 +47,14 @@
             <div class="d-flex align-center">
               <v-avatar
                 size="45"
-                :color="item.avatar ? '' : 'grey lighten-4'"
-                :class="item.avatar ? '' : 'v-avatar-light-bg primary--text'"
-                :variant="!item.avatar ? 'tonal' : undefined"
+                :color="item.photo ? '' : 'grey lighten-4'"
+                :class="item.photo ? '' : 'v-avatar-light-bg primary--text'"
+                :variant="!item.photo ? 'tonal' : undefined"
                 tile
                 rounded="lg"
               >
-                <v-img v-if="item.avatar" :src="item.avatar" />
-                <v-icon>mdi-account</v-icon>
+                <v-img v-if="item.photo" :src="`${baseUrl}${item.photo}`" />
+                <v-icon v-else>mdi-account</v-icon>
               </v-avatar>
               <div class="d-flex flex-column ms-3">
                 <span
@@ -64,8 +65,8 @@
             </div>
           </template>
 
-          <template #item.action="{}">
-            <v-btn color="info" class="text-none"> view </v-btn>
+          <template #[`item.age`]="{ item }">
+            {{ calulateAge(item.dateOfBirth) }}
           </template>
         </v-data-table>
       </v-col>
@@ -92,6 +93,7 @@
     <v-row dense>
       <v-col cols="12">
         <v-data-table
+          v-model="selectedMaterials"
           :headers="headersMaterials"
           :filter-keys="['title', 'category', 'type']"
           :items="itemsMaterials"
@@ -111,14 +113,25 @@
               >
             </v-avatar>
           </template>
+          <template #[`item.date`]="{ item }">
+            {{ new Date(item.createdAt).toLocaleDateString("en-GB") }}
+          </template>
+          <template #[`item.description`]="{ item }">
+            {{ item.description || "N/A" }}
+          </template>
         </v-data-table>
       </v-col>
     </v-row>
 
     <v-row justify="end">
       <v-col cols="auto">
-        <v-btn color="primary" class="text-none">
-          <v-icon start> mdi-content-save </v-icon>
+        <v-btn
+          color="primary"
+          class="text-none"
+          @click="update"
+          :disabled="!selectedStudent.length || !selectedMaterials.length"
+        >
+          <v-icon left> mdi-content-save </v-icon>
           Update
         </v-btn>
       </v-col>
@@ -135,59 +148,92 @@ export default {
       headers: [
         {
           align: "start",
-          value: "no",
+          value: "id",
           sortable: false,
           text: "Admission No.",
+          width: "2%",
         },
-        { value: "name", text: "Student Name", width: "40%" },
-        { value: "parentsPhone", text: "Mobile No." },
-        { value: "poits", text: "Poits" },
-        { value: "studentType", text: "Student Type" },
-        { value: "classType", text: "Class Type" },
-        { value: "age", text: "Age" },
-        { value: "gender", text: "Gender" },
+        { value: "name", text: "Student Name", width: "*" },
+        { value: "parentsPhone", text: "Mobile No.", width: "10%" },
+        { value: "points", text: "Points", width: "7%" },
+        { value: "studentType.name", text: "Student Type", width: "12%" },
+        { value: "classType.name", text: "Class Type", width: "10%" },
+        { value: "age", text: "Age", width: "5%" },
+        { value: "gender", text: "Gender", width: "7%" },
       ],
-      items: [
-        {
-          no: "M001",
-          name: "student name",
-          parentsPhone: "+666666",
-          poits: "150",
-          classType: "Class 1",
-          age: "15",
-          gender: "Male",
-        },
-      ],
+      items: [],
       headersMaterials: [
         {
           align: "start",
           value: "no",
           sortable: false,
           text: "Materials No.",
+          width: "3%",
         },
         { value: "photo", text: "Photo" },
-        { value: "title", text: "Title", width: "40%" },
-        { value: "category", text: "Materials Category" },
-        { value: "materialFor", text: "Materials for teacher/student" },
-        { value: "type", text: "Type" },
-        { value: "fileType", text: "File type" },
+        { value: "title", text: "Title", width: "25%" },
+        {
+          value: "materialCategory.name",
+          text: "Materials Category",
+          width: "",
+        },
+        { value: "materialFor.name", text: "Materials for teacher/student" },
+        { value: "materialType.name", text: "Type" },
+        { value: "documentType", text: "File type" },
         { value: "date", text: "Date" },
         { value: "description", text: "Description" },
       ],
-      itemsMaterials: [
-        {
-          no: "M001",
-          image: "1.png",
-          title: "Book",
-          category: "Class 1",
-          materialFor: "Student",
-          type: "Study",
-          fileType: "MP4",
-          date: "2024/11/12",
-          description: null,
-        },
-      ],
+      itemsMaterials: [],
+      selectedStudent: [],
+      selectedMaterials: [],
     };
+  },
+  mounted() {
+    this.fetchDataTeacher();
+    this.fetchDataMaterials();
+  },
+  methods: {
+    async fetchDataTeacher() {
+      try {
+        const { data } = await this.axios.get(`/account?role=student`);
+        this.items = data || [];
+      } catch (error) {
+        this.$swal.fire({
+          title: error.response.data.error,
+          text: error.response.data.details,
+          icon: "error",
+        });
+      }
+    },
+    async fetchDataMaterials() {
+      try {
+        const { data } = await this.axios.get(`/materials`);
+        this.itemsMaterials = data;
+      } catch (error) {
+        this.$swal.fire({
+          title: error.response.data.error,
+          text: error.response.data.details,
+          icon: "error",
+        });
+      }
+    },
+    async update() {
+      try {
+        let body = {
+          accountID: this.selectedStudent.map((item) => item.id),
+          materials: this.selectedMaterials.map((item) => item.id),
+        };
+        const { data } = await this.axios.post(`/myMaterial`, body);
+
+        this.$swal(data?.message, "", "success");
+      } catch (error) {
+        this.$swal.fire({
+          title: error.response.data.error,
+          text: error.response.data.details,
+          icon: "error",
+        });
+      }
+    },
   },
 };
 </script>

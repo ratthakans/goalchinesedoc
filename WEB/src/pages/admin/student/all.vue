@@ -53,14 +53,14 @@
             <div class="d-flex align-center">
               <v-avatar
                 size="45"
-                :color="item.avatar ? '' : 'grey lighten-4'"
-                :class="item.avatar ? '' : 'v-avatar-light-bg primary--text'"
-                :variant="!item.avatar ? 'tonal' : undefined"
+                :color="item.photo ? '' : 'grey lighten-4'"
+                :class="item.photo ? '' : 'v-avatar-light-bg primary--text'"
+                :variant="!item.photo ? 'tonal' : undefined"
                 tile
                 rounded="lg"
               >
-                <v-img v-if="item.avatar" :src="item.avatar" />
-                <v-icon>mdi-account</v-icon>
+                <v-img v-if="item.photo" :src="`${baseUrl}${item.photo}`" />
+                <v-icon v-else>mdi-account</v-icon>
               </v-avatar>
               <div class="d-flex flex-column ms-3">
                 <span
@@ -69,6 +69,10 @@
                 >
               </div>
             </div>
+          </template>
+
+          <template #[`item.age`]="{ item }">
+            {{ calulateAge(item.dateOfBirth) }}
           </template>
 
           <template #item.action="{ item }">
@@ -82,8 +86,8 @@
               <v-list dense :lines="false">
                 <v-list-item
                   v-for="(menu, i) in [
-                    { title: 'View', to: `./view/${item.no}` },
-                    { title: 'Edit', to: `./edit/${item.no}` },
+                    { title: 'View', to: `./view/${item.id}` },
+                    { title: 'Edit', to: `./edit/${item.id}` },
                   ]"
                   :key="i"
                   link
@@ -112,7 +116,7 @@ export default {
       headers: [
         {
           align: "start",
-          value: "no",
+          value: "id",
           sortable: false,
           text: "Admission No.",
           width: "2%",
@@ -120,24 +124,55 @@ export default {
         { value: "name", text: "Student Name", width: "*" },
         { value: "parentsPhone", text: "Mobile No.", width: "10%" },
         { value: "points", text: "Points", width: "7%" },
-        { value: "studentType", text: "Student Type", width: "7%" },
-        { value: "classType", text: "Class Type", width: "7%" },
+        { value: "studentType.name", text: "Student Type", width: "12%" },
+        { value: "classType.name", text: "Class Type", width: "10%" },
         { value: "age", text: "Age", width: "5%" },
         { value: "gender", text: "Gender", width: "7%" },
         { value: "action", text: "Action", width: "7%" },
       ],
-      items: [
-        {
-          no: "M001",
-          name: "student name",
-          parentsPhone: "+666666",
-          points: "150",
-          classType: "Class 1",
-          age: "15",
-          gender: "Male",
-        },
-      ],
+      items: [],
     };
+  },
+  mounted() {
+    this.fetchData();
+  },
+  methods: {
+    async fetchData() {
+      try {
+        const { data } = await this.axios.get(`/account?role=student`);
+        this.items = data || [];
+      } catch (error) {
+        this.$swal.fire({
+          title: error.response.data.error,
+          text: error.response.data.details,
+          icon: "error",
+        });
+      }
+    },
+    async deleteData(id) {
+      // confirm delete
+      const { isDismissed } = await this.$swal({
+        title: "Are you sure?",
+        text: "Once deleted, you will not be able to recover this data!",
+        icon: "warning",
+        buttons: true,
+      });
+
+      if (isDismissed) return;
+
+      //delete data from api
+      try {
+        await this.axios.delete(`/account/${id}`);
+        this.$swal("Material deleted successfully", "", "success");
+        this.fetchData();
+      } catch (error) {
+        this.$swal.fire({
+          title: error.response.data.error,
+          text: error.response.data.details,
+          icon: "error",
+        });
+      }
+    },
   },
 };
 </script>

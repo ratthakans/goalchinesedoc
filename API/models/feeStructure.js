@@ -19,7 +19,7 @@ const FeeStructure = sequelize.define(
       type: DataTypes.STRING,
     },
     payDate: {
-      type: DataTypes.DATE,
+      type: DataTypes.STRING,
     },
     classType: {
       type: DataTypes.STRING,

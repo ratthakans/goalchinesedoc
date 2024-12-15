@@ -116,9 +116,9 @@ export default {
     };
   },
   watch: {},
-  mounted() {
+  async mounted() {
     if (this.$route.params.id) {
-      this.getFeeStructure();
+      await this.getFeeStructure();
     }
 
     if (this.itemsFeeStruture.length === 0) {

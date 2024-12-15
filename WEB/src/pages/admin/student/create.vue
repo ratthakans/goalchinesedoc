@@ -8,13 +8,14 @@
         <h5 class="text-h5">New Student addmission</h5>
       </v-col>
     </v-row>
-
-    <FormStudent />
+    <v-form ref="form" lazy-validation>
+      <FormStudent v-model="formInput" />
+    </v-form>
 
     <v-row justify="end">
       <v-col cols="auto">
-        <v-btn color="primary" depressed class="text-none">
-          <v-icon start> mdi-content-save </v-icon>
+        <v-btn color="primary" @click="create" depressed class="text-none">
+          <v-icon left> mdi-content-save </v-icon>
           Save
         </v-btn>
       </v-col>
@@ -31,13 +32,34 @@ export default {
   },
   data() {
     return {
-      formInput: {
-        title: "",
-        category: "",
-        type: "",
-        image: "",
-      },
+      formInput: {},
     };
+  },
+  methods: {
+    async create() {
+      if (!this.$refs.form.validate()) return;
+      try {
+        this.formInput.role = "student";
+        let formData = new FormData();
+        for (let key in this.formInput) {
+          if (this.formInput[key] && key !== "photo") {
+            formData.append(key, this.formInput[key]);
+          } else if (key === "photo") {
+            formData.append("profile", this.formInput[key]);
+          }
+        }
+        const { data } = await this.axios.post(`/account`, formData);
+
+        this.$swal(data?.message, "", "success");
+        this.$router.push({ name: "student" });
+      } catch (error) {
+        this.$swal.fire({
+          title: error.response.data.error,
+          text: error.response.data.details,
+          icon: "error",
+        });
+      }
+    },
   },
 };
 </script>

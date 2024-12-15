@@ -18,11 +18,22 @@
           height="80"
           width="100%"
         >
-          <v-avatar class="mt-2 mx-2" rounded="xl" size="120">
-            <v-img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John" />
+          <v-avatar
+            class="mt-2 mx-2"
+            rounded="xl"
+            size="120"
+            :color="dataStudent.photo ? '' : 'grey lighten-4'"
+            :class="dataStudent.photo ? '' : 'v-avatar-light-bg primary--text'"
+            :variant="!dataStudent.photo ? 'tonal' : undefined"
+          >
+            <v-img
+              v-if="dataStudent.photo"
+              :src="`${baseUrl}${dataStudent.photo}`"
+            />
+            <v-icon v-else>mdi-account</v-icon>
           </v-avatar>
           <div class="d-flex white--text flex-column justify-center">
-            <h4 class="text-h4 font-weight-bold">Student name</h4>
+            <h4 class="text-h4 font-weight-bold">{{ dataStudent?.name }}</h4>
             <div>
               <v-icon color="yellow"> mdi-star-circle </v-icon>
               100 points
@@ -74,9 +85,16 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <tr v-for="item in []" :key="item.name">
-                          <td>{{ item.name }}</td>
-                          <td>{{ item.calories }}</td>
+                        <tr v-for="(item, inx) in dataMaterials" :key="inx">
+                          <td width="150px">{{ item?.material?.no }}</td>
+                          <td>{{ item?.material?.title }}</td>
+                          <td>
+                            {{
+                              new Date(item.updatedAt).toLocaleDateString(
+                                "en-GB"
+                              )
+                            }}
+                          </td>
                         </tr>
                       </tbody>
                     </v-simple-table>
@@ -144,7 +162,54 @@ export default {
   data() {
     return {
       tab: null,
+      dataStudent: {},
+      dataMaterials: [],
     };
+  },
+  watch: {
+    tab(val) {
+      if (val === 0) {
+        // this.fetchDataById();
+      } else if (val === 1) {
+        this.fetchDataMaterials();
+      } else if (val === 2) {
+        // this.fetchDataById();
+      }
+    },
+  },
+  created() {
+    this.fetchDataById();
+  },
+  methods: {
+    async fetchDataById() {
+      try {
+        const { data } = await this.axios.get(
+          `/account/${this.$route.params.id}`
+        );
+        this.dataStudent = data;
+      } catch (error) {
+        this.$swal.fire({
+          title: error.response.data.error,
+          text: error.response.data.details,
+          icon: "error",
+        });
+      }
+    },
+    async fetchDataMaterials() {
+      try {
+        const { data } = await this.axios.get(
+          `/myMaterial/account/${this.$route.params.id}`
+        );
+        this.dataMaterials = data;
+      } catch (error) {
+        if (error.response.status !== 404)
+          this.$swal.fire({
+            title: error.response.data.error,
+            text: error.response.data.details,
+            icon: "error",
+          });
+      }
+    },
   },
 };
 </script>

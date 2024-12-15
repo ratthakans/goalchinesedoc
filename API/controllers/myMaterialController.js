@@ -4,23 +4,23 @@ const { MyMaterial, Materials } = require("../models"); // Ensure correct path t
 // Create a new MyMaterial record
 exports.create = async (req, res) => {
   try {
-    const { teacherId, materials } = req.body;
+    const { accountID, materials } = req.body;
 
-    if (!teacherId.length || !materials.length) {
+    if (!accountID.length || !materials.length) {
       return res
         .status(400)
         .json({ error: "Both accountID and materialID are required" });
     }
 
-    for (let i = 0; i < teacherId.length; i++) {
+    for (let i = 0; i < accountID.length; i++) {
       for (let j = 0; j < materials.length; j++) {
         await MyMaterial.findOrCreate({
           where: {
-            accountID: teacherId[i],
+            accountID: accountID[i],
             materialID: materials[j],
           },
           defaults: {
-            accountID: teacherId[i],
+            accountID: accountID[i],
             materialID: materials[j],
           },
         });

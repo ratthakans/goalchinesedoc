@@ -3,7 +3,14 @@ const jwt = require("jsonwebtoken");
 
 const logger = require("../logger");
 
-const { Account, User, Permission, sequelize } = require("../models"); // Ensure correct path to your models
+const {
+  Account,
+  User,
+  Permission,
+  sequelize,
+  StudentType,
+  ClassType,
+} = require("../models"); // Ensure correct path to your models
 const { validationResult } = require("express-validator");
 
 // Create a new Account
@@ -80,12 +87,24 @@ exports.findAll = async (req, res) => {
     const { role } = req.query;
 
     const accounts = await Account.findAll({
-      include: {
-        model: User,
-        as: "user",
-        attributes: { exclude: ["password"] },
-        where: { role: role },
-      },
+      include: [
+        {
+          model: User,
+          as: "user",
+          attributes: { exclude: ["password"] },
+          where: { role: role },
+        },
+        {
+          model: StudentType,
+          as: "studentType",
+          attributes: ["name"],
+        },
+        {
+          model: ClassType,
+          as: "classType",
+          attributes: ["name"],
+        },
+      ],
     });
     res.status(200).json(accounts);
   } catch (error) {
