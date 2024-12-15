@@ -11,12 +11,13 @@
                   <span class="red--text mr-2">*</span>Class Name :
                 </label>
                 <v-text-field
-                  v-model="formInput.title"
+                  v-model="formInput.name"
                   dense
                   outlined
                   single-line
                   hide-details="auto"
                   placeholder="Enter Class name"
+                  :rules="[(v) => !!v || 'Class name is required']"
                 />
               </v-col>
 
@@ -25,12 +26,13 @@
                   ><span class="red--text mr-2">*</span>Class No :
                 </label>
                 <v-text-field
-                  v-model="formInput.title"
+                  v-model="formInput.no"
                   dense
                   outlined
                   single-line
                   hide-details="auto"
                   placeholder="Enter Class no"
+                  :rules="[(v) => !!v || 'Class no is required']"
                 />
               </v-col>
 
@@ -39,12 +41,16 @@
                   ><span class="red--text mr-2">*</span>Branch :
                 </label>
                 <v-select
-                  v-model="formInput.title"
+                  v-model="formInput.branchID"
+                  :items="itemsOptions.branch"
                   dense
                   outlined
+                  item-text="name"
+                  item-value="id"
                   single-line
                   hide-details="auto"
                   placeholder="Select branch"
+                  :rules="[(v) => !!v || 'Branch is required']"
                 />
               </v-col>
 
@@ -53,12 +59,16 @@
                   ><span class="red--text mr-2">*</span>Class Type :
                 </label>
                 <v-select
-                  v-model="formInput.title"
+                  v-model="formInput.classTypeID"
+                  :items="itemsOptions.classType"
                   dense
+                  item-text="name"
+                  item-value="id"
                   outlined
                   single-line
                   hide-details="auto"
                   placeholder="Select class type"
+                  :rules="[(v) => !!v || 'Class type is required']"
                 />
               </v-col>
 
@@ -67,12 +77,14 @@
                   <span class="red--text mr-2">*</span>Number Of Student :
                 </label>
                 <v-text-field
-                  v-model="formInput.title"
+                  v-model="formInput.numberOfStudent"
                   dense
                   outlined
+                  type="number"
                   single-line
                   hide-details="auto"
                   placeholder="Enter number of student"
+                  :rules="[(v) => !!v || 'Number of student is required']"
                 />
               </v-col>
 
@@ -81,20 +93,23 @@
                   <span class="red--text mr-2">*</span>Study fee/person :
                 </label>
                 <v-text-field
-                  v-model="formInput.title"
+                  v-model="formInput.studentFee"
                   dense
                   outlined
                   single-line
+                  type="number"
                   hide-details="auto"
                   placeholder="Enter fee"
+                  :rules="[(v) => !!v || 'Fee is required']"
                 />
               </v-col>
 
               <v-col cols="12" md="3">
                 <label class="v-label mb-2 text-subtitle-2">Discount : </label>
                 <v-text-field
-                  v-model="formInput.title"
+                  v-model="formInput.discount"
                   dense
+                  type="number"
                   outlined
                   single-line
                   hide-details="auto"
@@ -107,7 +122,7 @@
                   Discount Note :
                 </label>
                 <v-text-field
-                  v-model="formInput.title"
+                  v-model="formInput.discountNote"
                   dense
                   outlined
                   single-line
@@ -121,12 +136,13 @@
                   <span class="red--text mr-2">*</span>Total fee per class :
                 </label>
                 <v-text-field
-                  v-model="formInput.title"
+                  v-model="formInput.totalFeePerClass"
                   dense
                   outlined
                   single-line
                   hide-details="auto"
                   placeholder="Enter total fee"
+                  :rules="[(v) => !!v || 'Total fee is required']"
                 />
               </v-col>
 
@@ -135,12 +151,16 @@
                   ><span class="red--text mr-2">*</span>Teacher Name :
                 </label>
                 <v-select
-                  v-model="formInput.title"
+                  v-model="formInput.teacherID"
+                  :items="itemsOptions.teacher"
+                  item-text="name"
+                  item-value="id"
                   dense
                   outlined
                   single-line
                   hide-details="auto"
                   placeholder="Select teacher"
+                  :rules="[(v) => !!v || 'Teacher is required']"
                 />
               </v-col>
 
@@ -149,14 +169,17 @@
                   ><span class="red--text mr-2">*</span>Student Name :
                 </label>
                 <v-select
-                  v-model="formInput.title"
+                  v-model="selectedStudent"
                   dense
-                  :items="['foo', 'bar', 'fizz', 'buzz']"
+                  :items="itemsOptions.student"
+                  item-text="name"
+                  item-value="id"
                   outlined
                   single-line
                   hide-details="auto"
                   placeholder="Select student"
                   multiple
+                  :rules="[(v) => !!v || 'Student is required']"
                 />
               </v-col>
               <v-col cols="12" md="8">
@@ -166,7 +189,7 @@
                       ><span class="red--text mr-2">*</span>Class Status :
                     </label>
                     <v-select
-                      v-model="formInput.title"
+                      v-model="formInput.status"
                       dense
                       :items="['Active', 'Inactive']"
                       outlined
@@ -180,13 +203,16 @@
                       <span class="red--text mr-2">*</span>Material Type :
                     </label>
                     <v-select
-                      v-model="formInput.title"
+                      v-model="formInput.materialTypeID"
                       dense
-                      :items="[]"
+                      :items="itemsOptions.materialType"
+                      item-text="name"
+                      item-value="id"
                       outlined
                       single-line
                       hide-details="auto"
                       placeholder="Select material type"
+                      :rules="[(v) => !!v || 'Material type is required']"
                     />
                   </v-col>
                   <v-col cols="12" md="4">
@@ -195,11 +221,13 @@
                       registered (time) :
                     </label>
                     <v-text-field
-                      v-model="formInput.title"
+                      v-model="formInput.registeredTimes"
                       dense
+                      type="number"
                       outlined
                       single-line
                       hide-details="auto"
+                      :roules="[(v) => !!v || 'Registered time is required']"
                     />
                   </v-col>
                   <v-col cols="12" md="4">
@@ -208,24 +236,28 @@
                       (time) :
                     </label>
                     <v-text-field
-                      v-model="formInput.title"
+                      v-model="formInput.teacherLeave"
                       dense
+                      type="number"
                       outlined
                       single-line
                       hide-details="auto"
+                      :roules="[(v) => !!v || 'Teacher leave is required']"
                     />
                   </v-col>
                   <v-col cols="12" md="4">
                     <label class="v-label mb-2 text-subtitle-2">
-                      <span class="red--text mr-2">*</span> Teacher can leave
+                      <span class="red--text mr-2">*</span> Student can leave
                       (time) :
                     </label>
                     <v-text-field
-                      v-model="formInput.title"
+                      v-model="formInput.studentLeave"
                       dense
+                      type="number"
                       outlined
                       single-line
                       hide-details="auto"
+                      :rules="[(v) => !!v || 'Student leave is required']"
                     />
                   </v-col>
                 </v-row>
@@ -233,7 +265,7 @@
               <v-col cols="12" md="4">
                 <label class="v-label mb-2 text-subtitle-2"> Note : </label>
                 <v-textarea
-                  v-model="formInput.title"
+                  v-model="formInput.note"
                   dense
                   outlined
                   single-line
@@ -249,7 +281,7 @@
                   <span class="red--text mr-2">*</span>Start date :
                 </label>
                 <v-menu
-                  v-model="menu"
+                  ref="refStartDate"
                   :close-on-content-click="false"
                   :nudge-right="40"
                   transition="scale-transition"
@@ -258,7 +290,7 @@
                 >
                   <template v-slot:activator="{ on, attrs }">
                     <v-text-field
-                      v-model="date"
+                      v-model="formInput.startDate"
                       label="Select date"
                       append-icon="mdi-calendar"
                       dense
@@ -266,13 +298,15 @@
                       single-line
                       hide-details="auto"
                       readonly
+                      :rules="[(v) => !!v || 'Start date is required']"
                       v-bind="attrs"
                       v-on="on"
                     ></v-text-field>
                   </template>
                   <v-date-picker
-                    v-model="date"
-                    @input="menu = false"
+                    v-model="formInput.startDate"
+                    :min="new Date().toISOString().substring(0, 10)"
+                    @change="$refs.refStartDate.save(formInput.startDate)"
                   ></v-date-picker>
                 </v-menu>
               </v-col>
@@ -281,7 +315,7 @@
                   <span class="red--text mr-2">*</span>End date :
                 </label>
                 <v-menu
-                  v-model="menu2"
+                  ref="refEndDate"
                   :close-on-content-click="false"
                   :nudge-right="40"
                   transition="scale-transition"
@@ -290,7 +324,7 @@
                 >
                   <template v-slot:activator="{ on, attrs }">
                     <v-text-field
-                      v-model="date"
+                      v-model="formInput.endDate"
                       label="Select date"
                       append-icon="mdi-calendar"
                       dense
@@ -298,13 +332,15 @@
                       single-line
                       hide-details="auto"
                       readonly
+                      :rules="[(v) => !!v || 'End date is required']"
                       v-bind="attrs"
                       v-on="on"
                     ></v-text-field>
                   </template>
                   <v-date-picker
-                    v-model="date"
-                    @input="menu2 = false"
+                    v-model="formInput.endDate"
+                    :min="formInput.startDate"
+                    @change="$refs.refEndDate.save(formInput.endDate)"
                   ></v-date-picker>
                 </v-menu>
               </v-col>
@@ -313,12 +349,13 @@
                   <span class="red--text mr-2">*</span> Study time per time :
                 </label>
                 <v-text-field
-                  v-model="formInput.title"
+                  v-model="formInput.studyTimePerTime"
                   dense
                   outlined
                   single-line
                   hide-details="auto"
                   suffix="Mins"
+                  :rules="[(v) => !!v || 'Study time is required']"
                 />
               </v-col>
             </v-row>
@@ -340,7 +377,7 @@
               </v-col>
               <v-col cols="12" md="2">
                 <v-menu
-                  :ref="setRef"
+                  ref="timeStartRef"
                   :close-on-content-click="false"
                   :nudge-right="40"
                   transition="scale-transition"
@@ -364,7 +401,7 @@
                   <v-time-picker
                     v-model="item.startTime"
                     full-width
-                    @click:minute="itemsRef[i].save(item.startTime)"
+                    @click:minute="$refs.timeStartRef[i].save(item.startTime)"
                     format="24hr"
                   ></v-time-picker>
                 </v-menu>
@@ -374,7 +411,7 @@
               </v-col>
               <v-col cols="12" md="2">
                 <v-menu
-                  :ref="setRef2"
+                  ref="timeEndRef"
                   :close-on-content-click="false"
                   :nudge-right="40"
                   transition="scale-transition"
@@ -398,7 +435,7 @@
                   <v-time-picker
                     v-model="item.endTime"
                     full-width
-                    @click:minute="itemsRef2[i].save(item.endTime)"
+                    @click:minute="$refs.timeEndRef[i].save(item.endTime)"
                     format="24hr"
                   ></v-time-picker>
                 </v-menu>
@@ -420,12 +457,13 @@
                   <span class="red--text mr-2">*</span>Study platform :
                 </label>
                 <v-text-field
-                  v-model="formInput.title"
+                  v-model="formInput.studyPlatform"
                   dense
                   outlined
                   single-line
                   hide-details="auto"
                   placeholder="Enter platform"
+                  :rules="[(v) => !!v || 'Platform is required']"
                 />
               </v-col>
               <v-col cols="12" md="9">
@@ -433,12 +471,13 @@
                   <span class="red--text mr-2">*</span>Link :
                 </label>
                 <v-text-field
-                  v-model="formInput.title"
+                  v-model="formInput.link"
                   dense
                   outlined
                   single-line
                   hide-details="auto"
                   placeholder="Enter link"
+                  :rules="[(v) => !!v || 'Link is required']"
                 />
               </v-col>
 
@@ -449,7 +488,9 @@
                       <span class="red--text mr-2">*</span>Admin name :
                     </label>
                     <v-text-field
-                      v-model="formInput.title"
+                      :value="userInfo?.username"
+                      filled
+                      readonly
                       dense
                       outlined
                       single-line
@@ -467,6 +508,7 @@
                       :label="item"
                       :value="item"
                       hide-details="auto"
+                      :rules="[(v) => !!v || 'Check list is required']"
                     ></v-checkbox>
                   </v-col>
                 </v-row>
@@ -475,7 +517,7 @@
               <v-col cols="12" md="9">
                 <label class="v-label mb-2 text-subtitle-2"> Note : </label>
                 <v-textarea
-                  v-model="formInput.title"
+                  v-model="formInput.note"
                   dense
                   outlined
                   single-line
@@ -501,36 +543,42 @@
                   Class Name :
                 </label>
                 <v-text-field
-                  v-model="formInput.title"
+                  v-model="formInput.name"
+                  filled
+                  readonly
                   dense
                   outlined
                   single-line
                   hide-details="auto"
-                  disabled
                 />
               </v-col>
 
               <v-col cols="12" md="2">
                 <label class="v-label mb-2 text-subtitle-2">Class No : </label>
                 <v-text-field
-                  v-model="formInput.title"
+                  v-model="formInput.no"
+                  filled
+                  readonly
                   dense
                   outlined
                   single-line
                   hide-details="auto"
-                  disabled
                 />
               </v-col>
 
               <v-col cols="12" md="2">
                 <label class="v-label mb-2 text-subtitle-2">Branch : </label>
                 <v-select
-                  v-model="formInput.title"
+                  v-model="formInput.branchID"
                   dense
+                  :items="itemsOptions.branch"
+                  item-text="name"
+                  item-value="id"
+                  filled
+                  readonly
                   outlined
                   single-line
                   hide-details="auto"
-                  disabled
                 />
               </v-col>
 
@@ -539,12 +587,16 @@
                   >Class Type :
                 </label>
                 <v-select
-                  v-model="formInput.title"
+                  v-model="formInput.classTypeID"
+                  :items="itemsOptions.classType"
+                  item-text="name"
+                  item-value="id"
+                  filled
+                  readonly
                   dense
                   outlined
                   single-line
                   hide-details="auto"
-                  disabled
                 />
               </v-col>
 
@@ -553,12 +605,14 @@
                   >Teacher Name :
                 </label>
                 <v-select
-                  v-model="formInput.title"
+                  v-model="formInput.teacherID"
+                  :items="itemsOptions.teacher"
+                  filled
+                  readonly
                   dense
                   outlined
                   single-line
                   hide-details="auto"
-                  disabled
                 />
               </v-col>
 
@@ -567,14 +621,17 @@
                   >Student Name :
                 </label>
                 <v-select
-                  v-model="formInput.title"
+                  v-model="selectedStudent"
                   dense
-                  :items="['foo', 'bar', 'fizz', 'buzz']"
+                  :items="itemsOptions.student"
+                  item-text="name"
+                  item-value="id"
+                  filled
+                  readonly
                   outlined
                   single-line
                   hide-details="auto"
                   multiple
-                  disabled
                 />
               </v-col>
             </v-row>
@@ -595,7 +652,9 @@
                           </v-col>
                           <v-col cols="4">
                             <v-text-field
+                              v-model="formInput[status.value]"
                               dense
+                              type="number"
                               outlined
                               single-line
                               hide-details="auto"
@@ -611,8 +670,11 @@
               <v-col cols="4">
                 <label class="v-label mb-2 text-subtitle-2">Currency : </label>
                 <v-select
+                  v-model="formInput.currencyID"
                   dense
-                  :items="['USD', 'EUR', 'INR']"
+                  :items="itemsOptions.currency"
+                  item-text="name"
+                  item-value="id"
                   outlined
                   single-line
                   hide-details="auto"
@@ -627,6 +689,8 @@
 </template>
 
 <script>
+import { mapState } from "pinia";
+import { useAppStore } from "@/stores/app";
 export default {
   name: "FormStudent",
   data() {
@@ -645,11 +709,35 @@ export default {
         "Send study link to admin",
       ],
       formInput: {
-        title: "",
-        category: "",
-        type: "",
-        image: "",
+        name: "",
+        no: "",
+        branchID: "",
+        classTypeID: "",
+        numberOfStudent: null,
+        studentFee: null,
+        discount: null,
+        discountNote: "",
+        totalFeePerClass: null,
+        teacherID: null,
+        materialTypeID: null,
+        registeredTimes: null,
+        teacherLeave: null,
+        studentLeave: null,
+        note: "",
+        status: "Active",
+        startDate: null,
+        endDate: null,
+        studyTimePerTime: null,
+        studyPlatform: null,
+        link: null,
+        currencyID: null,
+
+        regular: null,
+        studentMissing: null,
+        teacherMissing: null,
+        other: null,
       },
+      selectedStudent: [],
       statusList: [
         {
           text: "Regular",
@@ -658,12 +746,12 @@ export default {
         },
         {
           text: "Student missing class",
-          value: "student missing",
+          value: "studentMissing",
           color: "pink",
         },
         {
           text: "Teacher missing class",
-          value: "teacher missing",
+          value: "teacherMissing",
           color: "red",
         },
         {
@@ -725,9 +813,59 @@ export default {
           note: "",
         },
       ],
+
+      itemsOptions: {
+        materialType: [],
+        classType: [],
+        branch: [],
+        teacher: [],
+        student: [],
+        currency: [],
+      },
     };
   },
+  computed: {
+    ...mapState(useAppStore, {
+      userInfo: "getUserinfo",
+    }),
+  },
+  mounted() {
+    this.fetchOption();
+  },
   methods: {
+    async fetchOption() {
+      try {
+        const { data: dataMaterialType } = await this.axios.get(
+          `/materialType`
+        );
+        this.itemsOptions.materialType = dataMaterialType;
+
+        const { data: dataClassType } = await this.axios.get(`/classType`);
+        this.itemsOptions.classType = dataClassType;
+
+        const { data: dataBranch } = await this.axios.get(`/branch`);
+        this.itemsOptions.branch = dataBranch;
+
+        const { data: dataCurrency } = await this.axios.get(`/currency`);
+        this.itemsOptions.currency = dataCurrency;
+
+        const { data: dataTeacher } = await this.axios.get(
+          `/account?role=teacher`
+        );
+        this.itemsOptions.teacher = dataTeacher || [];
+
+        const { data: dataStudent } = await this.axios.get(
+          `/account?role=student`
+        );
+        this.itemsOptions.student = dataStudent || [];
+      } catch (error) {
+        this.$swal.fire({
+          title: error.response.data.error,
+          text: error.response.data.details,
+          icon: "error",
+        });
+      }
+    },
     setRef(e) {
       return this.itemsRef.push(e);
     },

@@ -75,6 +75,10 @@ const Class = sequelize.define(
       type: DataTypes.INTEGER,
       defaultValue: 0,
     },
+    studentLeave: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
+    },
     startDate: {
       type: DataTypes.DATE,
     },
