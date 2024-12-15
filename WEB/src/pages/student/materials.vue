@@ -34,16 +34,18 @@
           :filter-keys="['title', 'category', 'type']"
           :items="items"
         >
-          <template #item.image="{ item }">
+          <template #item.photo="{ item }">
             <v-avatar size="64" rounded color="grey lighten-4" class="my-2">
               <v-img
-                :src="`https://cdn.vuetifyjs.com/docs/images/graphics/gpus/${item.image}`"
                 height="64"
                 width="64"
                 cover
-                v-if="item.image"
+                v-if="item.photo"
+                :src="`${baseUrl}${item.photo}`"
               />
-              <v-icon v-else size="45">mdi-notebook-edit</v-icon>
+              <v-icon color="primary" v-else size="45"
+                >mdi-notebook-edit</v-icon
+              >
             </v-avatar>
           </template>
 
@@ -64,6 +66,9 @@
 </template>
 
 <script>
+import { mapState } from "pinia";
+import { useAppStore } from "@/stores/app";
+
 import WebViewer from "@pdftron/webviewer";
 export default {
   name: "StudentMaterials",
@@ -73,35 +78,51 @@ export default {
       headers: [
         {
           align: "start",
-          value: "no",
+          value: "material.id",
           sortable: false,
           text: "Materials No.",
         },
-        { value: "image", text: "Photo" },
-        { value: "title", text: "Title", width: "40%" },
-        { value: "category", text: "Materials Category" },
-        { value: "type", text: "Materials for teacher/student" },
+        { value: "photo", text: "Photo" },
+        { value: "material.title", text: "Title", width: "40%" },
+        {
+          value: "material.materialCategory.name",
+          text: "Materials Category",
+          width: "10%",
+        },
+        {
+          value: "material.materialFor.name",
+          text: "Materials for teacher/student",
+          width: "10%",
+        },
         { value: "action", text: "Action", sortable: false },
       ],
-      items: [
-        {
-          no: "M001",
-          image: "1.png",
-          title: "Book",
-          category: "Class 1",
-          type: "Student",
-        },
-        {
-          no: "M001",
-          image: "",
-          title: "Book",
-          category: "Class 1",
-          type: "Student",
-        },
-      ],
+      items: [],
     };
   },
+  computed: {
+    ...mapState(useAppStore, {
+      userInfo: "getUserinfo",
+    }),
+  },
+  created() {
+    this.fetchDataMaterials();
+  },
   methods: {
+    async fetchDataMaterials() {
+      try {
+        const { data } = await this.axios.get(
+          `/myMaterial/account/${this.userInfo.accountID}`
+        );
+        this.items = data;
+      } catch (error) {
+        if (error.response.status !== 404)
+          this.$swal.fire({
+            title: error.response.data.error,
+            text: error.response.data.details,
+            icon: "error",
+          });
+      }
+    },
     openDoc() {
       WebViewer(
         {

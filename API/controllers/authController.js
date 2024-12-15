@@ -17,13 +17,13 @@ exports.login = async (req, res) => {
     // Step 1: Find the user by username
     const user = await User.findOne({ where: { username } });
     if (!user) {
-      return res.status(401).json({ error: "Invalid username or password" });
+      return res.status(400).json({ error: "Invalid username or password" });
     }
 
     // Step 2: Compare the password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(401).json({ error: "Invalid username or password" });
+      return res.status(400).json({ error: "Invalid username or password" });
     }
 
     // Step 3: Generate JWT
@@ -35,7 +35,7 @@ exports.login = async (req, res) => {
         role: user.role,
       },
       process.env.JWT_SECRET || "your_jwt_secret", // Use a secure secret in production
-      { expiresIn: "1h" }
+      { expiresIn: "6h" }
     );
 
     res.status(200).json({

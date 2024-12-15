@@ -13,17 +13,18 @@
             class="mt-2 mx-2"
             rounded="xl"
             size="120"
-            color="grey lighten-2"
+            :color="dataStudent.photo ? '' : 'grey lighten-4'"
+            :class="dataStudent.photo ? '' : 'v-avatar-light-bg primary--text'"
+            :variant="!dataStudent.photo ? 'tonal' : undefined"
           >
             <v-img
-              src="https://cdn.vuetifyjs.com/images/john.jpg"
-              alt="John"
-              v-if="userInfo?.photo"
-            ></v-img>
-            <v-icon v-else size="62">mdi-account-school</v-icon>
+              v-if="dataStudent.photo"
+              :src="`${baseUrl}${dataStudent.photo}`"
+            />
+            <v-icon v-else>mdi-account</v-icon>
           </v-avatar>
-          <div class="d-flex flex-column justify-center white--text">
-            <h4 class="text-h4 font-weight-bold">Nannie</h4>
+          <div class="d-flex white--text flex-column justify-center">
+            <h4 class="text-h4 font-weight-bold">{{ dataStudent?.name }}</h4>
             <div>
               <v-icon color="yellow"> mdi-star-circle </v-icon>
               100 points
@@ -77,6 +78,9 @@
 </template>
 
 <script>
+import { mapState } from "pinia";
+import { useAppStore } from "@/stores/app";
+
 import CalendarComponent from "@/components/Calendar.vue";
 export default {
   name: "StudentClass",
@@ -85,6 +89,7 @@ export default {
   },
   data() {
     return {
+      dataStudent: {},
       events: [
         {
           name: "เดี่ยว - Nannie",
@@ -108,6 +113,30 @@ export default {
         },
       ],
     };
+  },
+  computed: {
+    ...mapState(useAppStore, {
+      userInfo: "getUserinfo",
+    }),
+  },
+  created() {
+    this.fetchDataById();
+  },
+  methods: {
+    async fetchDataById() {
+      try {
+        const { data } = await this.axios.get(
+          `/account/${this.userInfo.accountID}`
+        );
+        this.dataStudent = data;
+      } catch (error) {
+        this.$swal.fire({
+          title: error.response.data.error,
+          text: error.response.data.details,
+          icon: "error",
+        });
+      }
+    },
   },
 };
 </script>

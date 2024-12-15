@@ -74,6 +74,20 @@ exports.getMaterialsByAccountId = async (req, res) => {
         model: Materials,
         as: "material",
         attributes: { exclude: ["updatedAt"] },
+        include: [
+          {
+            association: "materialCategory",
+            attributes: ["id", "name"],
+          },
+          {
+            association: "materialFor",
+            attributes: ["id", "name"],
+          },
+          {
+            association: "materialType",
+            attributes: ["id", "name"],
+          },
+        ],
       },
     });
 

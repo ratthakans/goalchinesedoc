@@ -276,6 +276,8 @@ export default {
       try {
         await this.axios.delete(`/setting/logo`);
         this.fetchSetting();
+        this.formInput.file = null;
+        this.formInput.logo = null;
       } catch (error) {
         this.$swal.fire({
           title: error.response.data.error,

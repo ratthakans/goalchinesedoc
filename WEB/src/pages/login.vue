@@ -84,7 +84,7 @@ export default {
           username: this.username,
           password: this.password,
         });
-
+        console.log("data :>> ", data);
         this.setUserInfo(data.user);
         localStorage.setItem("token", data.user.token);
 
