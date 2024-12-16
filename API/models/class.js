@@ -1,6 +1,8 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
 
+const { Attendance } = require("../models");
+
 const Class = sequelize.define(
   "Class",
   {
@@ -140,7 +142,7 @@ const Class = sequelize.define(
 Class.associate = (models) => {
   Class.belongsTo(models.Branch, { foreignKey: "branchID" });
   Class.belongsTo(models.ClassType, { foreignKey: "classTypeID" });
-  Class.belongsTo(models.Account, { foreignKey: "teacherID" });
+  Class.belongsTo(models.Account, { foreignKey: "teacherID", as: "teacher" });
   Class.belongsTo(models.Account, { foreignKey: "updateBy" });
   Class.belongsTo(models.MaterialType, { foreignKey: "materialTypeID" });
   Class.belongsTo(models.Currency, { foreignKey: "currencyID" });
@@ -153,6 +155,11 @@ Class.associate = (models) => {
   Class.hasMany(models.ClassStudy, {
     foreignKey: "classID",
     as: "classStudy",
+  });
+
+  Class.hasMany(models.Attendance, {
+    foreignKey: "classId",
+    as: "attendance",
   });
 };
 

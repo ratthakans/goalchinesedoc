@@ -15,6 +15,7 @@
                   dense
                   outlined
                   single-line
+                  :readonly="flagView"
                   hide-details="auto"
                   placeholder="Enter Class name"
                   :rules="[(v) => !!v || 'Class name is required']"
@@ -29,6 +30,7 @@
                   v-model="formInput.no"
                   dense
                   outlined
+                  :readonly="flagView"
                   single-line
                   hide-details="auto"
                   placeholder="Enter Class no"
@@ -43,6 +45,7 @@
                 <v-select
                   v-model="formInput.branchID"
                   :items="itemsOptions.branch"
+                  :readonly="flagView"
                   dense
                   outlined
                   item-text="name"
@@ -61,6 +64,7 @@
                 <v-select
                   v-model="formInput.classTypeID"
                   :items="itemsOptions.classType"
+                  :readonly="flagView"
                   dense
                   item-text="name"
                   item-value="id"
@@ -78,6 +82,7 @@
                 </label>
                 <v-text-field
                   v-model="formInput.numberOfStudent"
+                  :readonly="flagView"
                   dense
                   outlined
                   type="number"
@@ -94,6 +99,7 @@
                 </label>
                 <v-text-field
                   v-model="formInput.studentFee"
+                  :readonly="flagView"
                   dense
                   outlined
                   single-line
@@ -108,6 +114,7 @@
                 <label class="v-label mb-2 text-subtitle-2">Discount : </label>
                 <v-text-field
                   v-model="formInput.discount"
+                  :readonly="flagView"
                   dense
                   type="number"
                   outlined
@@ -123,6 +130,7 @@
                 </label>
                 <v-text-field
                   v-model="formInput.discountNote"
+                  :readonly="flagView"
                   dense
                   outlined
                   single-line
@@ -137,6 +145,7 @@
                 </label>
                 <v-text-field
                   v-model="formInput.totalFeePerClass"
+                  :readonly="flagView"
                   dense
                   outlined
                   single-line
@@ -153,6 +162,7 @@
                 <v-select
                   v-model="formInput.teacherID"
                   :items="itemsOptions.teacher"
+                  :readonly="flagView"
                   item-text="name"
                   item-value="id"
                   dense
@@ -170,8 +180,9 @@
                 </label>
                 <v-select
                   v-model="selectedStudent"
-                  dense
+                  :readonly="flagView"
                   :items="itemsOptions.student"
+                  dense
                   item-text="name"
                   item-value="id"
                   outlined
@@ -179,7 +190,10 @@
                   hide-details="auto"
                   placeholder="Select student"
                   multiple
-                  :rules="[(v) => !!v || 'Student is required']"
+                  :rules="[
+                    (v) => !!v || 'Student is required',
+                    (v) => v.length > 0 || 'Student is required',
+                  ]"
                 />
               </v-col>
               <v-col cols="12" md="8">
@@ -190,6 +204,7 @@
                     </label>
                     <v-select
                       v-model="formInput.status"
+                      :readonly="flagView"
                       dense
                       :items="['Active', 'Inactive']"
                       outlined
@@ -204,8 +219,9 @@
                     </label>
                     <v-select
                       v-model="formInput.materialTypeID"
-                      dense
                       :items="itemsOptions.materialType"
+                      :readonly="flagView"
+                      dense
                       item-text="name"
                       item-value="id"
                       outlined
@@ -222,12 +238,12 @@
                     </label>
                     <v-text-field
                       v-model="formInput.registeredTimes"
+                      :readonly="flagView"
                       dense
                       type="number"
                       outlined
-                      single-line
                       hide-details="auto"
-                      :roules="[(v) => !!v || 'Registered time is required']"
+                      :rules="[(v) => !!v || 'Registered time is required']"
                     />
                   </v-col>
                   <v-col cols="12" md="4">
@@ -235,14 +251,15 @@
                       <span class="red--text mr-2">*</span> Teacher can leave
                       (time) :
                     </label>
+
                     <v-text-field
                       v-model="formInput.teacherLeave"
+                      :readonly="flagView"
                       dense
                       type="number"
                       outlined
-                      single-line
                       hide-details="auto"
-                      :roules="[(v) => !!v || 'Teacher leave is required']"
+                      :rules="[(v) => !!v || 'Teacher leave is required']"
                     />
                   </v-col>
                   <v-col cols="12" md="4">
@@ -252,10 +269,10 @@
                     </label>
                     <v-text-field
                       v-model="formInput.studentLeave"
+                      :readonly="flagView"
                       dense
                       type="number"
                       outlined
-                      single-line
                       hide-details="auto"
                       :rules="[(v) => !!v || 'Student leave is required']"
                     />
@@ -266,6 +283,7 @@
                 <label class="v-label mb-2 text-subtitle-2"> Note : </label>
                 <v-textarea
                   v-model="formInput.note"
+                  :readonly="flagView"
                   dense
                   outlined
                   single-line
@@ -296,6 +314,7 @@
                       dense
                       outlined
                       single-line
+                      :disabled="flagView"
                       hide-details="auto"
                       readonly
                       :rules="[(v) => !!v || 'Start date is required']"
@@ -330,6 +349,7 @@
                       dense
                       outlined
                       single-line
+                      :disabled="flagView"
                       hide-details="auto"
                       readonly
                       :rules="[(v) => !!v || 'End date is required']"
@@ -350,7 +370,9 @@
                 </label>
                 <v-text-field
                   v-model="formInput.studyTimePerTime"
+                  :readonly="flagView"
                   dense
+                  type="number"
                   outlined
                   single-line
                   hide-details="auto"
@@ -368,11 +390,18 @@
               </v-col>
               <v-col cols="12" md="2">
                 <v-checkbox
-                  v-model="selectedDays"
+                  v-model="item.checked"
                   :label="item.text"
-                  :value="item.value"
+                  :value="item.checked"
+                  :readonly="flagView"
                   hide-details="auto"
                   class="mt-1"
+                  :rules="[
+                    (v) =>
+                      itemsTimes.every((it) => it.checked === false)
+                        ? !!v || 'Day is required'
+                        : true,
+                  ]"
                 ></v-checkbox>
               </v-col>
               <v-col cols="12" md="2">
@@ -393,9 +422,15 @@
                       dense
                       outlined
                       single-line
+                      :disabled="!item.checked || flagView"
+                      :filled="!item.checked"
                       hide-details="auto"
                       v-bind="attrs"
                       v-on="on"
+                      :rules="[
+                        (v) =>
+                          item.checked ? !!v || 'Start time is required' : true,
+                      ]"
                     ></v-text-field>
                   </template>
                   <v-time-picker
@@ -427,14 +462,20 @@
                       dense
                       outlined
                       single-line
+                      :disabled="!item.checked || flagView"
+                      :filled="!item.checked"
                       hide-details="auto"
                       v-bind="attrs"
                       v-on="on"
+                      :rules="[
+                        (v) =>
+                          item.checked ? !!v || 'End time is required' : true,
+                      ]"
                     ></v-text-field>
                   </template>
                   <v-time-picker
                     v-model="item.endTime"
-                    full-width
+                    :min="item.startTime"
                     @click:minute="$refs.timeEndRef[i].save(item.endTime)"
                     format="24hr"
                   ></v-time-picker>
@@ -445,6 +486,9 @@
                 <v-text-field
                   v-model="item.note"
                   dense
+                  :disabled="!item.checked"
+                  :filled="!item.checked"
+                  :readonly="flagView"
                   outlined
                   hide-details="auto"
                 />
@@ -458,6 +502,7 @@
                 </label>
                 <v-text-field
                   v-model="formInput.studyPlatform"
+                  :readonly="flagView"
                   dense
                   outlined
                   single-line
@@ -472,6 +517,7 @@
                 </label>
                 <v-text-field
                   v-model="formInput.link"
+                  :readonly="flagView"
                   dense
                   outlined
                   single-line
@@ -501,14 +547,19 @@
                     <label class="v-label mb-2 text-subtitle-2">
                       <span class="red--text mr-2">*</span>Check list :
                     </label>
+
                     <v-checkbox
                       v-for="(item, i) in checkList"
                       :key="i"
                       v-model="selectedCheckList"
+                      :readonly="flagView"
                       :label="item"
-                      :value="item"
+                      :value="i + 1"
                       hide-details="auto"
-                      :rules="[(v) => !!v || 'Check list is required']"
+                      :rules="[
+                        (v) => !!v || 'Check list is required',
+                        (v) => v.length > 0 || 'Check list is required',
+                      ]"
                     ></v-checkbox>
                   </v-col>
                 </v-row>
@@ -518,6 +569,7 @@
                 <label class="v-label mb-2 text-subtitle-2"> Note : </label>
                 <v-textarea
                   v-model="formInput.note"
+                  :readonly="flagView"
                   dense
                   outlined
                   single-line
@@ -607,6 +659,8 @@
                 <v-select
                   v-model="formInput.teacherID"
                   :items="itemsOptions.teacher"
+                  item-text="name"
+                  item-value="id"
                   filled
                   readonly
                   dense
@@ -653,6 +707,7 @@
                           <v-col cols="4">
                             <v-text-field
                               v-model="formInput[status.value]"
+                              :readonly="flagView"
                               dense
                               type="number"
                               outlined
@@ -673,6 +728,7 @@
                   v-model="formInput.currencyID"
                   dense
                   :items="itemsOptions.currency"
+                  :readonly="flagView"
                   item-text="name"
                   item-value="id"
                   outlined
@@ -693,6 +749,20 @@ import { mapState } from "pinia";
 import { useAppStore } from "@/stores/app";
 export default {
   name: "FormStudent",
+  props: {
+    editItems: {
+      type: Object,
+      default: () => ({}),
+    },
+    flagEdit: {
+      type: Boolean,
+      default: false,
+    },
+    flagView: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data() {
     return {
       menu: false,
@@ -700,7 +770,7 @@ export default {
       menuTime: false,
       time: null,
       date: null,
-      selectedDays: [],
+
       selectedCheckList: [],
       checkList: [
         "Send metarials to students",
@@ -764,50 +834,57 @@ export default {
       itemsRef2: [],
       itemsTimes: [
         {
+          checked: false,
           text: "Mon",
-          value: "mon",
+          value: "Mon",
           startTime: "",
           endTime: "",
           note: "",
         },
         {
+          checked: false,
           text: "Tue",
-          value: "tue",
+          value: "Tue",
           startTime: "",
           endTime: "",
           note: "",
         },
         {
+          checked: false,
           text: "Wed",
-          value: "wed",
+          value: "Wed",
           startTime: "",
           endTime: "",
           note: "",
         },
         {
+          checked: false,
           text: "Thu",
-          value: "thu",
+          value: "Thu",
           startTime: "",
           endTime: "",
           note: "",
         },
         {
+          checked: false,
           text: "Fri",
-          value: "fri",
+          value: "Fri",
           startTime: "",
           endTime: "",
           note: "",
         },
         {
+          checked: false,
           text: "Sat",
-          value: "sat",
+          value: "Sat",
           startTime: "",
           endTime: "",
           note: "",
         },
         {
+          checked: false,
           text: "Sun",
-          value: "sun",
+          value: "Sun",
           startTime: "",
           endTime: "",
           note: "",
@@ -828,6 +905,69 @@ export default {
     ...mapState(useAppStore, {
       userInfo: "getUserinfo",
     }),
+  },
+  watch: {
+    formInput: {
+      handler() {
+        this.emitData();
+      },
+      deep: true,
+    },
+    itemsTimes: {
+      handler() {
+        this.emitData();
+      },
+      deep: true,
+    },
+    selectedCheckList: {
+      handler() {
+        this.emitData();
+      },
+      deep: true,
+    },
+    selectedStudent: {
+      handler() {
+        this.emitData();
+      },
+      deep: true,
+    },
+    editItems: {
+      handler() {
+        if (Object.keys(this.editItems).length !== 0) {
+          this.formInput = { ...this.editItems };
+
+          this.selectedCheckList = this.editItems.checkList
+            .split(",")
+            .map((it) => parseInt(it));
+
+          this.selectedStudent = this.editItems.classStudent.map(
+            (it) => it.accountID
+          );
+
+          this.itemsTimes.forEach((item, index) => {
+            const find = this.editItems.classStudy.find(
+              (it) => it.day === item.text
+            );
+            if (find) {
+              this.itemsTimes[index] = {
+                ...item,
+                checked: true,
+                startTime: find.startTime,
+                endTime: find.endTime,
+                note: find.note,
+              };
+            }
+          });
+
+          console.log("this.itemsTimes :>> ", this.itemsTimes);
+
+          if (this.editItems.expireDate === "") {
+            this.notExpired = true;
+          }
+        }
+      },
+      deep: true,
+    },
   },
   mounted() {
     this.fetchOption();
@@ -866,11 +1006,13 @@ export default {
         });
       }
     },
-    setRef(e) {
-      return this.itemsRef.push(e);
-    },
-    setRef2(e) {
-      return this.itemsRef2.push(e);
+    emitData() {
+      this.$emit("input", {
+        ...this.formInput,
+        checkList: this.selectedCheckList.join(","),
+        classStudy: this.itemsTimes.filter((item) => item.checked),
+        classStudent: this.selectedStudent,
+      });
     },
   },
 };

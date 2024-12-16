@@ -19,10 +19,26 @@ const ClassStudy = sequelize.define(
     startTime: {
       type: DataTypes.TIME,
       allowNull: false,
+      get() {
+        const time = this.getDataValue("startTime"); // Fetch the raw value from the database
+        if (!time) return null; // Handle cases where the time is null
+
+        // Format the time to HH:mm
+        const [hours, minutes] = time.split(":"); // Split the time into components
+        return `${hours}:${minutes}`; // Return only hours and minutes
+      },
     },
     endTime: {
       type: DataTypes.TIME,
       allowNull: false,
+      get() {
+        const time = this.getDataValue("endTime"); // Fetch the raw value from the database
+        if (!time) return null; // Handle cases where the time is null
+
+        // Format the time to HH:mm
+        const [hours, minutes] = time.split(":"); // Split the time into components
+        return `${hours}:${minutes}`; // Return only hours and minutes
+      },
     },
     note: {
       type: DataTypes.STRING,

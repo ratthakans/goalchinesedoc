@@ -9,7 +9,9 @@
       </v-col>
     </v-row>
 
-    <FormClass />
+    <v-form ref="form" lazy-validation>
+      <FormClass v-model="formInput" :editItems="editItems" :flagView="true" />
+    </v-form>
   </v-container>
 </template>
 
@@ -22,13 +24,34 @@ export default {
   },
   data() {
     return {
-      formInput: {
-        title: "",
-        category: "",
-        type: "",
-        image: "",
-      },
+      formInput: null,
+      editItems: null,
     };
+  },
+  created() {
+    this.fetchDataById();
+  },
+  methods: {
+    async fetchDataById() {
+      try {
+        const { data } = await this.axios.get(
+          `/classes/${this.$route.params.id}`
+        );
+        this.editItems = {
+          ...data,
+
+          endDate: new Date(data.endDate).toISOString().substring(0, 10),
+
+          startDate: new Date(data.startDate).toISOString().substring(0, 10),
+        };
+      } catch (error) {
+        this.$swal.fire({
+          title: error.response.data.error,
+          text: error.response.data.details,
+          icon: "error",
+        });
+      }
+    },
   },
 };
 </script>

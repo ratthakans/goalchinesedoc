@@ -9,12 +9,14 @@
       </v-col>
     </v-row>
 
-    <FormClass />
+    <v-form ref="form" lazy-validation>
+      <FormClass v-model="formInput" :editItems="editItems" :flagEdit="true" />
+    </v-form>
 
     <v-row justify="end">
       <v-col cols="auto">
-        <v-btn color="primary" depressed class="text-none">
-          <v-icon start> mdi-content-save </v-icon>
+        <v-btn color="primary" depressed class="text-none" @click="update">
+          <v-icon left> mdi-content-save </v-icon>
           Save
         </v-btn>
       </v-col>
@@ -31,13 +33,52 @@ export default {
   },
   data() {
     return {
-      formInput: {
-        title: "",
-        category: "",
-        type: "",
-        image: "",
-      },
+      formInput: null,
+      editItems: null,
     };
+  },
+  created() {
+    this.fetchDataById();
+  },
+  methods: {
+    async fetchDataById() {
+      try {
+        const { data } = await this.axios.get(
+          `/classes/${this.$route.params.id}`
+        );
+        this.editItems = {
+          ...data,
+
+          endDate: new Date(data.endDate).toISOString().substring(0, 10),
+
+          startDate: new Date(data.startDate).toISOString().substring(0, 10),
+        };
+      } catch (error) {
+        this.$swal.fire({
+          title: error.response.data.error,
+          text: error.response.data.details,
+          icon: "error",
+        });
+      }
+    },
+    async update() {
+      if (!this.$refs.form.validate()) return;
+      try {
+        const { data } = await this.axios.put(
+          `/classes/${this.$route.params.id}`,
+          this.formInput
+        );
+
+        this.$swal(data?.message, "", "success");
+        this.$router.push({ name: "classesAll" });
+      } catch (error) {
+        this.$swal.fire({
+          title: error.response.data.error,
+          text: error.response.data.details,
+          icon: "error",
+        });
+      }
+    },
   },
 };
 </script>

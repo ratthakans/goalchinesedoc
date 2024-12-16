@@ -17,25 +17,18 @@
           :items="items"
         >
           <template #item.studyDay="{ item }">
-            <div class="d-flex flex-column">
-              <div v-for="(it, i) in item.studyDay" :key="i">{{ it.day }}</div>
-            </div>
+            <v-row dense v-for="(it, i) in item.classStudy" :key="i">
+              <v-col cols="">{{ it.day }}</v-col>
+            </v-row>
           </template>
           <template #item.timeSlot="{ item }">
-            <div class="d-flex flex-column">
-              <div v-for="(it, i) in item.studyDay" :key="i">
-                {{ it.timeSlot }}
-              </div>
-            </div>
-          </template>
-          <template #item.remaining="{ item }">
-            <span :class="{ 'red--text': item.remaining <= 2 }">{{
-              item.remaining
-            }}</span>
+            <v-row dense v-for="(it, i) in item.classStudy" :key="i">
+              <v-col cols="">{{ it.startTime }} - {{ it.endTime }}</v-col>
+            </v-row>
           </template>
 
           <template #item.teacherLeave="{ item }">
-            <v-text-field
+            <!-- <v-text-field
               v-model="item.teacherLeave"
               dense
               outlined
@@ -44,11 +37,13 @@
               suffix="/ 5"
               class="w-50"
               style="inline-size: 70px"
-            ></v-text-field>
+            ></v-text-field> -->
+
+            <div class="d-flex justify-center">0 / {{ item.teacherLeave }}</div>
           </template>
 
           <template #item.studentLeave="{ item }">
-            <v-text-field
+            <!-- <v-text-field
               v-model="item.studentLeave"
               dense
               outlined
@@ -57,19 +52,20 @@
               suffix="/ 5"
               class="w-50"
               style="inline-size: 70px"
-            ></v-text-field>
+            ></v-text-field> -->
+            <div class="d-flex justify-center">0 / {{ item.studentLeave }}</div>
           </template>
 
           <template #item.times="{ item }">
-            <div style="width: 300px" class="text-no-wrap overflow-auto">
+            <div style="width: 350px" class="text-no-wrap overflow-auto">
               <v-chip
-                v-for="(time, i) in item.times"
+                v-for="(time, i) in genarateTimes(item)"
                 :key="i"
                 class="ma-1 pa-2"
                 label
                 dark
                 :color="resolveStatus(time.status)"
-                @click.stop="dialog = true"
+                @click.stop="showDialog(item.id, time)"
               >
                 {{ i + 1 }}
               </v-chip>
@@ -87,8 +83,8 @@
               <v-list dense :lines="false">
                 <v-list-item
                   v-for="(menu, i) in [
-                    { title: 'View', to: `./view/${item.no}` },
-                    { title: 'Edit', to: `./edit/${item.no}` },
+                    { title: 'View', to: `./view/${item.id}` },
+                    { title: 'Edit', to: `./edit/${item.id}` },
                   ]"
                   :key="i"
                   link
@@ -109,7 +105,7 @@
             <v-col cols="12">
               <label class="v-label mb-2 text-subtitle-2"> Study date </label>
               <v-menu
-                v-model="menu2"
+                ref="datePicker"
                 :close-on-content-click="false"
                 :nudge-right="40"
                 transition="scale-transition"
@@ -118,7 +114,7 @@
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
-                    v-model="date"
+                    v-model="editItem.studyDate"
                     label="study date"
                     append-icon="mdi-calendar"
                     readonly
@@ -131,13 +127,18 @@
                   ></v-text-field>
                 </template>
                 <v-date-picker
-                  v-model="date"
-                  @input="menu2 = false"
+                  v-model="editItem.studyDate"
+                  @change="$refs.datePicker.save(editItem.studyDate)"
                 ></v-date-picker>
               </v-menu>
             </v-col>
             <v-col cols="12">
-              <v-radio-group column hide-details="auto" class="mt-0">
+              <v-radio-group
+                v-model="editItem.status"
+                column
+                hide-details="auto"
+                class="mt-0"
+              >
                 <v-list dense>
                   <v-list-item v-for="(status, i) in statusList" :key="i">
                     <v-list-item-content>
@@ -160,6 +161,7 @@
             <v-col cols="12">
               <label class="v-label mb-2 text-subtitle-2"> Note : </label>
               <v-textarea
+                v-model="editItem.note"
                 dense
                 outlined
                 single-line
@@ -174,7 +176,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
 
-          <v-btn color="primary" @click="dialog = false"> Save </v-btn>
+          <v-btn color="primary" @click="saveAttendance"> Save </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -211,56 +213,8 @@ export default {
         },
         { value: "action", text: "Action", width: "5%" },
       ],
-      items: [
-        {
-          no: "M001",
-          name: "Class 1",
-
-          studyDay: [
-            {
-              day: "Monday",
-              timeSlot: "8:00 - 10:00",
-            },
-            {
-              day: "Wednesday",
-              timeSlot: "8:00 - 10:00",
-            },
-            {
-              day: "Friday",
-              timeSlot: "8:00 - 10:00",
-            },
-          ],
-          teacherLeave: 0,
-          studentLeave: 1,
-          times: [
-            {
-              date: "2021-09-01",
-              status: "regular",
-            },
-            {
-              date: "2021-09-01",
-              status: "student missing",
-            },
-            {
-              date: "2021-09-01",
-              status: "teacher missing",
-            },
-            {
-              date: "2021-09-01",
-              status: "other",
-            },
-            {
-              date: "2021-09-01",
-              status: "",
-            },
-            {
-              date: "2021-09-01",
-              status: "",
-            },
-          ],
-        },
-      ],
-      date: new Date().toISOString().substr(0, 10),
+      items: [],
+      date: new Date().toISOString().substring(0, 10),
       statusList: [
         {
           text: "Regular",
@@ -283,9 +237,33 @@ export default {
           color: "info",
         },
       ],
+      selectedStatus: "regular",
+      itemsAttendance: [],
+      editClassID: null,
+      editTimeID: null,
+      editItem: {
+        studyDate: "",
+        classId: null,
+        status: "",
+      },
     };
   },
+  mounted() {
+    this.fetchData();
+  },
   methods: {
+    async fetchData() {
+      try {
+        const { data } = await this.axios.get(`/classes`);
+        this.items = data || [];
+      } catch (error) {
+        this.$swal.fire({
+          title: error.response.data.error,
+          text: error.response.data.details,
+          icon: "error",
+        });
+      }
+    },
     resolveStatus(status) {
       switch (status) {
         case "regular":
@@ -298,6 +276,60 @@ export default {
           return "info";
         default:
           return "grey lighten-2";
+      }
+    },
+    showDialog(classId, item) {
+      this.editClassID = classId;
+      this.editItem = {
+        ...item,
+        studyDate: new Date(item.studyDate).toISOString().substring(0, 10),
+      };
+      this.dialog = true;
+    },
+    genarateTimes(item) {
+      const times = [];
+      times.push(...item.attendance);
+      for (let i = 0; i < item.registeredTimes - item.attendance.length; i++) {
+        times.push({
+          studyDate: new Date().toISOString().substring(0, 10),
+          classId: null,
+          status: "",
+        });
+      }
+      return times;
+    },
+    async saveAttendance() {
+      try {
+        if (this.editItem?.id) {
+          await this.axios.put(`/attendances/${this.editItem?.id}`, {
+            studyDate: this.editItem.studyDate,
+            classId: this.editClassID,
+            status: this.editItem.status,
+          });
+        } else {
+          await this.axios.post(`/attendances`, {
+            studyDate: this.editItem.studyDate,
+            classId: this.editClassID,
+            status: this.editItem.status,
+          });
+        }
+
+        this.dialog = false;
+        this.editClassID = null;
+        this.editTimeID = null;
+        this.editItem = {
+          studyDate: "",
+          classId: null,
+          status: "",
+        };
+        this.selectedStatus = "regular";
+        this.fetchData();
+      } catch (error) {
+        this.$swal.fire({
+          title: error.response.data.error,
+          text: error.response.data.details,
+          icon: "error",
+        });
       }
     },
   },

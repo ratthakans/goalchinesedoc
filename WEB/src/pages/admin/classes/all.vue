@@ -68,21 +68,34 @@
           </template>
 
           <template #item.studyDay="{ item }">
-            <div class="d-flex flex-column">
-              <div v-for="(it, i) in item.studyDay" :key="i">{{ it.day }}</div>
-            </div>
+            <v-row dense v-for="(it, i) in item.classStudy" :key="i">
+              <v-col cols="">{{ it.day }}</v-col>
+            </v-row>
           </template>
           <template #item.timeSlot="{ item }">
-            <div class="d-flex flex-column">
-              <div v-for="(it, i) in item.studyDay" :key="i">
-                {{ it.timeSlot }}
-              </div>
-            </div>
+            <v-row dense v-for="(it, i) in item.classStudy" :key="i">
+              <v-col cols="">{{ it.startTime }} - {{ it.endTime }}</v-col>
+            </v-row>
           </template>
-          <template #item.remaining="{ item }">
+
+          <template #item.teacherName="{ item }">
+            {{ item.teacher?.name }}
+          </template>
+
+          <template #item.completed="{ item }">
             <span :class="{ 'red--text': item.remaining <= 2 }">{{
-              item.remaining
+              item?.attendance?.length || 0
             }}</span>
+          </template>
+
+          <template #item.remaining="{ item }">
+            <span
+              :class="{
+                'red--text':
+                  (item.registeredTimes - item?.attendance?.length || 0) <= 2,
+              }"
+              >{{ item.registeredTimes - item?.attendance?.length || 0 }}</span
+            >
           </template>
 
           <template #item.action="{ item }">
@@ -96,8 +109,8 @@
               <v-list dense :lines="false">
                 <v-list-item
                   v-for="(menu, i) in [
-                    { title: 'View', to: `./view/${item.no}` },
-                    { title: 'Edit', to: `./edit/${item.no}` },
+                    { title: 'View', to: `./view/${item.id}` },
+                    { title: 'Edit', to: `./edit/${item.id}` },
                     { title: 'Attendance', to: `./attendance` },
                   ]"
                   :key="i"
@@ -158,7 +171,7 @@ export default {
           class: "text-subtitle-2  grey--text text--darken-5",
         },
         {
-          value: "classTime",
+          value: "registeredTimes",
           text: "Total class time",
           align: "center",
           width: "5%",
@@ -185,39 +198,49 @@ export default {
           class: "text-subtitle-2  grey--text text--darken-5",
         },
       ],
-      items: [
-        {
-          no: "M001",
-          name: "Class 1",
-          teacherName: "Teacher 1",
-          classTime: "30",
-          completed: "10",
-          remaining: "20",
-          studyDay: [
-            {
-              day: "Monday",
-              timeSlot: "8:00 - 10:00",
-            },
-            {
-              day: "Wednesday",
-              timeSlot: "8:00 - 10:00",
-            },
-            {
-              day: "Friday",
-              timeSlot: "8:00 - 10:00",
-            },
-          ],
-        },
-        {
-          no: "M001",
-          name: "Class 1",
-          teacherName: "Teacher 1",
-          classTime: "30",
-          completed: "10",
-          remaining: "2",
-        },
-      ],
+      items: [],
     };
+  },
+  mounted() {
+    this.fetchData();
+  },
+  methods: {
+    async fetchData() {
+      try {
+        const { data } = await this.axios.get(`/classes`);
+        this.items = data || [];
+      } catch (error) {
+        this.$swal.fire({
+          title: error.response.data.error,
+          text: error.response.data.details,
+          icon: "error",
+        });
+      }
+    },
+    async deleteData(id) {
+      // confirm delete
+      const { isDismissed } = await this.$swal({
+        title: "Are you sure?",
+        text: "Once deleted, you will not be able to recover this data!",
+        icon: "warning",
+        buttons: true,
+      });
+
+      if (isDismissed) return;
+
+      //delete data from api
+      try {
+        await this.axios.delete(`/account/${id}`);
+        this.$swal("Material deleted successfully", "", "success");
+        this.fetchData();
+      } catch (error) {
+        this.$swal.fire({
+          title: error.response.data.error,
+          text: error.response.data.details,
+          icon: "error",
+        });
+      }
+    },
   },
 };
 </script>

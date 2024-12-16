@@ -8,6 +8,7 @@
         <h5 class="text-h5">New Student addmission</h5>
       </v-col>
     </v-row>
+
     <v-form ref="form" lazy-validation>
       <FormStudent v-model="formInput" />
     </v-form>

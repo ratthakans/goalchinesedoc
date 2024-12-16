@@ -9,12 +9,14 @@
       </v-col>
     </v-row>
 
-    <FormClass />
+    <v-form ref="form" lazy-validation>
+      <FormClass v-model="formInput" />
+    </v-form>
 
     <v-row justify="end">
       <v-col cols="auto">
-        <v-btn color="primary" depressed class="text-none">
-          <v-icon start> mdi-content-save </v-icon>
+        <v-btn color="primary" depressed class="text-none" @click="create">
+          <v-icon left> mdi-content-save </v-icon>
           Save
         </v-btn>
       </v-col>
@@ -31,13 +33,26 @@ export default {
   },
   data() {
     return {
-      formInput: {
-        title: "",
-        category: "",
-        type: "",
-        image: "",
-      },
+      formInput: {},
     };
+  },
+  methods: {
+    async create() {
+      if (!this.$refs.form.validate()) return;
+
+      try {
+        const { data } = await this.axios.post(`/classes`, this.formInput);
+
+        this.$swal(data?.message, "", "success");
+        this.$router.push({ name: "classesAll" });
+      } catch (error) {
+        this.$swal.fire({
+          title: error.response.data.error,
+          text: error.response.data.details,
+          icon: "error",
+        });
+      }
+    },
   },
 };
 </script>
