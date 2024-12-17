@@ -32,6 +32,7 @@ const ClassEvents = sequelize.define(
     },
     updateBy: {
       type: DataTypes.INTEGER,
+      allowNull: false,
     },
     note: {
       type: DataTypes.STRING,
@@ -41,5 +42,13 @@ const ClassEvents = sequelize.define(
     freezeTableName: true,
   }
 );
+
+ClassEvents.associate = (models) => {
+  ClassEvents.belongsTo(models.Account, {
+    foreignKey: "updateBy",
+    as: "updatedBy",
+  });
+  ClassEvents.belongsTo(models.Class, { foreignKey: "classId", as: "class" });
+};
 
 module.exports = ClassEvents;

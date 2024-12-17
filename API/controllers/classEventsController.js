@@ -1,0 +1,171 @@
+const {
+  ClassEvents,
+  Account,
+  Class,
+  ClassStudent,
+  Branch,
+} = require("../models");
+
+const logger = require("../logger");
+
+// Create a new Class Event
+exports.create = async (req, res) => {
+  try {
+    const newEvent = await ClassEvents.create(req.body);
+    res
+      .status(201)
+      .json({ message: "Event created successfully", data: newEvent });
+
+    logger.info(
+      `Event created: ${newEvent.id} ${req.body.title} by [${req.user.id}]${req.user.username}`
+    );
+  } catch (error) {
+    res
+      .status(400)
+      .json({ message: "Error creating event", error: error.message });
+  }
+};
+
+// create a new Class Event by Copying an existing event
+exports.copy = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const event = await ClassEvents.findByPk(id);
+    if (!event) {
+      return res.status(404).json({ message: "Event not found" });
+    }
+    const { dates } = req.body;
+
+    const { classId, title, link, color, note, startDate, endDate } =
+      event.toJSON();
+
+    await ClassEvents.bulkCreate(
+      dates.map((date) => ({
+        id: null,
+        classId: classId,
+        title: title,
+        link: link,
+        color: color,
+        note: note,
+        startDate: `${date} ${new Date(startDate).toLocaleTimeString("en-GB", {
+          hour: "2-digit",
+          minute: "2-digit",
+        })}`,
+        endDate: `${date} ${new Date(endDate).toLocaleTimeString("en-GB", {
+          hour: "2-digit",
+          minute: "2-digit",
+        })}`,
+        updateBy: req.user.accountID,
+      }))
+    );
+    res.status(201).json({ message: "Event created successfully" });
+
+    logger.info(
+      `Event Copy created: ${id}} by [${req.user.id}]${req.user.username}`
+    );
+  } catch (error) {
+    console.log("🚀 ~ exports.copy= ~ error:", error);
+    res
+      .status(400)
+      .json({ message: "Error creating event", error: error.message });
+  }
+};
+
+// Retrieve all Class Events
+exports.findAll = async (req, res) => {
+  try {
+    const { branchId, accountId } = req.query;
+    let where = {};
+    if (branchId) {
+      where = { ...where, "$class.branchId$": branchId };
+    }
+    if (accountId) {
+      where = { ...where, "$class.teacherId$": accountId };
+    }
+
+    const events = await ClassEvents.findAll({
+      include: [
+        { model: Account, as: "updatedBy", attributes: ["id", "name"] },
+        {
+          model: Class,
+          as: "class",
+          where,
+          include: [
+            { model: Account, as: "teacher", attributes: ["id", "name"] },
+            {
+              model: ClassStudent,
+              as: "classStudent",
+              include: [
+                { model: Account, as: "account", attributes: ["id", "name"] },
+              ],
+            },
+            { model: Branch, as: "branch" },
+          ],
+        },
+      ],
+    });
+    res.status(200).json(events);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error retrieving events", error: error.message });
+  }
+};
+
+// Retrieve a single Class Event by ID
+exports.findOne = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const event = await ClassEvents.findByPk(id);
+    if (!event) {
+      return res.status(404).json({ message: "Event not found" });
+    }
+    res.status(200).json(event);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error retrieving event", error: error.message });
+  }
+};
+
+// Update a Class Event by ID
+exports.update = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const [updated] = await ClassEvents.update(req.body, { where: { id } });
+    if (!updated) {
+      return res.status(404).json({ message: "Event not found" });
+    }
+    const updatedEvent = await ClassEvents.findByPk(id);
+    res
+      .status(200)
+      .json({ message: "Event updated successfully", data: updatedEvent });
+
+    logger.info(
+      `Event updated: ${id} ${req.body.title} by [${req.user.id}]${req.user.username}`
+    );
+  } catch (error) {
+    res
+      .status(400)
+      .json({ message: "Error updating event", error: error.message });
+  }
+};
+
+// Delete a Class Event by ID
+exports.delete = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deleted = await ClassEvents.destroy({ where: { id } });
+    if (!deleted) {
+      return res.status(404).json({ message: "Event not found" });
+    }
+    res.status(204).send();
+
+    logger.info(`Event deleted: ${id} by [${req.user.id}]${req.user.username}`);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error deleting event", error: error.message });
+  }
+};

@@ -240,8 +240,8 @@ export default {
 
       //delete data from api
       try {
-        await this.axios.delete(`/account/${id}`);
-        this.$swal("Material deleted successfully", "", "success");
+        const { data } = await this.axios.delete(`/account/${id}`);
+        this.$swal(data?.message, "", "success");
         this.fetchData();
       } catch (error) {
         this.$swal.fire({

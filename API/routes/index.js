@@ -17,6 +17,7 @@ const feeStructureRoutes = require("./feeStructureRoutes");
 const pointStructureRoutes = require("./pointStructureRoutes");
 const classRoutes = require("./classRoutes");
 const attendanceRoutes = require("./attendanceRoutes");
+const classEventsRoutes = require("./classEventsRoutes");
 
 const {
   authenticate,
@@ -41,5 +42,6 @@ router.use("/feeStructure", authenticate, feeStructureRoutes);
 router.use("/pointStructure", authenticate, pointStructureRoutes);
 router.use("/classes", authenticate, classRoutes);
 router.use("/attendances", authenticate, attendanceRoutes);
+router.use("/classEvents", authenticate, classEventsRoutes);
 
 module.exports = router;

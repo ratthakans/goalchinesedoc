@@ -1,457 +1,498 @@
 <template>
-  <div>
-    <v-row>
-      <v-col>
-        <v-sheet height="64">
-          <v-toolbar flat>
-            <v-btn
-              outlined
-              class="mr-4"
-              color="grey darken-2"
-              @click="setToday"
-            >
-              Today
+  <div class="fill-height">
+    <v-sheet height="64">
+      <v-toolbar flat>
+        <v-btn outlined class="mr-4" color="grey darken-2" @click="setToday">
+          Today
+        </v-btn>
+        <v-menu bottom right class="mr-4">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn outlined color="grey darken-2" v-bind="attrs" v-on="on">
+              <span>{{ typeToLabel[type] }}</span>
+              <v-icon right> mdi-menu-down </v-icon>
             </v-btn>
-            <v-menu bottom right class="mr-4">
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn outlined color="grey darken-2" v-bind="attrs" v-on="on">
-                  <span>{{ typeToLabel[type] }}</span>
-                  <v-icon right> mdi-menu-down </v-icon>
-                </v-btn>
-              </template>
-              <v-list>
-                <v-list-item @click="type = 'day'">
-                  <v-list-item-title>Day</v-list-item-title>
-                </v-list-item>
-                <v-list-item @click="type = 'week'">
-                  <v-list-item-title>Week</v-list-item-title>
-                </v-list-item>
-                <v-list-item @click="type = 'month'">
-                  <v-list-item-title>Month</v-list-item-title>
-                </v-list-item>
-                <v-list-item @click="type = '4day'">
-                  <v-list-item-title>4 days</v-list-item-title>
-                </v-list-item>
-              </v-list>
-            </v-menu>
-            <v-spacer></v-spacer>
-            <v-toolbar-title v-if="$refs.calendar">
-              {{ $refs.calendar.title }}
-            </v-toolbar-title>
-            <v-spacer></v-spacer>
-            <v-select
-              label="Branch"
-              outlined
-              dense
-              hide-details
-              style="inline-size: 50px"
-            ></v-select>
-            <v-btn fab text small color="grey darken-2" @click="prev">
-              <v-icon small> mdi-chevron-left </v-icon>
-            </v-btn>
-            <v-btn fab text small color="grey darken-2" @click="next">
-              <v-icon small> mdi-chevron-right </v-icon>
-            </v-btn>
-          </v-toolbar>
-        </v-sheet>
-        <v-calendar
-          ref="calendar"
-          v-model="focus"
-          color="primary"
-          :events="events"
-          :event-color="getEventColor"
-          :type="type"
-          @click:event="showEvent"
-          @click:more="viewMore"
-          @click:date="viewDay"
-        >
-          <!-- @change="getEvents" -->
-          <template #event="{ event }">
-            <div class="px-1">{{ event?.name }}</div>
           </template>
-        </v-calendar>
+          <v-list>
+            <v-list-item @click="type = 'day'">
+              <v-list-item-title>Day</v-list-item-title>
+            </v-list-item>
+            <v-list-item @click="type = 'week'">
+              <v-list-item-title>Week</v-list-item-title>
+            </v-list-item>
+            <v-list-item @click="type = 'month'">
+              <v-list-item-title>Month</v-list-item-title>
+            </v-list-item>
+            <v-list-item @click="type = '4day'">
+              <v-list-item-title>4 days</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+        <v-spacer></v-spacer>
+        <v-toolbar-title v-if="$refs.calendar">
+          {{ $refs.calendar.title }}
+        </v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-select
+          label="Branch"
+          v-model="branch"
+          :items="itemsOptions.branch"
+          item-text="name"
+          item-value="id"
+          outlined
+          dense
+          hide-details
+          clearable
+          style="inline-size: 50px"
+        ></v-select>
+        <v-btn fab text small color="grey darken-2" @click="prev">
+          <v-icon small> mdi-chevron-left </v-icon>
+        </v-btn>
+        <v-btn fab text small color="grey darken-2" @click="next">
+          <v-icon small> mdi-chevron-right </v-icon>
+        </v-btn>
+      </v-toolbar>
+    </v-sheet>
 
-        <v-menu
-          v-model="selectedOpenDay"
-          :close-on-content-click="false"
-          :activator="selectedElementDay"
-          offset-x
-        >
-          <v-card min-width="450px" flat>
-            <v-card-title>
-              {{ dateToYMD(selectedEventDay?.date) }}
-              <v-spacer></v-spacer>
-              <v-btn
-                v-if="isAdmin"
-                @click.stop="dialog = true"
-                color="primary"
-                x-small
-                fab
-                depressed
-              >
-                <v-icon>mdi-plus</v-icon>
+    <v-calendar
+      ref="calendar"
+      v-model="focus"
+      color="primary"
+      :events="events"
+      :event-color="getEventColor"
+      :type="type"
+      @click:event="showEvent"
+      @click:more="viewMore"
+      @click:date="viewDay"
+      @change="getEvents"
+    >
+      <!-- @change="getEvents" -->
+      <template #event="{ event }">
+        <div class="px-1">{{ event?.name }}</div>
+      </template>
+    </v-calendar>
+
+    <v-menu
+      v-model="selectedOpenDay"
+      :close-on-content-click="false"
+      :activator="selectedElementDay"
+      offset-x
+    >
+      <v-card min-width="450px" flat>
+        <v-card-title>
+          {{ dateToYMD(selectedEventDay?.date) }}
+          <v-spacer></v-spacer>
+          <v-btn
+            v-if="isAdmin"
+            @click.stop="openDialog"
+            color="primary"
+            x-small
+            fab
+            depressed
+          >
+            <v-icon>mdi-plus</v-icon>
+          </v-btn>
+        </v-card-title>
+        <v-card-text>
+          <v-list>
+            <v-list-item
+              v-for="event in selectedEventDay.events"
+              :key="event.name"
+              @click="showEvent({ nativeEvent: $event, event })"
+            >
+              <v-list-item-content>
+                <div class="d-flex flex-row">
+                  <div class="d-flex flex-column">
+                    <h6 class="subtitle-1">
+                      {{ new Date(event.start).toLocaleTimeString() }}
+                    </h6>
+                    <span class="body-2">
+                      {{ new Date(event.end).toLocaleTimeString() }}
+                    </span>
+                  </div>
+                  <v-divider
+                    vertical
+                    :class="['mx-4', getEventColor(event)]"
+                    style="border: 3px solid"
+                  ></v-divider>
+                  <div class="d-flex flex-column">
+                    <h6 class="subtitle-1">{{ event.name }}</h6>
+                    <span class="body-2">
+                      {{ new Date(event.end).toLocaleTimeString() }}
+                    </span>
+                  </div>
+                </div>
+              </v-list-item-content>
+              <v-list-item-action>
+                <v-avatar :color="event.color" size="30">
+                  <span class="white--text subtitle-1 text-uppercase">
+                    {{ event?.updatedBy?.name[0] }}
+                  </span>
+                </v-avatar>
+              </v-list-item-action>
+            </v-list-item>
+          </v-list>
+        </v-card-text>
+      </v-card>
+    </v-menu>
+
+    <v-menu
+      v-model="selectedOpen"
+      :close-on-content-click="false"
+      :activator="selectedElement"
+      offset-x
+    >
+      <v-card width="350px" flat>
+        <v-card-title class="pb-0">
+          <v-spacer></v-spacer>
+          <v-menu v-if="isAdmin">
+            <template #activator="{ on, attrs }">
+              <v-btn icon v-bind="attrs" v-on="on" small>
+                <v-icon>mdi-dots-vertical</v-icon>
               </v-btn>
-            </v-card-title>
-            <v-card-text>
-              <v-list>
-                <v-list-item
-                  v-for="event in selectedEventDay.events"
-                  :key="event.name"
-                  @click="showEvent({ nativeEvent: $event, event })"
-                >
-                  <v-list-item-content>
-                    <div class="d-flex flex-row">
-                      <div class="d-flex flex-column">
-                        <h6 class="subtitle-1">
-                          {{ new Date(event.start).toLocaleTimeString() }}
-                        </h6>
-                        <span class="body-2">
-                          {{ new Date(event.end).toLocaleTimeString() }}
-                        </span>
-                      </div>
-                      <v-divider
-                        vertical
-                        :class="['mx-4', getEventColor(event)]"
-                        style="border: 3px solid"
-                      ></v-divider>
-                      <div class="d-flex flex-column">
-                        <h6 class="subtitle-1">{{ event.name }}</h6>
-                        <span class="body-2">
-                          {{ new Date(event.end).toLocaleTimeString() }}
-                        </span>
-                      </div>
-                    </div>
-                  </v-list-item-content>
-                  <v-list-item-action>
-                    <v-avatar color="primary" size="35">
-                      <span class="white--text subtitle-1">36</span></v-avatar
-                    >
-                  </v-list-item-action>
-                </v-list-item>
-              </v-list>
-            </v-card-text>
-          </v-card>
-        </v-menu>
+            </template>
 
-        <v-menu
-          v-model="selectedOpen"
-          :close-on-content-click="false"
-          :activator="selectedElement"
-          offset-x
-        >
-          <v-card width="350px" flat>
-            <v-card-title class="pb-0">
-              <v-spacer></v-spacer>
-              <v-menu v-if="isAdmin">
-                <template #activator="{ on, attrs }">
-                  <v-btn icon v-bind="attrs" v-on="on" small>
-                    <v-icon>mdi-dots-vertical</v-icon>
-                  </v-btn>
-                </template>
-
-                <v-list dense :lines="false">
-                  <v-list-item
-                    v-for="(menu, i) in [
-                      {
-                        title: 'Edit',
-                        onClick: () => (dialog = true),
-                      },
-                      {
-                        title: 'Copy to multiple dates',
-                        onClick: () => (dialogCopyClass = true),
-                      },
-                      { title: 'Delete' },
-                    ]"
-                    :key="i"
-                    link
-                    @click="menu.onClick"
-                  >
-                    <v-list-item-title>{{ menu.title }}</v-list-item-title>
-                  </v-list-item>
-                </v-list>
-              </v-menu>
-            </v-card-title>
-
-            <v-card-text>
-              <v-row justify="center" dense>
-                <v-col cols="auto">
-                  <h6 class="text-h6">{{ selectedEvent.name }}</h6>
-                </v-col>
-              </v-row>
-              <v-row justify="center" align="center" dense>
-                <v-col cols="auto">
-                  <h6 class="subtitle-1">
-                    {{ dateToYMDShort(selectedEvent?.start) }}
-                  </h6>
-                  <h4 class="text-h5">
-                    {{
-                      new Date(selectedEvent.start)?.toLocaleTimeString([], {
-                        hourCycle: "h23",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })
-                    }}
-                  </h4>
-                </v-col>
-                <v-col cols="auto">
-                  <v-icon color="primary" large>mdi-chevron-right</v-icon>
-                </v-col>
-                <v-col cols="auto">
-                  <h6 class="subtitle-1">
-                    {{ dateToYMDShort(selectedEvent?.end) }}
-                  </h6>
-                  <h4 class="text-h5">
-                    {{
-                      new Date(selectedEvent.end)?.toLocaleTimeString([], {
-                        hourCycle: "h23",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })
-                    }}
-                  </h4>
-                </v-col>
-              </v-row>
-              <v-divider class="my-4"></v-divider>
-              <v-row dense>
-                <v-col cols="12" class="d-flex align-center">
-                  <v-icon color="primary">mdi-monitor-cellphone</v-icon>
-
-                  <span class="subtitle-2 mx-2">Platform :</span>
-
-                  <span>test</span>
-                </v-col>
-                <v-col cols="12" class="d-flex align-center">
-                  <v-icon color="primary">mdi-link</v-icon>
-
-                  <span class="subtitle-2 mx-2">Link :</span>
-
-                  <span>test</span>
-                </v-col>
-                <v-col cols="12" class="d-flex align-center">
-                  <v-icon color="primary">mdi-clock-time-five-outline</v-icon>
-
-                  <span class="subtitle-2 mx-2">Teacher in class :</span>
-
-                  <span>test</span>
-                </v-col>
-                <v-col cols="12" class="d-flex align-center">
-                  <v-icon color="primary">mdi-timer-edit-outline</v-icon>
-
-                  <span class="subtitle-2 mx-2">Student in class :</span>
-
-                  <span>test</span>
-                </v-col>
-              </v-row>
-
-              <v-row justify="center" dense>
-                <v-col cols="auto">
-                  <small>Wed, Sep 4, 2024</small>
-                </v-col>
-              </v-row>
-              <v-row justify="center" dense>
-                <v-col cols="auto">
-                  <v-avatar color="primary" size="20" class="mr-2">
-                    <span class="white--text text-caption">36</span></v-avatar
-                  >
-                  <small>Event created</small>
-                </v-col>
-              </v-row>
-            </v-card-text>
-          </v-card>
-        </v-menu>
-      </v-col>
-    </v-row>
-
-    <v-dialog v-model="dialog" max-width="450">
-      <v-card>
-        <v-card-title class="text-h5">
-          <v-text-field
-            dense
-            outlined
-            single-line
-            hide-details="auto"
-            placeholder="Enter title"
-          />
+            <v-list dense :lines="false">
+              <v-list-item
+                v-for="(menu, i) in [
+                  {
+                    title: 'Edit',
+                    onClick: () => onEditEvent(),
+                  },
+                  {
+                    title: 'Copy to multiple dates',
+                    onClick: () => (dialogCopyClass = true),
+                  },
+                  { title: 'Delete', onClick: onDeleteEvent },
+                ]"
+                :key="i"
+                link
+                @click="menu.onClick"
+              >
+                <v-list-item-title>{{ menu.title }}</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
         </v-card-title>
 
         <v-card-text>
+          <v-row justify="center" dense>
+            <v-col cols="auto">
+              <h6 class="text-h6">{{ selectedEvent.name }}</h6>
+            </v-col>
+          </v-row>
+          <v-row justify="center" align="center" dense>
+            <v-col cols="auto">
+              <h6 class="subtitle-1">
+                {{ dateToYMDShort(selectedEvent?.start) }}
+              </h6>
+              <h4 class="text-h5">
+                {{
+                  new Date(selectedEvent.start)?.toLocaleTimeString([], {
+                    hourCycle: "h23",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })
+                }}
+              </h4>
+            </v-col>
+            <v-col cols="auto">
+              <v-icon color="primary" large>mdi-chevron-right</v-icon>
+            </v-col>
+            <v-col cols="auto">
+              <h6 class="subtitle-1">
+                {{ dateToYMDShort(selectedEvent?.end) }}
+              </h6>
+              <h4 class="text-h5">
+                {{
+                  new Date(selectedEvent.end)?.toLocaleTimeString([], {
+                    hourCycle: "h23",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })
+                }}
+              </h4>
+            </v-col>
+          </v-row>
+          <v-divider class="my-4"></v-divider>
           <v-row dense>
-            <v-col cols="12" class="d-flex align-center">
-              <v-icon color="primary">mdi-hours-24</v-icon>
-
-              <span class="subtitle-2 mx-2">Class No :</span>
-
-              <span>test</span>
-            </v-col>
-            <v-col cols="12" class="d-flex align-center">
-              <v-icon color="primary">mdi-calendar</v-icon>
-
-              <span class="subtitle-2 mx-2">Starts :</span>
-
-              <div class="ml-auto d-flex align-center">
-                <v-chip class="mx-2" small label> Fri, Nov 8 2024 </v-chip>
-                <!-- <v-chip class="mx-2" small label> 9:30 PM </v-chip> -->
-                <v-menu
-                  ref="menu"
-                  v-model="menu"
-                  :close-on-content-click="false"
-                  :nudge-right="40"
-                  :return-value.sync="time"
-                  transition="scale-transition"
-                  offset-y
-                  max-width="290px"
-                  min-width="290px"
-                >
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-text-field
-                      v-model="time"
-                      label="Picker in menu"
-                      readonly
-                      dense
-                      outlined
-                      single-line
-                      hide-details="auto"
-                      v-bind="attrs"
-                      v-on="on"
-                      style="max-width: 70px"
-                    ></v-text-field>
-                  </template>
-                  <v-time-picker
-                    v-if="menu"
-                    v-model="time"
-                    full-width
-                    @click:minute="$refs.menu.save(time)"
-                    format="24hr"
-                  ></v-time-picker>
-                </v-menu>
-              </div>
-            </v-col>
-            <v-col cols="12" class="d-flex align-center">
-              <v-icon color="primary">mdi-calendar</v-icon>
-
-              <span class="subtitle-2 mx-2">End :</span>
-
-              <div class="ml-auto d-flex align-center">
-                <v-chip class="mx-2" small label> Fri, Nov 8 2024 </v-chip>
-                <!-- <v-chip class="mx-2" small label> 9:30 PM </v-chip> -->
-                <v-menu
-                  ref="menu2"
-                  v-model="menu2"
-                  :close-on-content-click="false"
-                  :nudge-right="40"
-                  :return-value.sync="time"
-                  transition="scale-transition"
-                  offset-y
-                  max-width="290px"
-                  min-width="290px"
-                >
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-text-field
-                      v-model="time"
-                      label="Picker in menu"
-                      readonly
-                      dense
-                      outlined
-                      single-line
-                      hide-details="auto"
-                      v-bind="attrs"
-                      v-on="on"
-                      style="max-width: 70px"
-                    ></v-text-field>
-                  </template>
-                  <v-time-picker
-                    v-if="menu2"
-                    v-model="time"
-                    full-width
-                    @click:minute="$refs.menu2.save(time)"
-                    format="24hr"
-                  ></v-time-picker>
-                </v-menu>
-              </div>
-            </v-col>
-            <v-col cols="12" class="d-flex align-center">
-              <v-icon color="primary">mdi-home</v-icon>
-
-              <span class="subtitle-2 mx-2">Branch :</span>
-
-              <span>test</span>
-            </v-col>
             <v-col cols="12" class="d-flex align-center">
               <v-icon color="primary">mdi-monitor-cellphone</v-icon>
 
               <span class="subtitle-2 mx-2">Platform :</span>
 
-              <span>test</span>
+              <span>{{ selectedEvent?.class?.studyPlatform }}</span>
             </v-col>
             <v-col cols="12" class="d-flex align-center">
               <v-icon color="primary">mdi-link</v-icon>
 
               <span class="subtitle-2 mx-2">Link :</span>
-              <v-text-field dense outlined single-line hide-details="auto" />
+
+              <span>{{ selectedEvent?.link }}</span>
             </v-col>
             <v-col cols="12" class="d-flex align-center">
               <v-icon color="primary">mdi-clock-time-five-outline</v-icon>
 
               <span class="subtitle-2 mx-2">Teacher in class :</span>
 
-              <span>test</span>
+              <span>{{ selectedEvent?.class?.teacher?.name }}</span>
             </v-col>
             <v-col cols="12" class="d-flex align-center">
               <v-icon color="primary">mdi-timer-edit-outline</v-icon>
 
               <span class="subtitle-2 mx-2">Student in class :</span>
 
-              <span>test</span>
-            </v-col>
-            <v-col cols="12" class="d-flex align-center">
-              <v-icon color="primary">mdi-tag</v-icon>
-
-              <span class="subtitle-2 mx-2">Coral pink :</span>
-
-              <v-item-group>
-                <v-item
-                  v-for="(color, i) in listColors"
-                  :key="i"
-                  v-slot="{ active, toggle }"
-                >
-                  <v-chip
-                    class="ma-1"
-                    :color="color"
-                    :input-value="active"
-                    @click="toggle"
-                    dark
-                    small
-                  >
-                    <v-icon small v-if="active">mdi-check</v-icon>
-                  </v-chip>
-                </v-item>
-              </v-item-group>
-            </v-col>
-            <v-col cols="12">
-              <span>
-                <v-avatar color="primary" size="30">
-                  <span class="white--text subtitle-1">N</span></v-avatar
-                >
-              </span>
-            </v-col>
-            <v-col cols="12">
-              <label class="v-label mb-2 text-subtitle-2"> Note : </label>
-              <v-textarea
-                dense
-                outlined
-                single-line
-                hide-details="auto"
-                placeholder="Enter note"
-                rows="2"
-              />
+              <span>{{
+                selectedEvent?.class?.classStudent
+                  .map((it) => it.account.name)
+                  .join(",")
+              }}</span>
             </v-col>
           </v-row>
+
+          <v-row justify="center" dense>
+            <v-col cols="auto">
+              <small>{{ dateToYMDShort(selectedEvent.updatedAt, true) }}</small>
+            </v-col>
+          </v-row>
+          <v-row justify="center" dense>
+            <v-col cols="auto">
+              <v-avatar :color="selectedEvent.color" size="20">
+                <span class="white--text subtitle-1 text-uppercase">
+                  {{ selectedEvent?.updatedBy?.name[0] }}
+                </span>
+              </v-avatar>
+              <small class="pl-2">Event created</small>
+            </v-col>
+          </v-row>
+        </v-card-text>
+      </v-card>
+    </v-menu>
+
+    <v-dialog v-model="dialog" max-width="550">
+      <v-card>
+        <v-card-text class="pa-6">
+          <v-form ref="formCreateClass" lazy-validation>
+            <v-row dense>
+              <v-col cols="12">
+                <v-text-field
+                  v-model="formInput.title"
+                  dense
+                  outlined
+                  single-line
+                  hide-details="auto"
+                  placeholder="Enter title"
+                  :rules="[(v) => !!v || 'Title is required']"
+                />
+              </v-col>
+              <v-col cols="12" class="d-flex align-center">
+                <v-icon color="primary">mdi-hours-24</v-icon>
+
+                <span class="subtitle-2 mx-2">Class No :</span>
+
+                <v-select
+                  :items="itemsOptions.class"
+                  v-model="selectedClass"
+                  item-text="name"
+                  return-object
+                  placeholder="Select class"
+                  dense
+                  outlined
+                  single-line
+                  hide-details="auto"
+                  :rules="[(v) => !!v || 'Class is required']"
+                ></v-select>
+              </v-col>
+              <v-col cols="12" class="d-flex align-center">
+                <v-icon color="primary">mdi-calendar</v-icon>
+
+                <span class="subtitle-2 mx-2">Starts :</span>
+
+                <div class="ml-auto d-flex align-center">
+                  <v-chip class="mx-2" small label>
+                    {{ dateToYMDShort(formInput.startDate, true) }}
+                  </v-chip>
+                  <v-menu
+                    ref="menu"
+                    v-model="menu"
+                    :close-on-content-click="false"
+                    :nudge-right="40"
+                    :return-value.sync="formInput.startTime"
+                    transition="scale-transition"
+                    offset-y
+                    max-width="290px"
+                    min-width="290px"
+                  >
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-text-field
+                        v-model="formInput.startTime"
+                        label="time"
+                        readonly
+                        dense
+                        outlined
+                        single-line
+                        hide-details="auto"
+                        v-bind="attrs"
+                        v-on="on"
+                        style="max-width: 100px"
+                        :rules="[(v) => !!v || 'Start time is required']"
+                      ></v-text-field>
+                    </template>
+                    <v-time-picker
+                      v-if="menu"
+                      v-model="formInput.startTime"
+                      full-width
+                      @click:minute="$refs.menu.save(formInput.startTime)"
+                      format="24hr"
+                    ></v-time-picker>
+                  </v-menu>
+                </div>
+              </v-col>
+              <v-col cols="12" class="d-flex align-center">
+                <v-icon color="primary">mdi-calendar</v-icon>
+
+                <span class="subtitle-2 mx-2">End :</span>
+
+                <div class="ml-auto d-flex align-center">
+                  <v-chip class="mx-2" small label>
+                    {{ dateToYMDShort(formInput.endDate, true) }}
+                  </v-chip>
+                  <!-- <v-chip class="mx-2" small label> 9:30 PM </v-chip> -->
+                  <v-menu
+                    ref="menu2"
+                    v-model="menu2"
+                    :close-on-content-click="false"
+                    :nudge-right="40"
+                    :return-value.sync="formInput.endTime"
+                    transition="scale-transition"
+                    offset-y
+                    max-width="290px"
+                    min-width="290px"
+                  >
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-text-field
+                        v-model="formInput.endTime"
+                        label="time"
+                        readonly
+                        dense
+                        outlined
+                        single-line
+                        hide-details="auto"
+                        v-bind="attrs"
+                        v-on="on"
+                        style="max-width: 100px"
+                        :rules="[(v) => !!v || 'End time is required']"
+                      ></v-text-field>
+                    </template>
+                    <v-time-picker
+                      v-if="menu2"
+                      v-model="formInput.endTime"
+                      :min="formInput.startTime"
+                      full-width
+                      @click:minute="$refs.menu2.save(formInput.endTime)"
+                      format="24hr"
+                    ></v-time-picker>
+                  </v-menu>
+                </div>
+              </v-col>
+              <v-col cols="12" class="d-flex align-center">
+                <v-icon color="primary">mdi-home</v-icon>
+
+                <span class="subtitle-2 mx-2">Branch :</span>
+
+                <span>{{ selectedClass?.branch?.name }}</span>
+              </v-col>
+              <v-col cols="12" class="d-flex align-center">
+                <v-icon color="primary">mdi-monitor-cellphone</v-icon>
+
+                <span class="subtitle-2 mx-2">Platform :</span>
+
+                <span>{{ selectedClass?.studyPlatform }}</span>
+              </v-col>
+              <v-col cols="12" class="d-flex align-center">
+                <v-icon color="primary">mdi-link</v-icon>
+
+                <span class="subtitle-2 mx-2">Link :</span>
+                <v-text-field
+                  v-model="formInput.link"
+                  dense
+                  outlined
+                  single-line
+                  hide-details="auto"
+                  :rules="[(v) => !!v || 'Link is required']"
+                />
+              </v-col>
+              <v-col cols="12" class="d-flex align-center">
+                <v-icon color="primary">mdi-clock-time-five-outline</v-icon>
+
+                <span class="subtitle-2 mx-2">Teacher in class :</span>
+
+                <span>{{ selectedClass?.teacher?.name }}</span>
+              </v-col>
+              <v-col cols="12" class="d-flex align-center">
+                <v-icon color="primary">mdi-timer-edit-outline</v-icon>
+
+                <span class="subtitle-2 mx-2">Student in class :</span>
+
+                <span>{{
+                  selectedClass?.classStudent
+                    ?.map((it) => it.account?.name)
+                    ?.join(",")
+                }}</span>
+              </v-col>
+              <v-col cols="12" class="d-flex align-center">
+                <v-icon color="primary">mdi-tag</v-icon>
+
+                <span class="subtitle-2 mx-2">Coral pink :</span>
+
+                <v-item-group v-model="formInput.color">
+                  <v-item
+                    v-for="(color, i) in listColors"
+                    :key="i"
+                    v-slot="{ active, toggle }"
+                    :value="color"
+                  >
+                    <v-chip
+                      class="ma-1"
+                      :color="color"
+                      :input-value="active"
+                      @click="toggle"
+                      dark
+                      small
+                    >
+                      <v-icon small v-if="active">mdi-check</v-icon>
+                    </v-chip>
+                  </v-item>
+                </v-item-group>
+              </v-col>
+              <v-col cols="12">
+                <span>
+                  <v-avatar :color="formInput.color" size="30">
+                    <span class="white--text subtitle-1 text-uppercase">
+                      {{ this.userInfo?.username[0] }}
+                    </span>
+                  </v-avatar>
+                </span>
+              </v-col>
+              <v-col cols="12">
+                <label class="v-label mb-2 text-subtitle-2"> Note : </label>
+                <v-textarea
+                  v-model="formInput.note"
+                  dense
+                  outlined
+                  single-line
+                  hide-details="auto"
+                  placeholder="Enter note"
+                  rows="2"
+                />
+              </v-col>
+            </v-row>
+          </v-form>
         </v-card-text>
 
         <v-card-actions>
           <v-spacer></v-spacer>
 
-          <v-btn color="primary" @click="dialog = false"> Save </v-btn>
+          <v-btn color="primary" @click="createClassEvent"> Save </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -462,15 +503,21 @@
       persistent
       width="290px"
     >
-      <v-date-picker v-model="selectedDate" multiple scrollable>
+      <v-date-picker
+        v-model="selectedDate"
+        multiple
+        scrollable
+        :min="new Date().toISOString().substring(0, 10)"
+      >
         <v-spacer></v-spacer>
-        <v-btn text color="primary" @click="dialogCopyClass = false">
+        <v-btn text color="error" @click="dialogCopyClass = false">
           Cancel
         </v-btn>
         <v-btn
+          :disabled="!selectedDate.length"
           text
           color="primary"
-          @click="$refs.dialogCopyClass.save(selectedDate)"
+          @click="copyClassEvent"
         >
           OK
         </v-btn>
@@ -480,6 +527,9 @@
 </template>
 
 <script>
+import { mapState } from "pinia";
+import { useAppStore } from "@/stores/app";
+
 export default {
   name: "CalendarComponent",
   props: {
@@ -493,9 +543,9 @@ export default {
     },
   },
   data: () => ({
-    time: "14:30",
     menu: false,
     menu2: false,
+    branch: null,
     focus: "",
     type: "month",
     typeToLabel: {
@@ -510,7 +560,7 @@ export default {
     selectedOpenDay: false,
     selectedElementDay: null,
     selectedEventDay: {},
-
+    events: [],
     colors: [
       "blue",
       "indigo",
@@ -545,19 +595,190 @@ export default {
       "#fdc02d",
       "#b38bdc",
     ],
+    itemsOptions: {
+      class: [],
+      branch: [],
+    },
+    selectedClass: null,
+
+    formInput: {
+      title: "",
+      class: "",
+      startDate: new Date().toISOString().substring(0, 10),
+      startTime: new Date().getHours() + ":" + new Date().getMinutes(),
+      endDate: new Date().toISOString().substring(0, 10),
+      endTime: "",
+      branch: "",
+      platform: "",
+      link: "",
+      teacher: "",
+      student: "",
+      color: "",
+      note: "",
+    },
   }),
+  computed: {
+    ...mapState(useAppStore, {
+      userInfo: "getUserinfo",
+    }),
+  },
   watch: {
     eventsItems: {
       immediate: true,
       handler(val) {
-        this.events = val;
+        if (val) this.getEvents();
+      },
+    },
+    selectedClass: {
+      immediate: true,
+      handler(val) {
+        this.formInput.link = val?.link;
+      },
+    },
+    branch: {
+      immediate: true,
+      handler(val) {
+        this.$emit("fetchEvents", val);
       },
     },
   },
   mounted() {
+    this.fetchOption();
     // this.$refs.calendar.checkChange();
   },
   methods: {
+    async fetchOption() {
+      try {
+        const { data: dataClass } = await this.axios.get(`/classes`);
+        this.itemsOptions.class = dataClass;
+
+        const { data: dataBranch } = await this.axios.get(`/branch`);
+        this.itemsOptions.branch = dataBranch;
+      } catch (error) {
+        this.$swal.fire({
+          title: error.response.data.error,
+          text: error.response.data.details,
+          icon: "error",
+        });
+      }
+    },
+
+    openDialog() {
+      this.formInput = {
+        title: "",
+        startDate: this.selectedEventDay.date,
+        startTime: new Date().getHours() + ":" + new Date().getMinutes(),
+        endDate: this.selectedEventDay.date,
+        endTime: "",
+        link: "",
+        color: this.listColors[0],
+        note: "",
+      };
+      this.dialog = true;
+    },
+
+    onEditEvent() {
+      this.formInput = {};
+      this.selectedClass = this.selectedEvent.class;
+
+      setTimeout(() => {
+        this.formInput = {
+          title: this.selectedEvent.name,
+          startDate: this.selectedEvent.start,
+          startTime: new Date(this.selectedEvent.start).toLocaleTimeString(
+            "en-GB",
+            {
+              hour: "2-digit",
+              minute: "2-digit",
+            }
+          ),
+          endDate: this.selectedEvent.end,
+          endTime: new Date(this.selectedEvent.end).toLocaleTimeString(
+            "en-GB",
+            {
+              hour: "2-digit",
+              minute: "2-digit",
+            }
+          ),
+          link: this.selectedEvent.link,
+          color: this.selectedEvent.color,
+          note: this.selectedEvent.note,
+        };
+      }, 100);
+      this.dialog = true;
+    },
+
+    async createClassEvent() {
+      if (!this.$refs.formCreateClass.validate()) return;
+
+      try {
+        let response = null;
+        if (this.selectedEvent?.id) {
+          const body = {
+            ...this.formInput,
+            classId: this.selectedClass.id,
+            startDate: `${new Date(this.formInput.startDate)
+              .toISOString()
+              .substring(0, 10)} ${this.formInput.startTime}`,
+            endDate: `${new Date(this.formInput.endDate)
+              .toISOString()
+              .substring(0, 10)} ${this.formInput.endTime}`,
+            updateBy: this.userInfo.accountID,
+          };
+          response = await this.axios.put(
+            `/classEvents/${this.selectedEvent?.id}`,
+            body
+          );
+        } else {
+          const body = {
+            ...this.formInput,
+            classId: this.selectedClass.id,
+            startDate: `${this.formInput.startDate} ${this.formInput.startTime}`,
+            endDate: `${this.formInput.endDate} ${this.formInput.endTime}`,
+            updateBy: this.userInfo.accountID,
+          };
+          response = await this.axios.post(`/classEvents`, body);
+        }
+
+        this.$swal(response?.data?.message, "", "success");
+        // this.selectedEvent = {};
+        this.dialog = false;
+        this.selectedOpen = false;
+        this.$emit("fetchEvents");
+        this.$refs.calendar.checkChange();
+      } catch (error) {
+        this.$swal.fire({
+          title: error.response.data.error,
+          text: error.response.data.details,
+          icon: "error",
+        });
+      }
+    },
+
+    async copyClassEvent() {
+      try {
+        const { data } = await this.axios.post(
+          `/classEvents/copy/${this.selectedEvent.id}`,
+          {
+            dates: this.selectedDate,
+          }
+        );
+
+        this.$swal(data?.message, "", "success");
+        this.dialogCopyClass = false;
+        this.selectedDate = [];
+        this.$emit("fetchEvents");
+        this.$refs.calendar.checkChange();
+      } catch (error) {
+        console.log("🚀 ~ copyClassEvent ~ error:", error);
+        this.$swal.fire({
+          title: error.response.data.error,
+          text: error.response.data.details,
+          icon: "error",
+        });
+      }
+    },
+
     viewDay({ nativeEvent, date }) {
       const open = () => {
         const findEvent = this.events.filter((event) => {
@@ -621,89 +842,20 @@ export default {
 
       nativeEvent.stopPropagation();
     },
-    getEvents({ start, end }) {
-      console.log("🚀 ~ getEvents ~ end:", end);
-      console.log("🚀 ~ getEvents ~ start:", start);
-      let events = [
-        {
-          name: "Party",
-          start: "2024-12-19T21:00:00.000Z",
-          end: "2024-12-22T01:30:00.000Z",
-          color: "cyan",
-          timed: true,
-        },
-        {
-          name: "Party",
-          start: "2024-12-01T08:15:00.000Z",
-          end: "2024-12-02T11:00:00.000Z",
-          color: "green",
-          timed: true,
-        },
-        {
-          name: "Event",
-          start: "2024-12-10T06:30:00.000Z",
-          end: "2024-12-10T07:30:00.000Z",
-          color: "green",
-          timed: true,
-        },
-        {
-          name: "Event",
-          start: "2024-12-28T09:15:00.000Z",
-          end: "2024-12-28T11:15:00.000Z",
-          color: "grey darken-1",
-          timed: true,
-        },
-        {
-          name: "PTO",
-          start: "2024-12-02T18:15:00.000Z",
-          end: "2024-12-03T04:00:00.000Z",
-          color: "grey darken-1",
-          timed: true,
-        },
-        {
-          name: "PTO2",
-          start: "2024-12-02T18:15:00.000Z",
-          end: "2024-12-03T04:00:00.000Z",
-          color: "grey darken-1",
-          timed: true,
-        },
-        {
-          name: "PTO3",
-          start: "2024-12-02T18:15:00.000Z",
-          end: "2024-12-03T04:00:00.000Z",
-          color: "grey darken-1",
-          timed: true,
-        },
-        {
-          name: "PTO4",
-          start: "2024-12-02T18:15:00.000Z",
-          end: "2024-12-03T04:00:00.000Z",
-          color: "grey darken-1",
-          timed: true,
-        },
-        {
-          name: "Travel",
-          start: "2024-12-27T09:30:00.000Z",
-          end: "2024-12-27T11:30:00.000Z",
-          color: "grey darken-1",
-          timed: true,
-        },
-        {
-          name: "Travel",
-          start: "2024-12-30T15:45:00.000Z",
-          end: "2024-12-30T17:15:00.000Z",
-          color: "indigo",
-          timed: true,
-        },
-      ];
-
-      for (let i = 0; i < events.length; i++) {
-        const event = events[i];
-        event.start = new Date(event.start);
-        event.end = new Date(event.end);
+    getEvents() {
+      let temp = this.eventsItems;
+      for (let i = 0; i < temp.length; i++) {
+        const event = temp[i];
+        event.name = event.title;
+        event.start = new Date(event.startDate);
+        event.end = new Date(event.endDate);
+        event.timed = true;
       }
-
-      this.events = events;
+      this.events = temp;
+      console.log("🚀 ~ getEvents ~ events:", this.events);
+      this.$nextTick(() => {
+        this.$refs.calendar.checkChange();
+      });
     },
     dateToYMD(dateParam) {
       const date = new Date(dateParam);
@@ -715,15 +867,42 @@ export default {
 
       return date.toLocaleDateString("en-US", options);
     },
-    dateToYMDShort(dateParam) {
+    dateToYMDShort(dateParam, year = false) {
       const date = new Date(dateParam);
       const options = {
         weekday: "short",
         month: "short",
         day: "numeric",
+        year: year ? "numeric" : undefined,
       };
 
       return date.toLocaleDateString("en-US", options);
+    },
+    async onDeleteEvent() {
+      // confirm delete
+      const { isDismissed } = await this.$swal({
+        title: "Are you sure?",
+        text: "Once deleted, you will not be able to recover this data!",
+        icon: "warning",
+        buttons: true,
+      });
+
+      if (isDismissed) return;
+
+      //delete data from api
+      try {
+        const { data } = await this.axios.delete(
+          `/classEvents/${this.selectedEvent.id}`
+        );
+        this.$swal(data?.message, "", "success");
+        this.$emit("fetchEvents");
+      } catch (error) {
+        this.$swal.fire({
+          title: error.response.data.error,
+          text: error.response.data.details,
+          icon: "error",
+        });
+      }
     },
   },
 };
