@@ -5,6 +5,9 @@ const {
   ClassStudent,
   Account,
   Attendance,
+  Branch,
+  ClassType,
+  Currency,
 } = require("../models"); // Adjust the path to your models folder
 const logger = require("../logger");
 
@@ -63,9 +66,17 @@ exports.findAll = async (req, res) => {
     const classes = await Class.findAll({
       include: [
         { model: ClassStudy, as: "classStudy" },
-        { model: ClassStudent, as: "classStudent" },
+        {
+          model: ClassStudent,
+          as: "classStudent",
+          include: [{ model: Account, as: "account" }],
+        },
+        { model: ClassType, as: "classType" },
         { model: Account, as: "teacher" },
+        { model: Account, as: "updatedBy" },
         { model: Attendance, as: "attendance" },
+        { model: Branch, as: "branch" },
+        { model: Currency, as: "currency" },
       ],
     });
     res.status(200).json(classes);

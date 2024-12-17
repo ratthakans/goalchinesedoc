@@ -959,8 +959,6 @@ export default {
             }
           });
 
-          console.log("this.itemsTimes :>> ", this.itemsTimes);
-
           if (this.editItems.expireDate === "") {
             this.notExpired = true;
           }
@@ -1012,6 +1010,7 @@ export default {
         checkList: this.selectedCheckList.join(","),
         classStudy: this.itemsTimes.filter((item) => item.checked),
         classStudent: this.selectedStudent,
+        updatedBy: this.userInfo.accountID,
       });
     },
   },

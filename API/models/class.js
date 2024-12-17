@@ -140,12 +140,18 @@ const Class = sequelize.define(
 );
 
 Class.associate = (models) => {
-  Class.belongsTo(models.Branch, { foreignKey: "branchID" });
-  Class.belongsTo(models.ClassType, { foreignKey: "classTypeID" });
+  Class.belongsTo(models.Branch, { foreignKey: "branchID", as: "branch" });
+  Class.belongsTo(models.ClassType, {
+    foreignKey: "classTypeID",
+    as: "classType",
+  });
   Class.belongsTo(models.Account, { foreignKey: "teacherID", as: "teacher" });
-  Class.belongsTo(models.Account, { foreignKey: "updateBy" });
+  Class.belongsTo(models.Account, { foreignKey: "updateBy", as: "updatedBy" });
   Class.belongsTo(models.MaterialType, { foreignKey: "materialTypeID" });
-  Class.belongsTo(models.Currency, { foreignKey: "currencyID" });
+  Class.belongsTo(models.Currency, {
+    foreignKey: "currencyID",
+    as: "currency",
+  });
 
   Class.hasMany(models.ClassStudent, {
     foreignKey: "classID",

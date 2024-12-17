@@ -42,7 +42,14 @@
         />
       </v-col>
       <v-col cols="auto">
-        <v-btn color="info" icon small depressed>
+        <v-btn
+          color="info"
+          icon
+          small
+          depressed
+          :disabled="!selectedClass.length"
+          @click="printData"
+        >
           <v-icon>mdi-printer</v-icon>
         </v-btn>
       </v-col>
@@ -50,6 +57,7 @@
     <v-row dense>
       <v-col cols="12">
         <v-data-table
+          v-model="selectedClass"
           :headers="headers"
           :filter-keys="['title', 'category', 'type']"
           :items="items"
@@ -132,6 +140,7 @@
 </template>
 
 <script>
+import { exportPdf } from "@/printOuts/class";
 export default {
   name: "AllStudent",
   data() {
@@ -199,6 +208,7 @@ export default {
         },
       ],
       items: [],
+      selectedClass: [],
     };
   },
   mounted() {
@@ -240,6 +250,10 @@ export default {
           icon: "error",
         });
       }
+    },
+
+    printData() {
+      exportPdf(this.selectedClass);
     },
   },
 };

@@ -223,12 +223,12 @@ export default {
         },
         {
           text: "Student missing class",
-          value: "student missing",
+          value: "studentMissing",
           color: "pink",
         },
         {
           text: "Teacher missing class",
-          value: "teacher missing",
+          value: "teacherMissing",
           color: "red",
         },
         {
