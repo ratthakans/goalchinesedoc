@@ -75,22 +75,25 @@ exports.copy = async (req, res) => {
 // Retrieve all Class Events
 exports.findAll = async (req, res) => {
   try {
-    const { branchId, accountId } = req.query;
+    const { branchId, teacherId, studentId } = req.query;
     let where = {};
     if (branchId) {
       where = { ...where, "$class.branchId$": branchId };
     }
-    if (accountId) {
-      where = { ...where, "$class.teacherId$": accountId };
+    if (teacherId) {
+      where = { ...where, "$class.teacherId$": teacherId };
+    }
+    if (studentId) {
+      where = { ...where, "$class.classStudent.accountID$": Number(studentId) };
     }
 
     const events = await ClassEvents.findAll({
+      where,
       include: [
         { model: Account, as: "updatedBy", attributes: ["id", "name"] },
         {
           model: Class,
           as: "class",
-          where,
           include: [
             { model: Account, as: "teacher", attributes: ["id", "name"] },
             {

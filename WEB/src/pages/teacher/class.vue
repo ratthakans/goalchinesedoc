@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container class="fill-height">
     <v-row>
       <v-col cols="12">
         <v-sheet
@@ -14,17 +14,17 @@
       </v-col>
     </v-row>
 
-    <v-container>
-      <v-row>
-        <v-col>
-          <CalendarComponent class="mt-6" :eventsItems="events" />
-        </v-col>
-      </v-row>
-    </v-container>
+    <v-row class="fill-height">
+      <v-col>
+        <CalendarComponent @fetchEvents="onFetchEvents" :eventsItems="events" />
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
 <script>
+import { mapState } from "pinia";
+import { useAppStore } from "@/stores/app";
 import CalendarComponent from "@/components/Calendar.vue";
 export default {
   name: "TeacherClass",
@@ -33,29 +33,33 @@ export default {
   },
   data() {
     return {
-      events: [
-        {
-          name: "เดี่ยว - Nannie",
-          start: "2024-12-19 08:00",
-          end: "2024-12-19 10:30",
-          color: "cyan",
-          time: true,
-        },
-        {
-          name: "เดี่ยว - Nannie",
-          start: "2024-12-17 08:00",
-          end: "2024-12-17 10:30",
-          color: "cyan",
-          time: true,
-        },
-        {
-          name: "เดี่ยว - Nannie",
-          start: "2024-12-27 08:00",
-          end: "2024-12-27 10:30",
-          color: "cyan",
-        },
-      ],
+      events: [],
     };
+  },
+  computed: {
+    ...mapState(useAppStore, {
+      userInfo: "getUserinfo",
+    }),
+  },
+  created() {
+    this.fetchDataById();
+    this.onFetchEvents();
+  },
+  methods: {
+    async onFetchEvents() {
+      try {
+        const { data } = await this.axios.get(
+          `/classEvents?teacherId=${this.userInfo.accountID}`
+        );
+        this.events = data || [];
+      } catch (error) {
+        this.$swal.fire({
+          title: error.response.data.error,
+          text: error.response.data.details,
+          icon: "error",
+        });
+      }
+    },
   },
 };
 </script>

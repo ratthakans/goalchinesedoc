@@ -33,6 +33,7 @@
         </v-toolbar-title>
         <v-spacer></v-spacer>
         <v-select
+          v-if="isAdmin"
           label="Branch"
           v-model="branch"
           :items="itemsOptions.branch"
