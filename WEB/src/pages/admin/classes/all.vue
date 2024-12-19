@@ -124,7 +124,7 @@
                       to: `./edit/${item.id}`,
                       show: userInfo?.role !== 'user' || permission?.edit,
                     },
-                    { title: 'Attendance', to: `./attendance` },
+                    { title: 'Attendance', to: `./attendance`, show: true },
                   ]"
                 >
                   <v-list-item :key="i" link :to="menu.to" v-if="menu?.show">

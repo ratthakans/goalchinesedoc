@@ -855,7 +855,7 @@ export default {
     },
     getEvents() {
       let temp = this.eventsItems;
-      if (this.eventsItems.length === 0) return;
+      // if (this.eventsItems.length === 0) return;
       for (let i = 0; i < temp.length; i++) {
         const event = temp[i];
         event.name = event.title;
