@@ -129,6 +129,7 @@
           class="text-none"
           @click="update"
           :disabled="!selectedStudent.length || !selectedMaterials.length"
+          v-if="userInfo?.role !== 'user' || permission?.edit"
         >
           <v-icon left> mdi-content-save </v-icon>
           Update
@@ -139,6 +140,8 @@
 </template>
 
 <script>
+import { mapState } from "pinia";
+import { useAppStore } from "@/stores/app";
 export default {
   name: "MaterialsStudent",
   data() {
@@ -187,9 +190,18 @@ export default {
       selectedMaterials: [],
     };
   },
+  computed: {
+    ...mapState(useAppStore, {
+      userInfo: "getUserinfo",
+    }),
+  },
   mounted() {
     this.fetchDataTeacher();
     this.fetchDataMaterials();
+
+    this.permission = this.userInfo.permissions.find(
+      (it) => it.link === this.$route.path
+    );
   },
   methods: {
     async fetchDataTeacher() {

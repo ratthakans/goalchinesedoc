@@ -24,6 +24,7 @@
           depressed
           to="/admin/teacher/create"
           class="mx-2"
+          v-if="userInfo?.role !== 'user' || permission?.create"
         >
           <v-icon>mdi-plus</v-icon>
         </v-btn>
@@ -85,18 +86,29 @@
               </template>
 
               <v-list dense>
-                <v-list-item
+                <template
                   v-for="(menu, i) in [
-                    { title: 'View', to: `./view/${item.id}` },
-                    { title: 'Edit', to: `./edit/${item.id}` },
+                    {
+                      title: 'View',
+                      to: `./view/${item.id}`,
+                      show: userInfo?.role !== 'user' || permission?.view,
+                    },
+                    {
+                      title: 'Edit',
+                      to: `./edit/${item.id}`,
+                      show: userInfo?.role !== 'user' || permission?.edit,
+                    },
                   ]"
-                  :key="i"
-                  link
-                  :to="menu.to"
                 >
-                  <v-list-item-title>{{ menu.title }}</v-list-item-title>
-                </v-list-item>
-                <v-list-item link>
+                  <v-list-item :key="i" link :to="menu.to" v-if="menu.show">
+                    <v-list-item-title>{{ menu.title }}</v-list-item-title>
+                  </v-list-item>
+                </template>
+                <v-list-item
+                  link
+                  v-if="userInfo?.role !== 'user' || permission?.delete"
+                  @click="deleteData(item.id)"
+                >
                   <v-list-item-title>Delete</v-list-item-title>
                 </v-list-item>
               </v-list>
@@ -109,10 +121,13 @@
 </template>
 
 <script>
+import { mapState } from "pinia";
+import { useAppStore } from "@/stores/app";
 export default {
   name: "TeacherAll",
   data() {
     return {
+      permission: {},
       search: "",
       headers: [
         {
@@ -133,8 +148,16 @@ export default {
       items: [],
     };
   },
+  computed: {
+    ...mapState(useAppStore, {
+      userInfo: "getUserinfo",
+    }),
+  },
   mounted() {
     this.fetchData();
+    this.permission = this.userInfo.permissions.find(
+      (it) => it.link === this.$route.path
+    );
   },
   methods: {
     async fetchData() {

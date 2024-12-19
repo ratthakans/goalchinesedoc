@@ -25,6 +25,7 @@
 
           <v-col cols="12" md="9">
             <v-file-input
+              v-if="userInfo?.role == 'superadmin'"
               v-model="formInput.file"
               dense
               outlined
@@ -40,7 +41,12 @@
             >
               <img v-if="formInput.logo" :src="formInput.logo" alt="John" />
             </v-avatar>
-            <v-btn color="error" class="text-none mt-2" @click="deleteLogo">
+            <v-btn
+              color="error"
+              class="text-none mt-2"
+              @click="deleteLogo"
+              v-if="userInfo?.role == 'superadmin'"
+            >
               Remove Logo
             </v-btn>
           </v-col>
@@ -66,6 +72,7 @@
               depressed
               class="text-none mt-2"
               @click="saveSetting"
+              v-if="userInfo?.role !== 'user' || permission?.edit"
             >
               Save
             </v-btn>
@@ -91,16 +98,19 @@
                 <v-chip
                   class="mx-2"
                   size="large"
-                  closable
+                  :closable="userInfo?.role == 'superadmin'"
                   label
                   rounded="lg"
                   v-for="(item, ix) in items[name]"
                   :key="ix"
                   @click="
-                    editItems[name] = item;
-                    (formData[name] = item.name), (isvisible[name] = true);
+                    userInfo?.role !== 'user' || permission?.edit
+                      ? ((editItems[name] = item),
+                        (formData[name] = item.name),
+                        (isvisible[name] = true))
+                      : null
                   "
-                  close
+                  :close="userInfo?.role == 'superadmin'"
                   @click:close="deleteData(name, item.id)"
                 >
                   {{ item.name }}
@@ -119,17 +129,21 @@
                   />
                   <v-btn
                     color="success"
-                    class="mx-1"
+                    class="mx-1 text-none"
                     @click="saveData(name, formData[name], editItems[name]?.id)"
                     >save</v-btn
                   >
-                  <v-btn color="error" @click="isvisible[name] = false"
+                  <v-btn
+                    color="error"
+                    class="text-none"
+                    @click="isvisible[name] = false"
                     >cancle</v-btn
                   >
                 </div>
               </v-col>
               <v-col cols="auto" v-else>
                 <v-btn
+                  v-if="userInfo?.role !== 'user' || permission?.create"
                   color="info"
                   fab
                   dark
@@ -148,17 +162,30 @@
         </v-row>
       </v-col>
       <v-col cols="10">
-        <v-btn color="info" class="text-none"> view history details </v-btn>
+        <v-btn
+          color="info"
+          class="text-none"
+          target="_blank"
+          :href="
+            baseUrl + `logs/app-${new Date().toISOString().split('T')[0]}.log`
+          "
+        >
+          view history details
+        </v-btn>
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
+import { mapState } from "pinia";
+import { useAppStore } from "@/stores/app";
+
 export default {
   name: "SettingPage",
   data() {
     return {
+      permission: {},
       formInput: {
         file: null,
         logo: "",
@@ -206,6 +233,11 @@ export default {
       },
     };
   },
+  computed: {
+    ...mapState(useAppStore, {
+      userInfo: "getUserinfo",
+    }),
+  },
   watch: {
     "formInput.file": function (val) {
       if (val) {
@@ -224,6 +256,10 @@ export default {
     this.fetchData("materialFor", "materialFor");
     this.fetchData("materialCategory", "materialCategory");
     this.fetchData("currency", "currency");
+
+    this.permission = this.userInfo.permissions.find(
+      (it) => it.link === this.$route.path
+    );
   },
   methods: {
     async fetchSetting() {

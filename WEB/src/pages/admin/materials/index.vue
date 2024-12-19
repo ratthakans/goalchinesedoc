@@ -25,6 +25,7 @@
           depressed
           to="/admin/materials/create"
           class="mx-2"
+          v-if="userInfo?.role !== 'user' || permission?.create"
         >
           <v-icon>mdi-plus</v-icon>
         </v-btn>
@@ -78,10 +79,18 @@
                 small
                 depressed
                 :to="`/admin/materials/edit/${item.id}`"
+                v-if="userInfo?.role !== 'user' || permission?.edit"
               >
                 <v-icon> mdi-pencil</v-icon>
               </v-btn>
-              <v-btn color="error" icon dark small @click="deleteData(item.id)">
+              <v-btn
+                color="error"
+                v-if="userInfo?.role !== 'user' || permission?.delete"
+                icon
+                dark
+                small
+                @click="deleteData(item.id)"
+              >
                 <v-icon>mdi-trash-can</v-icon>
               </v-btn>
             </div>
@@ -93,11 +102,13 @@
 </template>
 
 <script>
+import { mapState } from "pinia";
+import { useAppStore } from "@/stores/app";
 export default {
   name: "MaterialsPage",
   data() {
     return {
-      baseUrl: process.env.VUE_APP_API_IMAGE,
+      permission: {},
       search: "",
       headersMaterials: [
         {
@@ -124,8 +135,16 @@ export default {
       itemsMaterials: [],
     };
   },
+  computed: {
+    ...mapState(useAppStore, {
+      userInfo: "getUserinfo",
+    }),
+  },
   mounted() {
     this.fetchData();
+    this.permission = this.userInfo.permissions.find(
+      (it) => it.link === this.$route.path
+    );
   },
   methods: {
     async fetchData() {

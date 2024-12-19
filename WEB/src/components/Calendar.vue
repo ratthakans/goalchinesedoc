@@ -83,7 +83,7 @@
           {{ dateToYMD(selectedEventDay?.date) }}
           <v-spacer></v-spacer>
           <v-btn
-            v-if="isAdmin"
+            v-if="isAdmin && permission?.create"
             @click.stop="openDialog"
             color="primary"
             x-small
@@ -153,24 +153,34 @@
             </template>
 
             <v-list dense :lines="false">
-              <v-list-item
+              <template
                 v-for="(menu, i) in [
                   {
                     title: 'Edit',
+                    show: permission?.edit,
                     onClick: () => onEditEvent(),
                   },
                   {
                     title: 'Copy to multiple dates',
+                    show: true,
                     onClick: () => (dialogCopyClass = true),
                   },
-                  { title: 'Delete', onClick: onDeleteEvent },
+                  {
+                    title: 'Delete',
+                    show: permission?.delete,
+                    onClick: onDeleteEvent,
+                  },
                 ]"
-                :key="i"
-                link
-                @click="menu.onClick"
               >
-                <v-list-item-title>{{ menu.title }}</v-list-item-title>
-              </v-list-item>
+                <v-list-item
+                  :key="i"
+                  link
+                  @click="menu.onClick"
+                  v-if="menu?.show"
+                >
+                  <v-list-item-title>{{ menu.title }}</v-list-item-title>
+                </v-list-item>
+              </template>
             </v-list>
           </v-menu>
         </v-card-title>
@@ -544,6 +554,7 @@ export default {
     },
   },
   data: () => ({
+    permission: {},
     menu: false,
     menu2: false,
     branch: null,
@@ -642,7 +653,9 @@ export default {
   },
   mounted() {
     this.fetchOption();
-    // this.$refs.calendar.checkChange();
+    this.permission = this.userInfo.permissions.find(
+      (it) => it.link === this.$route.path
+    );
   },
   methods: {
     async fetchOption() {

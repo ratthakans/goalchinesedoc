@@ -17,6 +17,7 @@
                 dense
                 icon
                 @click="saveScorestructure(item.id, item, inx)"
+                v-if="permission?.edit"
               >
                 <v-icon>mdi-content-save</v-icon>
               </v-btn>
@@ -25,6 +26,7 @@
                 dense
                 icon
                 @click="deleteScoreStructure(item.id, inx)"
+                v-if="permission?.delete"
               >
                 <v-icon>mdi-trash-can</v-icon>
               </v-btn>
@@ -146,6 +148,7 @@
           top
           small
           @click="addFeeStructure"
+          v-if="permission?.create"
         >
           <v-icon>mdi-plus</v-icon>
         </v-btn>
@@ -160,6 +163,7 @@ import { useAppStore } from "@/stores/app";
 export default {
   data() {
     return {
+      permission: {},
       itemsScoreStruture: [],
       defaultValue: {
         updateDate: "",
@@ -186,6 +190,9 @@ export default {
     if (this.itemsScoreStruture.length === 0) {
       this.addFeeStructure();
     }
+    this.permission = this.userInfo.permissions.find(
+      (it) => it.link === this.$route.path
+    );
   },
   methods: {
     async getPointStructure() {

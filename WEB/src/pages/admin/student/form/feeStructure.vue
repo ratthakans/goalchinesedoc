@@ -17,6 +17,7 @@
                 dense
                 icon
                 @click="saveFeestructure(item.id, item, inx)"
+                v-if="userInfo?.role !== 'user' || permission?.edit"
               >
                 <v-icon>mdi-content-save</v-icon>
               </v-btn>
@@ -25,6 +26,7 @@
                 dense
                 icon
                 @click="deleteFeeStructure(item.id, inx)"
+                v-if="userInfo?.role !== 'user' || permission?.delete"
               >
                 <v-icon>mdi-trash-can</v-icon>
               </v-btn>
@@ -149,6 +151,7 @@
           top
           small
           @click="addFeeStructure"
+          v-if="userInfo?.role !== 'user' || permission?.create"
         >
           <v-icon>mdi-plus</v-icon>
         </v-btn>
@@ -158,9 +161,12 @@
 </template>
 
 <script>
+import { mapState } from "pinia";
+import { useAppStore } from "@/stores/app";
 export default {
   data() {
     return {
+      permission: {},
       itemsFeeStruture: [],
       defaultValue: {
         payDate: "",
@@ -176,6 +182,11 @@ export default {
       },
     };
   },
+  computed: {
+    ...mapState(useAppStore, {
+      userInfo: "getUserinfo",
+    }),
+  },
   watch: {},
   async mounted() {
     this.fetchOption();
@@ -187,6 +198,9 @@ export default {
     if (this.itemsFeeStruture.length === 0) {
       this.addFeeStructure();
     }
+    this.permission = this.userInfo.permissions.find(
+      (it) => it.link === this.$route.path
+    );
   },
   methods: {
     async fetchOption() {

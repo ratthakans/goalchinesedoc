@@ -24,6 +24,7 @@
           depressed
           to="/admin/users/create"
           class="mx-2"
+          v-if="userInfo?.role !== 'user' || permission?.create"
         >
           <v-icon>mdi-plus</v-icon>
         </v-btn>
@@ -74,10 +75,21 @@
           </template>
           <template #[`item.action`]="{ item }">
             <div class="d-flex">
-              <v-btn color="primary" icon :to="`/admin/users/edit/${item.id}`">
+              <v-btn
+                color="primary"
+                v-if="userInfo?.role !== 'user' || permission?.edit"
+                icon
+                :to="`/admin/users/edit/${item.id}`"
+              >
                 <v-icon>mdi-pencil</v-icon>
               </v-btn>
-              <v-btn color="error" icon @click="deleteData(item.id)">
+
+              <v-btn
+                color="error"
+                v-if="userInfo?.role !== 'user' || permission?.delete"
+                icon
+                @click="deleteData(item.id)"
+              >
                 <v-icon>mdi-trash-can</v-icon>
               </v-btn>
             </div>
@@ -89,10 +101,13 @@
 </template>
 
 <script>
+import { mapState } from "pinia";
+import { useAppStore } from "@/stores/app";
 export default {
   name: "UsersPage",
   data() {
     return {
+      permission: {},
       search: "",
       headers: [
         { value: "name", text: "User Name", width: "30%" },
@@ -105,8 +120,16 @@ export default {
       items: [],
     };
   },
+  computed: {
+    ...mapState(useAppStore, {
+      userInfo: "getUserinfo",
+    }),
+  },
   mounted() {
     this.fetchData();
+    this.permission = this.userInfo.permissions.find(
+      (it) => it.link === this.$route.path
+    );
   },
   methods: {
     async fetchData() {

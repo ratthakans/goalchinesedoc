@@ -28,7 +28,9 @@
                 Total Target [2024]
               </v-list-item-title>
             </v-list-item-content>
-            <v-list-item-action>
+            <v-list-item-action
+              v-if="userInfo?.role !== 'user' || permission?.edit"
+            >
               <v-icon @click="editTarget = true">mdi-pencil-box-outline</v-icon>
             </v-list-item-action>
           </v-list-item>
@@ -108,6 +110,9 @@
 </template>
 
 <script>
+import { mapState } from "pinia";
+import { useAppStore } from "@/stores/app";
+
 import CalendarComponent from "@/components/Calendar.vue";
 export default {
   name: "DashboardPage",
@@ -116,6 +121,7 @@ export default {
   },
   data() {
     return {
+      permission: {},
       target: 0,
       editTarget: false,
       events: [],
@@ -127,11 +133,20 @@ export default {
       summaryList: [],
     };
   },
+  computed: {
+    ...mapState(useAppStore, {
+      userInfo: "getUserinfo",
+    }),
+  },
   mounted() {
     this.fetchSetting();
     this.onFetchEvents();
     this.onFetchSummaryUser();
     this.onFetchSummaryBranch();
+
+    this.permission = this.userInfo.permissions.find(
+      (it) => it.link === this.$route.path
+    );
   },
   methods: {
     async fetchSetting() {

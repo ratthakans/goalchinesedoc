@@ -346,7 +346,7 @@ export default {
         //   flagCreate: true,
         // },
         {
-          name: "Student Point",
+          name: "New Student addmission",
           link: "/admin/student/create",
           view: false,
           edit: false,

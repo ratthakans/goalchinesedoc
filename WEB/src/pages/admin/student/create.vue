@@ -15,7 +15,13 @@
 
     <v-row justify="end">
       <v-col cols="auto">
-        <v-btn color="primary" @click="create" depressed class="text-none">
+        <v-btn
+          color="primary"
+          @click="create"
+          depressed
+          class="text-none"
+          v-if="userInfo?.role !== 'user' || permission?.create"
+        >
           <v-icon left> mdi-content-save </v-icon>
           Save
         </v-btn>
@@ -25,6 +31,9 @@
 </template>
 
 <script>
+import { mapState } from "pinia";
+import { useAppStore } from "@/stores/app";
+
 import FormStudent from "./form/student.vue";
 export default {
   name: "CreateStudent",
@@ -33,8 +42,20 @@ export default {
   },
   data() {
     return {
+      permission: {},
       formInput: {},
     };
+  },
+
+  computed: {
+    ...mapState(useAppStore, {
+      userInfo: "getUserinfo",
+    }),
+  },
+  mounted() {
+    this.permission = this.userInfo.permissions.find(
+      (it) => it.link === this.$route.path
+    );
   },
   methods: {
     async create() {

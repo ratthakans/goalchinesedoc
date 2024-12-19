@@ -24,6 +24,7 @@ if (process.env.NODE_ENV === "development") {
 // Middleware
 app.use(bodyParser.json());
 app.use("/uploads", express.static("uploads")); // Serve uploaded files as static
+app.use("/logs", express.static("logs")); // Serve uploaded files as static
 
 // Set a single `/api` prefix for all routes
 app.use("/api", apiRoutes);

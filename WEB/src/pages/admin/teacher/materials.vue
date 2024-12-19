@@ -69,32 +69,6 @@
           <template #[`item.registerDate`]="{ item }">
             {{ new Date(item.registerDate).toLocaleDateString("en-GB") }}
           </template>
-          <template #item.action="{ item }">
-            <v-menu bottom left>
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn icon v-bind="attrs" v-on="on">
-                  <v-icon>mdi-dots-vertical</v-icon>
-                </v-btn>
-              </template>
-
-              <v-list dense>
-                <v-list-item
-                  v-for="(menu, i) in [
-                    { title: 'View', to: `./view/${item.id}` },
-                    { title: 'Edit', to: `./edit/${item.id}` },
-                  ]"
-                  :key="i"
-                  link
-                  :to="menu.to"
-                >
-                  <v-list-item-title>{{ menu.title }}</v-list-item-title>
-                </v-list-item>
-                <v-list-item link>
-                  <v-list-item-title>Delete</v-list-item-title>
-                </v-list-item>
-              </v-list>
-            </v-menu>
-          </template>
         </v-data-table>
       </v-col>
     </v-row>
@@ -157,6 +131,7 @@
           class="text-none"
           @click="update"
           :disabled="!selectedTeacher.length || !selectedMaterials.length"
+          v-if="userInfo?.role !== 'user' || permission?.edit"
         >
           <v-icon left> mdi-content-save </v-icon>
           Update
@@ -167,10 +142,13 @@
 </template>
 
 <script>
+import { mapState } from "pinia";
+import { useAppStore } from "@/stores/app";
 export default {
   name: "TeacherMaterials",
   data() {
     return {
+      permission: {},
       search: "",
       headers: [
         {
@@ -214,9 +192,18 @@ export default {
       selectedMaterials: [],
     };
   },
+  computed: {
+    ...mapState(useAppStore, {
+      userInfo: "getUserinfo",
+    }),
+  },
   mounted() {
     this.fetchDataTeacher();
     this.fetchDataMaterials();
+
+    this.permission = this.userInfo.permissions.find(
+      (it) => it.link === this.$route.path
+    );
   },
   methods: {
     async fetchDataTeacher() {
