@@ -87,6 +87,73 @@ exports.findAll = async (req, res) => {
   }
 };
 
+// Pagination helper functions
+const getPagination = (page, size) => {
+  const limit = size ? +size : 10;
+  const offset = page ? page * limit : 0;
+
+  return { limit, offset };
+};
+
+// Retrieve all Classes with pagination
+exports.findAllPagination = async (req, res) => {
+  try {
+    const { page, size } = req.query;
+    const { limit, offset } = getPagination(page, size);
+
+    const classes = await Class.findAndCountAll({
+      limit,
+      offset,
+      include: [
+        { model: ClassStudy, as: "classStudy" },
+        {
+          model: ClassStudent,
+          as: "classStudent",
+          include: [{ model: Account, as: "account" }],
+        },
+        { model: ClassType, as: "classType" },
+        { model: Account, as: "teacher" },
+        { model: Account, as: "updatedBy" },
+        { model: Attendance, as: "attendance" },
+        { model: Branch, as: "branch" },
+        { model: Currency, as: "currency" },
+      ],
+    });
+
+    const response = getPagingData(classes, page, limit);
+
+    res.status(200).json(response);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error retrieving classes", error: error.message });
+  }
+};
+
+// retrieve all Classes by student ID
+exports.findAllByStudent = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const classes = await Class.findAll({
+      include: [
+        { model: ClassStudy, as: "classStudy" },
+        {
+          model: ClassStudent,
+          as: "classStudent",
+          where: { accountID: id },
+          include: [{ model: Account, as: "account" }],
+        },
+        { model: Attendance, as: "attendance" },
+      ],
+    });
+    res.status(200).json(classes);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error retrieving classes", error: error.message });
+  }
+};
+
 // Retrieve a single Class by ID
 exports.findOne = async (req, res) => {
   try {

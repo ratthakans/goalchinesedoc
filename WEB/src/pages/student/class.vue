@@ -45,7 +45,9 @@
         >
           <div class="text-grey">Remaining class:</div>
           <div class="d-flex justify-center align-center fill-height pb-4">
-            <h3 class="text-h3 font-weight-bold">8/15</h3>
+            <h3 class="text-h3 font-weight-bold">
+              {{ totalClassTimes - events.length }} / {{ totalClassTimes }}
+            </h3>
             <small class="mt-5 text-grey pl-4"> times</small>
           </div>
         </v-sheet>
@@ -60,7 +62,7 @@
         >
           <div class="text-grey">Leave class:</div>
           <div class="d-flex justify-center align-center fill-height pb-4">
-            <h3 class="text-h3 font-weight-bold">8/15</h3>
+            <h3 class="text-h3 font-weight-bold">0 / {{ totalClassTimes }}</h3>
             <small class="mt-5 text-grey pl-4"> times</small>
           </div>
         </v-sheet>
@@ -92,7 +94,9 @@ export default {
   data() {
     return {
       dataStudent: {},
+      dataClass: [],
       events: [],
+      totalClassTimes: 0,
     };
   },
   computed: {
@@ -103,6 +107,7 @@ export default {
   created() {
     this.fetchDataById();
     this.onFetchEvents();
+    this.onFetchClassByStudentId();
   },
   methods: {
     async onFetchEvents() {
@@ -125,6 +130,24 @@ export default {
           `/account/${this.userInfo.accountID}`
         );
         this.dataStudent = data;
+      } catch (error) {
+        this.$swal.fire({
+          title: error.response.data.error,
+          text: error.response.data.details,
+          icon: "error",
+        });
+      }
+    },
+
+    async onFetchClassByStudentId() {
+      try {
+        const { data } = await this.axios.get(
+          `/classes/student/${this.userInfo.accountID}`
+        );
+        this.dataClass = data;
+        this.totalClassTimes = data.reduce((acc, cur) => {
+          return acc + cur.registeredTimes;
+        }, 0);
       } catch (error) {
         this.$swal.fire({
           title: error.response.data.error,

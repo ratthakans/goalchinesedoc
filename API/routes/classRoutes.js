@@ -9,4 +9,7 @@ router.get("/:id", classController.findOne); // Get a single Class by ID
 router.put("/:id", classController.update); // Update a Class by ID
 router.delete("/:id", classController.delete); // Delete a Class by ID
 
+// Add this line
+router.get("/student/:id", classController.findAllByStudent); // Get all Classes by student ID
+
 module.exports = router;
