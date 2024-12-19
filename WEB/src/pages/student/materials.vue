@@ -59,43 +59,7 @@
     </v-row>
     <v-row>
       <v-col cols="12">
-        <!-- <div ref="viewer"></div>
-        <div class="pdf-container"></div> -->
-        <div class="d-flex justify-end align-center">
-          <v-btn @click="toggleFullScreen" icon>
-            <v-icon>mdi-fullscreen</v-icon>
-          </v-btn>
-        </div>
-
-        <div style="position: relative">
-          <iframe
-            :class="{ 'full-screen-iframe': isFullScreen }"
-            id="myIframe"
-            ref="myIframe"
-            :src="`https://view.officeapps.live.com/op/embed.aspx?src=https://getsamplefiles.com/download/pptx/sample-2.pptx`"
-            width="100%"
-            height="600px"
-            frameborder="0"
-            allowfullscreen
-          ></iframe>
-          <div
-            :style="{
-              position: isFullScreen ? 'fixed' : 'absolute',
-              bottom: 0,
-              left: 0,
-              width: '100%',
-              height: '30px',
-              'background-color': 'white',
-              'z-index': '10000',
-              'pointer-events': none,
-            }"
-            class="d-flex justify-center align-center"
-          >
-            <v-btn v-if="isFullScreen" @click="toggleFullScreen">
-              {{ isFullScreen ? "Exit Full Screen" : "Go Full Screen" }}
-            </v-btn>
-          </div>
-        </div>
+        <div ref="viewer"></div>
       </v-col>
     </v-row>
   </v-container>
@@ -205,6 +169,7 @@ export default {
           // disabledElements: ["default-top-header"],
           path: `${process.env.BASE_URL}webviewer`,
           initialDoc: "https://getsamplefiles.com/download/pptx/sample-2.pptx",
+          licenseKey: process.env.VUE_APP_PDF_LICENSE, // sign up to get a free trial key at https://dev.apryse.com
         },
         this.$refs.viewer
       ).then((instance) => {
@@ -237,19 +202,19 @@ export default {
             fontFamily: "sans-serif",
             color: "red",
             opacity: 50, // from 0 to 100
-            text: "Watermark",
+            text: this.userInfo.name,
           },
 
           // Draw header watermark
-          header: {
-            fontSize: 10,
-            fontFamily: "sans-serif",
-            color: "red",
-            opacity: 70,
-            left: "left watermark",
-            center: "center watermark",
-            right: "",
-          },
+          // header: {
+          //   fontSize: 10,
+          //   fontFamily: "sans-serif",
+          //   color: "red",
+          //   opacity: 70,
+          //   left: "left watermark",
+          //   center: "center watermark",
+          //   right: "",
+          // },
         });
       });
     },

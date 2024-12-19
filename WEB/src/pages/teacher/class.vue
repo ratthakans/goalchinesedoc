@@ -42,7 +42,6 @@ export default {
     }),
   },
   created() {
-    this.fetchDataById();
     this.onFetchEvents();
   },
   methods: {
