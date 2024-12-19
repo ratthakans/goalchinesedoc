@@ -851,7 +851,6 @@ export default {
         event.timed = true;
       }
       this.events = temp;
-      console.log("🚀 ~ getEvents ~ events:", this.events);
       this.$nextTick(() => {
         this.$refs.calendar.checkChange();
       });

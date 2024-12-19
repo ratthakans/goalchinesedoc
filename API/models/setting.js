@@ -12,6 +12,11 @@ const Setting = sequelize.define(
       type: DataTypes.STRING,
       allowNull: true,
     },
+    target: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      defaultValue: 0,
+    },
   },
   {
     freezeTableName: true,

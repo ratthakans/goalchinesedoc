@@ -283,7 +283,8 @@ export default {
       permissions: [
         {
           name: "Dashboard",
-          view: false,
+          link: "/admin/dashboard",
+          view: true,
           edit: false,
           flagEdit: true,
           flagDelete: false,
@@ -291,6 +292,7 @@ export default {
         },
         {
           name: "Class Management",
+          link: "/admin/classes/all",
           view: false,
           edit: false,
           create: false,
@@ -300,6 +302,7 @@ export default {
         },
         {
           name: "Class Calendar",
+          link: "/admin/classes/calendar",
           view: false,
           edit: false,
           delete: false,
@@ -311,6 +314,7 @@ export default {
 
         {
           name: "Check Class Attendance",
+          link: "/admin/classes/attendance",
           view: false,
           edit: false,
           delete: false,
@@ -321,6 +325,7 @@ export default {
         },
         {
           name: "Student Management",
+          link: "/admin/student/all",
           view: false,
           edit: false,
           delete: false,
@@ -329,18 +334,20 @@ export default {
           flagDelete: true,
           flagCreate: true,
         },
-        {
-          name: "Student Payment",
-          view: false,
-          edit: false,
-          delete: false,
-          create: false,
-          flagEdit: true,
-          flagDelete: true,
-          flagCreate: true,
-        },
+        // {
+        //   name: "Student Payment",
+        //   link: "/admin/student/all",
+        //   view: false,
+        //   edit: false,
+        //   delete: false,
+        //   create: false,
+        //   flagEdit: true,
+        //   flagDelete: true,
+        //   flagCreate: true,
+        // },
         {
           name: "Student Point",
+          link: "/admin/student/create",
           view: false,
           edit: false,
           delete: false,
@@ -351,6 +358,7 @@ export default {
         },
         {
           name: "Student Metrials Management",
+          link: "/admin/student/materials",
           view: false,
           edit: false,
           create: false,
@@ -360,6 +368,7 @@ export default {
         },
         {
           name: "Teacher Management",
+          link: "/admin/teacher/all",
           view: false,
           edit: false,
           delete: false,
@@ -370,6 +379,7 @@ export default {
         },
         {
           name: "Teacher fee Management",
+          link: "/admin/teacher/create",
           view: false,
           edit: false,
           flagEdit: true,
@@ -378,6 +388,7 @@ export default {
         },
         {
           name: "Teacher Metrials Management",
+          link: "/admin/teacher/materials",
           view: false,
           edit: false,
           create: false,
@@ -387,6 +398,7 @@ export default {
         },
         {
           name: "Metrials Management",
+          link: "/admin/materials",
           view: false,
           edit: false,
           delete: false,
@@ -397,6 +409,7 @@ export default {
         },
         {
           name: "Users Management",
+          link: "/admin/users",
           view: false,
           edit: false,
           delete: false,
@@ -411,8 +424,10 @@ export default {
         // },
         {
           name: "Setting",
+          link: "/admin/setting",
           view: false,
-          flagEdit: false,
+          edit: false,
+          flagEdit: true,
           flagDelete: false,
           flagCreate: false,
         },

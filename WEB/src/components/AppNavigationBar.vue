@@ -72,56 +72,76 @@ export default {
     }),
   },
   mounted() {
+    const orignMenu = [
+      {
+        text: "Dashboard",
+        icon: "mdi-view-dashboard",
+        to: "/admin/dashboard",
+      },
+      {
+        text: "Classes",
+        icon: "mdi-table-account",
+        children: [
+          {
+            text: "Calendar",
+            icon: "mdi-calender",
+            to: "/admin/classes/calendar",
+          },
+          {
+            text: "All Class Check",
+            icon: "mdi-account-check",
+            to: "/admin/classes/all",
+          },
+        ],
+      },
+      {
+        text: "Student",
+        icon: "mdi-account-school",
+        children: [
+          { text: "All Students", to: "/admin/student/all" },
+          { text: "New Admission", to: "/admin/student/create" },
+          { text: "Student Meterial", to: "/admin/student/materials" },
+        ],
+      },
+      {
+        text: "Teacher",
+        icon: "mdi-account-tie",
+        children: [
+          { text: "All Teacher", to: "/admin/teacher/all" },
+          { text: "New Teacher Register", to: "/admin/teacher/create" },
+          { text: "Teacher Meterial", to: "/admin/teacher/materials" },
+        ],
+      },
+      { text: "Users", icon: "mdi-account", to: "/admin/users" },
+      { text: "Materials", icon: "mdi-file", to: "/admin/materials" },
+      // {
+      //   text: "Library",
+      //   icon: "mdi-book-open-page-variant",
+      //   to: "/admin/library",
+      // },
+      { text: "Setting", icon: "mdi-cog", to: "/admin/setting" },
+    ];
     if (["admin", "superadmin"].includes(this.userInfo?.role)) {
-      this.menus = [
-        {
-          text: "Dashboard",
-          icon: "mdi-view-dashboard",
-          to: "/admin/dashboard",
-        },
-        {
-          text: "Classes",
-          icon: "mdi-table-account",
-          children: [
-            {
-              text: "Calendar",
-              icon: "mdi-calender",
-              to: "/admin/classes/calendar",
-            },
-            {
-              text: "All Class Check",
-              icon: "mdi-account-check",
-              to: "/admin/classes/all",
-            },
-          ],
-        },
-        {
-          text: "Student",
-          icon: "mdi-account-school",
-          children: [
-            { text: "All Students", to: "/admin/student/all" },
-            { text: "New Admission", to: "/admin/student/create" },
-            { text: "Student Meterial", to: "/admin/student/materials" },
-          ],
-        },
-        {
-          text: "Teacher",
-          icon: "mdi-account-tie",
-          children: [
-            { text: "All Teacher", to: "/admin/teacher/all" },
-            { text: "New Teacher Register", to: "/admin/teacher/create" },
-            { text: "Teacher Meterial", to: "/admin/teacher/materials" },
-          ],
-        },
-        { text: "Users", icon: "mdi-account", to: "/admin/users" },
-        { text: "Materials", icon: "mdi-file", to: "/admin/materials" },
-        // {
-        //   text: "Library",
-        //   icon: "mdi-book-open-page-variant",
-        //   to: "/admin/library",
-        // },
-        { text: "Setting", icon: "mdi-cog", to: "/admin/setting" },
-      ];
+      this.menus = orignMenu;
+    }
+
+    if (this.userInfo?.role === "user") {
+      orignMenu.forEach((menu) => {
+        if (!menu?.children) {
+          if (
+            this.userInfo?.permissions.map((it) => it.link).includes(menu.to)
+          ) {
+            this.menus.push(menu);
+          }
+        } else {
+          const children = menu.children.filter((child) =>
+            this.userInfo?.permissions.map((it) => it.link).includes(child.to)
+          );
+          if (children.length) {
+            this.menus.push({ ...menu, children });
+          }
+        }
+      });
     }
 
     if (this.userInfo?.role === "student") {

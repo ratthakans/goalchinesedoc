@@ -16,6 +16,10 @@ const Permission = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    link: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     view: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,

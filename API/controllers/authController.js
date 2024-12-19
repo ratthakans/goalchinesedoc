@@ -1,5 +1,5 @@
 const logger = require("../logger");
-const { User, Account } = require("../models"); // Ensure correct path
+const { User, Account, Permission } = require("../models"); // Ensure correct path
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { validationResult } = require("express-validator");
@@ -28,6 +28,10 @@ exports.login = async (req, res) => {
 
     const account = await Account.findOne({ where: { id: user.accountID } });
 
+    const permissions = await Permission.findAll({
+      where: { accountID: user.accountID },
+    });
+
     // Step 3: Generate JWT
     const token = jwt.sign(
       {
@@ -49,6 +53,7 @@ exports.login = async (req, res) => {
         username: user.username,
         name: account.name,
         role: user.role,
+        permissions,
         token,
       },
     });

@@ -13,7 +13,9 @@
 
           <v-card-text>
             <v-row align="center" justify="center">
-              <v-col class="text-h3" cols="auto"> 750,555</v-col>
+              <v-col class="text-h3" cols="auto">
+                {{ target.toLocaleString() }}</v-col
+              >
             </v-row>
           </v-card-text>
         </v-card>
@@ -27,13 +29,26 @@
               </v-list-item-title>
             </v-list-item-content>
             <v-list-item-action>
-              <v-icon>mdi-pencil-box-outline</v-icon>
+              <v-icon @click="editTarget = true">mdi-pencil-box-outline</v-icon>
             </v-list-item-action>
           </v-list-item>
 
           <v-card-text>
             <v-row align="center" justify="center">
-              <v-col class="text-h3" cols="auto"> 750,555</v-col>
+              <v-col class="text-h3" cols="auto" v-if="!editTarget">
+                {{ target.toLocaleString() }}
+              </v-col>
+              <v-col cols="auto" v-else>
+                <v-text-field
+                  v-model.number="target"
+                  type="number"
+                  dense
+                  outlined
+                  single-line
+                  hide-details="auto"
+                ></v-text-field>
+                <v-btn @click="saveSetting">Save</v-btn>
+              </v-col>
             </v-row>
           </v-card-text>
         </v-card>
@@ -101,6 +116,8 @@ export default {
   },
   data() {
     return {
+      target: 0,
+      editTarget: false,
       events: [],
       totalList: [
         { name: "Total Student", value: 0, color: "warning" },
@@ -111,16 +128,50 @@ export default {
     };
   },
   mounted() {
+    this.fetchSetting();
     this.onFetchEvents();
     this.onFetchSummaryUser();
     this.onFetchSummaryBranch();
   },
   methods: {
+    async fetchSetting() {
+      // fetch data from api
+      try {
+        const { data } = await this.axios.get(`/setting`);
+
+        if (data.length) {
+          this.target = data[0].target || 0;
+        } else {
+          this.target = 0;
+        }
+      } catch (error) {
+        this.$swal.fire({
+          title: error.response.data.error,
+          text: error.response.data.details,
+          icon: "error",
+        });
+      }
+    },
+    async saveSetting() {
+      try {
+        const formData = new FormData();
+        formData.append("target", this.target);
+
+        await this.axios.post(`/setting`, formData);
+        this.fetchSetting();
+        this.editTarget = false;
+      } catch (error) {
+        this.$swal.fire({
+          title: error.response.data.error,
+          text: error.response.data.details,
+          icon: "error",
+        });
+      }
+    },
     async onFetchSummaryUser() {
       try {
         const { data } = await this.axios.get(`/dashboard/getSummaryUser`);
 
-        console.log("🚀 ~ onFetchSummaryUser ~ data:", data);
         this.totalList.forEach((it) => {
           if (it.name === "Total Student") {
             it.value = data.totalStudent || 0;
@@ -142,7 +193,6 @@ export default {
       try {
         const { data } = await this.axios.get(`/dashboard/getSummaryBranch`);
 
-        console.log("🚀 ~ onFetchSummaryUser ~ data:", data);
         data.forEach((it) => {
           this.summaryList.push(
             {
