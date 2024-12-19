@@ -163,7 +163,7 @@ exports.delete = async (req, res) => {
     if (!deleted) {
       return res.status(404).json({ message: "Event not found" });
     }
-    res.status(204).send();
+    res.status(204).send({ message: "Event deleted successfully" });
 
     logger.info(`Event deleted: ${id} by [${req.user.id}]${req.user.username}`);
   } catch (error) {

@@ -83,7 +83,7 @@
           {{ dateToYMD(selectedEventDay?.date) }}
           <v-spacer></v-spacer>
           <v-btn
-            v-if="isAdmin && permission?.create"
+            v-if="isAdmin && (userInfo?.role !== 'user' || permission?.create)"
             @click.stop="openDialog"
             color="primary"
             x-small
@@ -157,7 +157,7 @@
                 v-for="(menu, i) in [
                   {
                     title: 'Edit',
-                    show: permission?.edit,
+                    show: userInfo?.role !== 'user' || permission?.edit,
                     onClick: () => onEditEvent(),
                   },
                   {
@@ -167,7 +167,7 @@
                   },
                   {
                     title: 'Delete',
-                    show: permission?.delete,
+                    show: userInfo?.role !== 'user' || permission?.delete,
                     onClick: onDeleteEvent,
                   },
                 ]"
@@ -906,6 +906,7 @@ export default {
           `/classEvents/${this.selectedEvent.id}`
         );
         this.$swal(data?.message, "", "success");
+        this.selectedEvent = {};
         this.$emit("fetchEvents");
       } catch (error) {
         this.$swal.fire({

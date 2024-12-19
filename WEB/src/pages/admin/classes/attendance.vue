@@ -268,9 +268,9 @@ export default {
       switch (status) {
         case "regular":
           return "green";
-        case "student missing":
+        case "studentMissing":
           return "pink";
-        case "teacher missing":
+        case "teacherMissing":
           return "red";
         case "other":
           return "info";

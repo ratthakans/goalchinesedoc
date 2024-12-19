@@ -103,7 +103,12 @@
 
     <v-row class="fill-height">
       <v-col cols="12">
-        <CalendarComponent class="mt-6" :eventsItems="events" isAdmin />
+        <CalendarComponent
+          class="mt-6"
+          :eventsItems="events"
+          isAdmin
+          @fetchEvents="onFetchEvents"
+        />
       </v-col>
     </v-row>
   </v-container>
