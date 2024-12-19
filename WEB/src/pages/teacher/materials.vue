@@ -90,7 +90,6 @@
               height: '30px',
               'background-color': 'white',
               'z-index': '10000',
-              'pointer-events': 'none',
             }"
             class="d-flex justify-center align-center"
           >
