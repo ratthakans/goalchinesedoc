@@ -103,26 +103,78 @@ export default {
     return {
       events: [],
       totalList: [
-        { name: "Total Student", value: 20, color: "warning" },
-        { name: "Total Teacher", value: 101, color: "info" },
-        { name: "Total admin", value: 21, color: "success" },
+        { name: "Total Student", value: 0, color: "warning" },
+        { name: "Total Teacher", value: 0, color: "info" },
+        { name: "Total admin", value: 0, color: "success" },
       ],
-      summaryList: [
-        { name: "Total classes Branch 1", value: 20, color: "primary" },
-        { name: "Total Student Branch 1", value: 20, color: "success" },
-        { name: "Expiring Classes Branch 1", value: 101, color: "warning" },
-        { name: "Monthly income Branch 1", value: 21, color: "error" },
-        { name: "Total classes Branch 2", value: 20, color: "primary" },
-        { name: "Total Student Branch 2", value: 20, color: "success" },
-        { name: "Expiring Classes Branch 2", value: 101, color: "warning" },
-        { name: "Monthly income Branch 2", value: 21, color: "error" },
-      ],
+      summaryList: [],
     };
   },
   mounted() {
     this.onFetchEvents();
+    this.onFetchSummaryUser();
+    this.onFetchSummaryBranch();
   },
   methods: {
+    async onFetchSummaryUser() {
+      try {
+        const { data } = await this.axios.get(`/dashboard/getSummaryUser`);
+
+        console.log("🚀 ~ onFetchSummaryUser ~ data:", data);
+        this.totalList.forEach((it) => {
+          if (it.name === "Total Student") {
+            it.value = data.totalStudent || 0;
+          } else if (it.name === "Total Teacher") {
+            it.value = data.totalTeacher || 0;
+          } else if (it.name === "Total admin") {
+            it.value = data.totalAdmin || 0;
+          }
+        });
+      } catch (error) {
+        this.$swal.fire({
+          title: error.response.data.error,
+          text: error.response.data.details,
+          icon: "error",
+        });
+      }
+    },
+    async onFetchSummaryBranch() {
+      try {
+        const { data } = await this.axios.get(`/dashboard/getSummaryBranch`);
+
+        console.log("🚀 ~ onFetchSummaryUser ~ data:", data);
+        data.forEach((it) => {
+          this.summaryList.push(
+            {
+              name: `Total classes ${it.name}`,
+              value: it.totalClass || 0,
+              color: "primary",
+            },
+            {
+              name: `Total Student ${it.name}`,
+              value: it.totalStudent || 0,
+              color: "success",
+            },
+            {
+              name: `Expiring Classes ${it.name}`,
+              value: it.totalExpireClass || 0,
+              color: "warning",
+            },
+            {
+              name: `Monthly income ${it.name}`,
+              value: it.totalIncomeClass || 0,
+              color: "error",
+            }
+          );
+        });
+      } catch (error) {
+        this.$swal.fire({
+          title: error.response.data.error,
+          text: error.response.data.details,
+          icon: "error",
+        });
+      }
+    },
     async onFetchEvents(branchId) {
       try {
         const { data } = await this.axios.get(

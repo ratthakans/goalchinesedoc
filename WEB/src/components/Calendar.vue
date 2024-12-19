@@ -515,7 +515,7 @@
           Cancel
         </v-btn>
         <v-btn
-          :disabled="!selectedDate.length"
+          :disabled="!selectedDate?.length"
           text
           color="primary"
           @click="copyClassEvent"
@@ -636,11 +636,8 @@ export default {
         this.formInput.link = val?.link;
       },
     },
-    branch: {
-      immediate: true,
-      handler(val) {
-        this.$emit("fetchEvents", val);
-      },
+    branch(val) {
+      if (val) this.$emit("fetchEvents", val);
     },
   },
   mounted() {
@@ -845,6 +842,7 @@ export default {
     },
     getEvents() {
       let temp = this.eventsItems;
+      if (this.eventsItems.length === 0) return;
       for (let i = 0; i < temp.length; i++) {
         const event = temp[i];
         event.name = event.title;

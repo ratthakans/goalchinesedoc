@@ -1,5 +1,5 @@
 const logger = require("../logger");
-const { User } = require("../models"); // Ensure correct path
+const { User, Account } = require("../models"); // Ensure correct path
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { validationResult } = require("express-validator");
@@ -26,12 +26,14 @@ exports.login = async (req, res) => {
       return res.status(400).json({ error: "Invalid username or password" });
     }
 
+    const account = await Account.findOne({ where: { id: user.accountID } });
+
     // Step 3: Generate JWT
     const token = jwt.sign(
       {
         id: user.id,
         accountID: user.accountID,
-        name: user.name,
+        name: account.name,
         username: user.username,
         role: user.role,
       },
@@ -45,6 +47,7 @@ exports.login = async (req, res) => {
         id: user.id,
         accountID: user.accountID,
         username: user.username,
+        name: account.name,
         role: user.role,
         token,
       },

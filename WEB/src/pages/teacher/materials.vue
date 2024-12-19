@@ -34,16 +34,22 @@
           :filter-keys="['title', 'category', 'type']"
           :items="items"
         >
-          <template #item.image="{ item }">
-            <v-avatar size="64" rounded color="grey lighten-4" class="my-2">
+          <template #item.photo="{ item }">
+            <v-avatar
+              size="50"
+              :color="item?.material?.photo ? '' : 'grey lighten-4'"
+              :class="
+                item?.material?.photo ? '' : 'v-avatar-light-bg primary--text'
+              "
+              :variant="!item?.material?.photo ? 'tonal' : undefined"
+              tile
+              rounded="lg"
+            >
               <v-img
-                :src="`https://cdn.vuetifyjs.com/docs/images/graphics/gpus/${item.image}`"
-                height="64"
-                width="64"
-                cover
-                v-if="item.image"
+                v-if="item?.material?.photo"
+                :src="`${baseUrl}${item?.material?.photo}`"
               />
-              <v-icon v-else size="45">mdi-notebook-edit</v-icon>
+              <v-icon v-else>mdi-notebook-edit</v-icon>
             </v-avatar>
           </template>
 
@@ -80,6 +86,8 @@
 <script>
 // import WebViewer from "@pdftron/webviewer";
 // import pptx from "../../../public/example.pptx";
+import { mapState } from "pinia";
+import { useAppStore } from "@/stores/app";
 export default {
   name: "StudentMaterials",
   data() {
@@ -88,31 +96,47 @@ export default {
       headers: [
         {
           align: "start",
-          value: "no",
+          value: "material.no",
           sortable: false,
           text: "Materials No.",
         },
-        { value: "image", text: "Photo" },
-        { value: "title", text: "Title", width: "40%" },
-        { value: "category", text: "Materials Category" },
-        { value: "type", text: "Materials for teacher/student" },
+        { value: "photo", text: "Photo" },
+        { value: "material.title", text: "Title", width: "40%" },
+        { value: "material.materialCategory.name", text: "Materials Category" },
+        {
+          value: "material.materialType.name",
+          text: "Materials for teacher/student",
+        },
         { value: "action", text: "Action", sortable: false },
       ],
-      items: [
-        {
-          no: "M001",
-          image: "1.png",
-          title: "Book",
-          category: "Class 1",
-          type: "Student",
-        },
-      ],
+      items: [],
       fileUrl: ``,
       // "https://docs.google.com/gview?url=http://cwestblog.com/wp-content/uploads/2020/05/Example-Presentation.pptx&embedded=true",
     };
   },
-  mounted() {},
+  computed: {
+    ...mapState(useAppStore, {
+      userInfo: "getUserinfo",
+    }),
+  },
+  mounted() {
+    this.fetchDataMaterials();
+  },
   methods: {
+    async fetchDataMaterials() {
+      try {
+        const { data } = await this.axios.get(
+          `/myMaterial/account/${this.userInfo.accountID}`
+        );
+        this.items = data;
+      } catch (error) {
+        this.$swal.fire({
+          title: error.response.data.error,
+          text: error.response.data.details,
+          icon: "error",
+        });
+      }
+    },
     removeElementInIframe() {
       // Access the iframe via the ref
       const iframe = this.$refs.myIframe;
