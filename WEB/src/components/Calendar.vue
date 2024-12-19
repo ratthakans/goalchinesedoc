@@ -652,7 +652,7 @@ export default {
     },
   },
   mounted() {
-    this.fetchOption();
+    if (this.isAdmin) this.fetchOption();
     this.permission = this.userInfo.permissions.find(
       (it) => it.link === this.$route.path
     );

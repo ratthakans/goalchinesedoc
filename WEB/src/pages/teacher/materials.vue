@@ -53,8 +53,8 @@
             </v-avatar>
           </template>
 
-          <template #item.action="{}">
-            <v-btn color="info" class="text-none" @click="openDoc">
+          <template #item.action="{ item }">
+            <v-btn color="info" class="text-none" @click="openDoc(item)">
               view
             </v-btn>
           </template>
@@ -62,10 +62,8 @@
       </v-col>
     </v-row>
 
-    <v-row>
+    <v-row v-if="showDocument">
       <v-col cols="12">
-        <!-- <div ref="viewer"></div>
-        <div class="pdf-container"></div> -->
         <div class="d-flex justify-end align-center">
           <v-btn @click="toggleFullScreen" icon>
             <v-icon>mdi-fullscreen</v-icon>
@@ -77,7 +75,7 @@
             :class="{ 'full-screen-iframe': isFullScreen }"
             id="myIframe"
             ref="myIframe"
-            :src="`https://view.officeapps.live.com/op/embed.aspx?src=https://getsamplefiles.com/download/pptx/sample-2.pptx`"
+            :src="fileUrl"
             width="100%"
             height="600px"
             frameborder="0"
@@ -92,7 +90,7 @@
               height: '30px',
               'background-color': 'white',
               'z-index': '10000',
-              'pointer-events': none,
+              'pointer-events': 'none',
             }"
             class="d-flex justify-center align-center"
           >
@@ -116,6 +114,7 @@ export default {
   data() {
     return {
       isFullScreen: false,
+      showDocument: false,
       search: "",
       headers: [
         {
@@ -135,7 +134,7 @@ export default {
       ],
       items: [],
       fileUrl: ``,
-      // "https://docs.google.com/gview?url=http://cwestblog.com/wp-content/uploads/2020/05/Example-Presentation.pptx&embedded=true",
+      // "https://view.officeapps.live.com/op/embed.aspx?src=https://getsamplefiles.com/download/pptx/sample-2.pptx",
     };
   },
   computed: {
@@ -214,61 +213,18 @@ export default {
         console.error("Error accessing iframe content:", error);
       }
     },
-    openDoc() {
-      this.fileUrl = `https://view.officeapps.live.com/op/embed.aspx?src=http://cwestblog.com/wp-content/uploads/2020/05/Example-Presentation.pptx`;
-
-      this.$nextTick(() => {
-        const iframe = this.$refs.myIframe;
-        if (iframe) {
-          iframe.onload = this.removeElementInIframe; // Set the onload handler
-        } else {
-          console.error("Iframe ref is not defined");
-        }
-      });
-
-      // WebViewer(
-      //   {
-      //     // disabledElements: ["default-top-header"],
-      //     path: `${process.env.BASE_URL}webviewer`,
-      //     initialDoc: "https://getsamplefiles.com/download/pptx/sample-2.pptx",
-      //   },
-      //   this.$refs.viewer
-      // ).then((instance) => {
-      //   // hide the ribbons
-      //   instance.UI.disableElements(["default-ribbon-group"]);
-      //   instance.UI.disableElements(["tools-header"]);
-      //   instance.UI.disableElements(["leftPanelButton"]);
-      //   instance.UI.disableElements(["searchPanelToggle"]);
-      //   instance.UI.disableElements(["notesPanelToggle"]);
-      //   instance.UI.disableElements(["groupedLeftHeaderButtons"]);
-      //   instance.UI.disableElements([
-      //     "menuButton",
-      //     "panToolButton",
-      //     "annotationEditToolButton",
-      //   ]);
-      //   // Add header button that will get file data on click
-      //   const { documentViewer } = instance.Core;
-      //   documentViewer.setWatermark({
-      //     // Draw diagonal watermark in middle of the document
-      //     diagonal: {
-      //       fontSize: 25, // or even smaller size
-      //       fontFamily: "sans-serif",
-      //       color: "red",
-      //       opacity: 50, // from 0 to 100
-      //       text: "Watermark",
-      //     },
-      //     // Draw header watermark
-      //     header: {
-      //       fontSize: 10,
-      //       fontFamily: "sans-serif",
-      //       color: "red",
-      //       opacity: 70,
-      //       left: "left watermark",
-      //       center: "center watermark",
-      //       right: "",
-      //     },
-      //   });
-      // });
+    openDoc(item) {
+      this.showDocument = true;
+      if (process.env.NODE_ENV === "development") {
+        this.fileUrl = `https://view.officeapps.live.com/op/embed.aspx?src=https://getsamplefiles.com/download/pptx/sample-2.pptx`;
+      } else {
+        if (["pptx", "pdf"].includes(item.material.documentType))
+          this.fileUrl = `https://view.officeapps.live.com/op/embed.aspx?src=${this.baseUrl}${item.material.document}`;
+        else if (item.material.documentType === "canva") {
+          const canvaLink = item.material.link;
+          window.open(canvaLink, "_blank"); // Open in a new tab
+        } else this.fileUrl = `${item.material.link}`;
+      }
     },
   },
 };

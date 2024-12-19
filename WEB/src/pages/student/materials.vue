@@ -49,8 +49,8 @@
             </v-avatar>
           </template>
 
-          <template #item.action="{}">
-            <v-btn color="info" class="text-none" @click="openDoc">
+          <template #item.action="{ item }">
+            <v-btn color="info" class="text-none" @click="openDoc(item)">
               view
             </v-btn>
           </template>
@@ -163,60 +163,42 @@ export default {
           });
       }
     },
-    openDoc() {
-      WebViewer(
-        {
-          // disabledElements: ["default-top-header"],
-          path: `${process.env.BASE_URL}webviewer`,
-          initialDoc: "https://getsamplefiles.com/download/pptx/sample-2.pptx",
-          licenseKey: process.env.VUE_APP_PDF_LICENSE, // sign up to get a free trial key at https://dev.apryse.com
-        },
-        this.$refs.viewer
-      ).then((instance) => {
-        // hide the ribbons
-        instance.UI.disableElements(["default-ribbon-group"]);
-        instance.UI.disableElements(["tools-header"]);
-        instance.UI.disableElements(["leftPanelButton"]);
-        instance.UI.disableElements(["searchPanelToggle"]);
-        instance.UI.disableElements(["notesPanelToggle"]);
-        instance.UI.disableElements(["groupedLeftHeaderButtons"]);
-
-        const { documentViewer } = instance.Core;
-
-        // Add header button that will get file data on click
-        // instance.UI.setHeaderItems((header) => {
-        //   header.update([
-        //     {
-        //       type: "toogleElementButton",
-        //       img: "icon-header-sidebar-line",
-        //       elemenu: "leftPanel",
-        //       dataElement: "leftPanelButton",
-        //     },
-        //   ]);
-        // });
-
-        documentViewer.setWatermark({
-          // Draw diagonal watermark in middle of the document
-          diagonal: {
-            fontSize: 25, // or even smaller size
-            fontFamily: "sans-serif",
-            color: "red",
-            opacity: 50, // from 0 to 100
-            text: this.userInfo.name,
+    openDoc(item) {
+      if (["pptx", "pdf"].includes(item.material.documentType)) {
+        WebViewer(
+          {
+            // disabledElements: ["default-top-header"],
+            path: `${process.env.BASE_URL}webviewer`,
+            initialDoc: `${this.baseUrl}${item.material.document}`, //"https://getsamplefiles.com/download/pptx/sample-2.pptx",
+            licenseKey: process.env.VUE_APP_PDF_LICENSE, // sign up to get a free trial key at https://dev.apryse.com
           },
+          this.$refs.viewer
+        ).then((instance) => {
+          // hide the ribbons
+          instance.UI.disableElements(["default-ribbon-group"]);
+          instance.UI.disableElements(["tools-header"]);
+          instance.UI.disableElements(["leftPanelButton"]);
+          instance.UI.disableElements(["searchPanelToggle"]);
+          instance.UI.disableElements(["notesPanelToggle"]);
+          instance.UI.disableElements(["groupedLeftHeaderButtons"]);
 
-          // Draw header watermark
-          // header: {
-          //   fontSize: 10,
-          //   fontFamily: "sans-serif",
-          //   color: "red",
-          //   opacity: 70,
-          //   left: "left watermark",
-          //   center: "center watermark",
-          //   right: "",
-          // },
+          const { documentViewer } = instance.Core;
+
+          documentViewer.setWatermark({
+            // Draw diagonal watermark in middle of the document
+            diagonal: {
+              fontSize: 25, // or even smaller size
+              fontFamily: "sans-serif",
+              color: "red",
+              opacity: 50, // from 0 to 100
+              text: this.userInfo.name,
+            },
+          });
         });
-      });
+      } else if (item.material.documentType === "canva") {
+        const canvaLink = item.material.link;
+        window.open(canvaLink, "_blank"); // Open in a new tab
+      } else this.fileUrl = `${item.material.link}`;
     },
   },
 };
