@@ -38,7 +38,7 @@ router.use("/materialType", authenticate, materialTypeRoutes);
 router.use("/currency", authenticate, currencyRoutes);
 router.use("/materials", authenticate, materialsRoutes);
 router.use("/myMaterial", authenticate, myMaterialRoutes);
-router.use("/setting", authenticate, settingRoutes);
+router.use("/setting", settingRoutes);
 router.use("/feeStructure", authenticate, feeStructureRoutes);
 router.use("/pointStructure", authenticate, pointStructureRoutes);
 router.use("/classes", authenticate, classRoutes);

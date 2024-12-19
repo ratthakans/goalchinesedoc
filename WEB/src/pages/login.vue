@@ -1,12 +1,19 @@
 <template>
   <v-container class="fill-height">
     <v-responsive class="align-center fill-height mx-auto" max-width="700">
-      <v-img class="mb-4" height="150" src="@/assets/logo.png" contain />
+      <v-img
+        class="mb-4"
+        height="170"
+        :src="formInput?.logo || '@/assets/logo.png'"
+        contain
+      />
 
       <div class="text-center">
         <div class="text-body-2 font-weight-light mb-n1">Welcome to</div>
 
-        <h1 class="text-h2 font-weight-bold">Class Regiser</h1>
+        <h1 class="text-h2 font-weight-bold">
+          {{ formInput.academyName || "Academy Name" }}
+        </h1>
       </div>
 
       <div class="py-2" />
@@ -70,11 +77,19 @@ export default {
   name: "LoginPage",
   data() {
     return {
+      formInput: {
+        file: null,
+        logo: "",
+        academyName: "",
+      },
       username: "admin",
       password: "123456",
       error: null,
       showPassword: false,
     };
+  },
+  mounted() {
+    this.fetchSetting();
   },
   methods: {
     ...mapActions(useAppStore, { setUserInfo: "setUserInfo" }),
@@ -97,6 +112,27 @@ export default {
         }
       } catch (error) {
         this.error = error.response?.data?.error;
+      }
+    },
+    async fetchSetting() {
+      // fetch data from api
+      try {
+        const { data } = await this.axios.get(`/setting`);
+
+        if (data.length) {
+          if (data[0].logo)
+            this.formInput.logo = process.env.VUE_APP_API_IMAGE + data[0].logo;
+          this.formInput.academyName = data[0].academyName;
+        } else {
+          this.formInput.logo = null;
+          this.formInput.academyName = "";
+        }
+      } catch (error) {
+        this.$swal.fire({
+          title: error.response.data.error,
+          text: error.response.data.details,
+          icon: "error",
+        });
       }
     },
   },
