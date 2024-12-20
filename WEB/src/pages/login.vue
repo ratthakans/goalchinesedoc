@@ -1,18 +1,13 @@
 <template>
   <v-container class="fill-height">
     <v-responsive class="align-center fill-height mx-auto" max-width="700">
-      <v-img
-        class="mb-4"
-        height="170"
-        :src="formInput?.logo || '@/assets/logo.png'"
-        contain
-      />
+      <v-img class="mb-4" height="170" :src="formInput?.logo || logo" contain />
 
       <div class="text-center">
         <div class="text-body-2 font-weight-light mb-n1">Welcome to</div>
 
         <h1 class="text-h2 font-weight-bold">
-          {{ formInput.academyName || "Academy Name" }}
+          {{ formInput?.academyName || "Academy Name" }}
         </h1>
       </div>
 
@@ -73,17 +68,19 @@
 <script>
 import { mapActions } from "pinia";
 import { useAppStore } from "@/stores/app";
+import logo from "@/assets/logo.png";
 export default {
   name: "LoginPage",
   data() {
     return {
+      logo,
       formInput: {
         file: null,
-        logo: "",
+        logo: null,
         academyName: "",
       },
-      username: "admin",
-      password: "123456",
+      username: "",
+      password: "",
       error: null,
       showPassword: false,
     };

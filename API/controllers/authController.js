@@ -1,5 +1,5 @@
 const logger = require("../logger");
-const { User, Account, Permission } = require("../models"); // Ensure correct path
+const { sequelize, User, Account, Permission } = require("../models"); // Ensure correct path
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { validationResult } = require("express-validator");
@@ -60,6 +60,69 @@ exports.login = async (req, res) => {
 
     logger.info(`User ${user.username} logged in`);
   } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// register Function
+exports.register = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  // Get field names from the model
+  const validFieldsAccount = Object.keys(Account.rawAttributes);
+
+  // Filter req.body to include only valid fields
+  const filteredDataAccount = Object.fromEntries(
+    Object.entries(req.body).filter(([key]) => validFieldsAccount.includes(key))
+  );
+
+  const t = await sequelize.transaction();
+
+  try {
+    // Step 1: Create the Account
+    const account = await Account.create(
+      {
+        ...filteredDataAccount,
+      },
+      { transaction: t }
+    );
+
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    // Step 2: Insert into User using the generated accountID
+    const user = await User.create(
+      {
+        accountID: account.id,
+        username: req.body.username,
+        password: hashedPassword,
+        role: req.body.role || "user",
+        expireDate: req.body.expireDate,
+      },
+      { transaction: t }
+    );
+
+    if (req.body.permissions) {
+      const bodyPermissions = JSON.parse(req.body.permissions);
+      // Delete all permissions for the account
+      // Insert new permissions
+      await Permission.bulkCreate(
+        bodyPermissions.map((p) => ({ ...p, accountID: account.id })),
+        { transaction: t }
+      );
+    }
+
+    logger.info(`Account created: ${account.id} ${req.body.username}`);
+
+    res.status(201).json({
+      message: "Account and User created successfully",
+      account,
+      user,
+    });
+    await t.commit();
+  } catch (error) {
+    await t.rollback();
     res.status(500).json({ error: error.message });
   }
 };
