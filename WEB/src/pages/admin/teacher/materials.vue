@@ -29,6 +29,7 @@
           background-color="grey lighten-4"
           solo
           flat
+          clearable
         />
       </v-col>
     </v-row>
@@ -81,13 +82,14 @@
       </v-col>
       <v-col cols="4">
         <v-text-field
-          v-model="search"
+          v-model="searchMaterials"
           placeholder="Search..."
           dense
           hide-details="auto"
           background-color="grey lighten-4"
           solo
           flat
+          clearable
         />
       </v-col>
     </v-row>
@@ -150,6 +152,7 @@ export default {
     return {
       permission: {},
       search: "",
+      searchMaterials: "",
       headers: [
         {
           align: "start",
@@ -197,6 +200,14 @@ export default {
       userInfo: "getUserinfo",
     }),
   },
+  watch: {
+    search() {
+      this.fetchDataTeacher();
+    },
+    searchMaterials() {
+      this.fetchDataMaterials();
+    },
+  },
   mounted() {
     this.fetchDataTeacher();
     this.fetchDataMaterials();
@@ -208,7 +219,9 @@ export default {
   methods: {
     async fetchDataTeacher() {
       try {
-        const { data } = await this.axios.get(`/account?role=teacher`);
+        const { data } = await this.axios.get(
+          `/account?role=teacher${this.search ? `&search=${this.search}` : ""}`
+        );
         this.items = data || [];
       } catch (error) {
         this.$swal.fire({
@@ -220,7 +233,11 @@ export default {
     },
     async fetchDataMaterials() {
       try {
-        const { data } = await this.axios.get(`/materials`);
+        const { data } = await this.axios.get(
+          `/materials?materialFor=teacher${
+            this.searchMaterials ? `&search=${this.searchMaterials}` : ""
+          }`
+        );
         this.itemsMaterials = data;
       } catch (error) {
         this.$swal.fire({

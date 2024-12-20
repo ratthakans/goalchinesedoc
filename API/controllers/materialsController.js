@@ -2,6 +2,7 @@ const logger = require("../logger");
 const { Materials } = require("../models"); // Ensure the path to your models is correct
 const fs = require("fs");
 const path = require("path");
+const { Op } = require("sequelize");
 
 // Create a new Material with optional photo and document upload
 exports.create = async (req, res) => {
@@ -98,7 +99,25 @@ exports.update = async (req, res, next) => {
 // Get all Materials
 exports.findAll = async (req, res, next) => {
   try {
+    const { materialFor, search } = req.query;
+    let where = {};
+    if (materialFor) {
+      where = {
+        "$materialFor.name$": materialFor.toLowerCase(),
+      };
+    }
+    if (search) {
+      where = {
+        ...where,
+        [Op.or]: [
+          { "$Materials.title$": { [Op.like]: `%${search}%` } },
+          { "$Materials.no$": { [Op.like]: `%${search}%` } },
+        ],
+      };
+    }
+
     const materials = await Materials.findAll({
+      where,
       include: [
         {
           association: "materialCategory",

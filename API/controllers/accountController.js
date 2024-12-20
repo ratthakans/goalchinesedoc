@@ -2,6 +2,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 const logger = require("../logger");
+const { Op } = require("sequelize");
 
 const {
   Account,
@@ -84,7 +85,16 @@ exports.create = async (req, res, next) => {
 // Get all Accounts
 exports.findAll = async (req, res) => {
   try {
-    const { role } = req.query;
+    const { role, search } = req.query;
+    let where = {};
+    if (search) {
+      where = {
+        [Op.or]: [
+          { "$Account.name$": { [Op.like]: `%${search}%` } },
+          { "$user.username$": { [Op.like]: `%${search}%` } },
+        ],
+      };
+    }
 
     const accounts = await Account.findAll({
       include: [
@@ -92,7 +102,7 @@ exports.findAll = async (req, res) => {
           model: User,
           as: "user",
           attributes: { exclude: ["password"] },
-          where: { role: role },
+          where: { role: role, ...where },
         },
         {
           model: StudentType,

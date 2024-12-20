@@ -8,8 +8,11 @@ const {
   Branch,
   ClassType,
   Currency,
+  Sequelize,
 } = require("../models"); // Adjust the path to your models folder
 const logger = require("../logger");
+
+const { Op } = require("sequelize");
 
 // Create a new Class
 exports.create = async (req, res, next) => {
@@ -63,7 +66,27 @@ exports.create = async (req, res, next) => {
 // Retrieve all Classes
 exports.findAll = async (req, res) => {
   try {
+    const { search } = req.query;
+    let where = {};
+    if (search) {
+      where = {
+        [Op.or]: [
+          sequelize.where(
+            sequelize.fn("LOWER", sequelize.col("Class.name")),
+            "LIKE",
+            `%${search.toLowerCase()}%`
+          ),
+          sequelize.where(
+            sequelize.fn("LOWER", sequelize.col("Class.no")),
+            "LIKE",
+            `%${search.toLowerCase()}%`
+          ),
+        ],
+      };
+    }
+
     const classes = await Class.findAll({
+      where,
       include: [
         { model: ClassStudy, as: "classStudy" },
         {

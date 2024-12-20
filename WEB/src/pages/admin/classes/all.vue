@@ -40,6 +40,7 @@
           background-color="grey lighten-4"
           solo
           flat
+          clearable
         />
       </v-col>
       <v-col cols="auto">
@@ -133,7 +134,6 @@
                 </template>
                 <v-list-item
                   link
-                  :key="i"
                   v-if="userInfo?.role !== 'user' || permission?.delete"
                 >
                   <v-list-item-title>Delete</v-list-item-title>
@@ -228,6 +228,11 @@ export default {
       userInfo: "getUserinfo",
     }),
   },
+  watch: {
+    search() {
+      this.fetchData();
+    },
+  },
   mounted() {
     this.fetchData();
 
@@ -237,8 +242,11 @@ export default {
   },
   methods: {
     async fetchData() {
+      this.items = [];
       try {
-        const { data } = await this.axios.get(`/classes`);
+        const { data } = await this.axios.get(
+          `/classes${this.search ? `?search=${this.search}` : ""}`
+        );
         this.items = data || [];
       } catch (error) {
         this.$swal.fire({

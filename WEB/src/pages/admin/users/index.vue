@@ -38,6 +38,7 @@
           background-color="grey lighten-4"
           solo
           flat
+          clearable
         />
       </v-col>
     </v-row>
@@ -125,6 +126,11 @@ export default {
       userInfo: "getUserinfo",
     }),
   },
+  watch: {
+    search() {
+      this.fetchData();
+    },
+  },
   mounted() {
     this.fetchData();
     this.permission = this.userInfo.permissions.find(
@@ -134,7 +140,9 @@ export default {
   methods: {
     async fetchData() {
       try {
-        const { data } = await this.axios.get(`/account?role=user`);
+        const { data } = await this.axios.get(
+          `/account?role=user${this.search ? `&search=${this.search}` : ""}`
+        );
         this.items = data;
       } catch (error) {
         this.$swal.fire({

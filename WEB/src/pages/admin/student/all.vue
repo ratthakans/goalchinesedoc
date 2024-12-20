@@ -39,6 +39,7 @@
           background-color="grey lighten-4"
           solo
           flat
+          clearable
         />
       </v-col>
     </v-row>
@@ -154,6 +155,11 @@ export default {
       userInfo: "getUserinfo",
     }),
   },
+  watch: {
+    search() {
+      this.fetchData();
+    },
+  },
   mounted() {
     this.fetchData();
 
@@ -164,7 +170,9 @@ export default {
   methods: {
     async fetchData() {
       try {
-        const { data } = await this.axios.get(`/account?role=student`);
+        const { data } = await this.axios.get(
+          `/account?role=student${this.search ? `&search=${this.search}` : ""}`
+        );
         this.items = data || [];
       } catch (error) {
         this.$swal.fire({
