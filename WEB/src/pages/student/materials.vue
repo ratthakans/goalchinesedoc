@@ -195,10 +195,12 @@ export default {
             },
           });
         });
-      } else if (item.material.documentType === "canva") {
+      } else if (["canva", "link"].includes(item.material.documentType)) {
         const canvaLink = item.material.link;
         window.open(canvaLink, "_blank"); // Open in a new tab
-      } else this.fileUrl = `${item.material.link}`;
+      } else if (item.material.documentType === "mp4") {
+        this.fileUrl = `${this.baseUrl}${item.material.document}`;
+      }
     },
   },
 };

@@ -250,7 +250,7 @@ export default {
     async update() {
       try {
         let body = {
-          teacherId: this.selectedTeacher.map((item) => item.id),
+          accountID: this.selectedTeacher.map((item) => item.id),
           materials: this.selectedMaterials.map((item) => item.id),
         };
         const { data } = await this.axios.post(`/myMaterial`, body);

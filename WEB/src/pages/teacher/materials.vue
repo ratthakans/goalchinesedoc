@@ -214,16 +214,18 @@ export default {
     },
     openDoc(item) {
       this.showDocument = true;
-      if (process.env.NODE_ENV === "development") {
-        this.fileUrl = `https://view.officeapps.live.com/op/embed.aspx?src=https://getsamplefiles.com/download/pptx/sample-2.pptx`;
-      } else {
-        if (["pptx", "pdf"].includes(item.material.documentType))
-          this.fileUrl = `https://view.officeapps.live.com/op/embed.aspx?src=${this.baseUrl}${item.material.document}`;
-        else if (item.material.documentType === "canva") {
-          const canvaLink = item.material.link;
-          window.open(canvaLink, "_blank"); // Open in a new tab
-        } else this.fileUrl = `${item.material.link}`;
+      // if (process.env.NODE_ENV === "development") {
+      //   this.fileUrl = `https://view.officeapps.live.com/op/embed.aspx?src=https://getsamplefiles.com/download/pptx/sample-2.pptx`;
+      // } else {
+      if (["pptx", "pdf"].includes(item.material.documentType))
+        this.fileUrl = `https://view.officeapps.live.com/op/embed.aspx?src=${this.baseUrl}${item.material.document}`;
+      else if (["canva", "link"].includes(item.material.documentType)) {
+        const canvaLink = item.material.link;
+        window.open(canvaLink, "_blank"); // Open in a new tab
+      } else if (item.material.documentType === "mp4") {
+        this.fileUrl = `${this.baseUrl}${item.material.document}`;
       }
+      // }
     },
   },
 };
