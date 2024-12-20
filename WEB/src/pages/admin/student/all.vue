@@ -54,15 +54,14 @@
           <template #item.name="{ item }">
             <div class="d-flex align-center">
               <v-avatar
-                size="45"
+                size="64"
                 :color="item.photo ? '' : 'grey lighten-4'"
                 :class="item.photo ? '' : 'v-avatar-light-bg primary--text'"
                 :variant="!item.photo ? 'tonal' : undefined"
-                tile
                 rounded="lg"
               >
                 <v-img v-if="item.photo" :src="`${baseUrl}${item.photo}`" />
-                <v-icon v-else>mdi-account</v-icon>
+                <v-img v-else :src="iconStudent" />
               </v-avatar>
               <div class="d-flex flex-column ms-3">
                 <span
@@ -123,11 +122,12 @@
 <script>
 import { mapState } from "pinia";
 import { useAppStore } from "@/stores/app";
-
+import iconStudent from "@/assets/student.png";
 export default {
   name: "AllStudent",
   data() {
     return {
+      iconStudent,
       permission: {},
       search: "",
       headers: [

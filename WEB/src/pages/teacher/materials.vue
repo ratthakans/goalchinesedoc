@@ -42,14 +42,13 @@
                 item?.material?.photo ? '' : 'v-avatar-light-bg primary--text'
               "
               :variant="!item?.material?.photo ? 'tonal' : undefined"
-              tile
               rounded="lg"
             >
               <v-img
                 v-if="item?.material?.photo"
                 :src="`${baseUrl}${item?.material?.photo}`"
               />
-              <v-icon v-else>mdi-notebook-edit</v-icon>
+              <v-img v-else :src="iconDocument" />
             </v-avatar>
           </template>
 
@@ -104,14 +103,14 @@
 </template>
 
 <script>
-// import WebViewer from "@pdftron/webviewer";
-// import pptx from "../../../public/example.pptx";
 import { mapState } from "pinia";
 import { useAppStore } from "@/stores/app";
+import iconDocument from "@/assets/document.png";
 export default {
   name: "StudentMaterials",
   data() {
     return {
+      iconDocument,
       isFullScreen: false,
       showDocument: false,
       search: "",

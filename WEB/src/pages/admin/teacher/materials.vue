@@ -45,15 +45,14 @@
           <template #item.name="{ item }">
             <div class="d-flex align-center">
               <v-avatar
-                size="45"
+                size="64"
                 :color="item.photo ? '' : 'grey lighten-4'"
                 :class="item.photo ? '' : 'v-avatar-light-bg primary--text'"
                 :variant="!item.photo ? 'tonal' : undefined"
-                tile
                 rounded="lg"
               >
                 <v-img v-if="item.photo" :src="`${baseUrl}${item.photo}`" />
-                <v-icon v-else>mdi-account</v-icon>
+                <v-img v-else :src="iconTeacher" />
               </v-avatar>
               <div class="d-flex flex-column ms-3">
                 <span
@@ -111,9 +110,7 @@
                 v-if="item.photo"
                 :src="`${baseUrl}${item.photo}`"
               />
-              <v-icon color="primary" v-else size="45"
-                >mdi-notebook-edit</v-icon
-              >
+              <v-img v-else :src="iconDocument" />
             </v-avatar>
           </template>
           <template #[`item.date`]="{ item }">
@@ -146,10 +143,14 @@
 <script>
 import { mapState } from "pinia";
 import { useAppStore } from "@/stores/app";
+import iconTeacher from "@/assets/teacher.png";
+import iconDocument from "@/assets/document.png";
 export default {
   name: "TeacherMaterials",
   data() {
     return {
+      iconTeacher,
+      iconDocument,
       permission: {},
       search: "",
       searchMaterials: "",

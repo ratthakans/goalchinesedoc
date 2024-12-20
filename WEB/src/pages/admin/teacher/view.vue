@@ -30,7 +30,7 @@
               v-if="dataTeacher.photo"
               :src="`${baseUrl}${dataTeacher.photo}`"
             />
-            <v-icon v-else>mdi-account</v-icon>
+            <v-img v-else :src="iconTeacher" />
           </v-avatar>
           <div class="d-flex flex-column justify-center">
             <h4 class="text-h4 font-weight-bold white--text">
@@ -121,10 +121,12 @@
 </template>
 
 <script>
+import iconTeacher from "@/assets/teacher.png";
 export default {
   name: "TeacherView",
   data() {
     return {
+      iconTeacher,
       tab: null,
       dataTeacher: {},
       dataMaterials: [],

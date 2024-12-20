@@ -129,6 +129,7 @@
                   single-line
                   hide-details="auto"
                   placeholder="Enter school name"
+                  :rules="[(v) => !!v || 'School name is required']"
                 />
               </v-col>
             </v-row>
@@ -283,6 +284,7 @@
                   outlined
                   hide-details="auto"
                   placeholder="Select class"
+                  :rules="[(v) => !!v || 'Student type is required']"
                 />
               </v-col>
               <v-col cols="12" md="4">
@@ -298,6 +300,7 @@
                   outlined
                   hide-details="auto"
                   placeholder="Select class"
+                  :rules="[(v) => !!v || 'Class type is required']"
                 />
               </v-col>
 

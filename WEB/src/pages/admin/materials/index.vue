@@ -52,7 +52,12 @@
           show-select
         >
           <template #[`item.photo`]="{ item }">
-            <v-avatar size="64" rounded color="grey lighten-4" class="my-2">
+            <v-avatar
+              size="64"
+              rounded="lg"
+              color="grey lighten-4"
+              class="my-2"
+            >
               <v-img
                 height="64"
                 width="64"
@@ -60,9 +65,7 @@
                 v-if="item.photo"
                 :src="`${baseUrl}${item.photo}`"
               />
-              <v-icon color="primary" v-else size="45"
-                >mdi-notebook-edit</v-icon
-              >
+              <v-img v-else :src="iconDocument" />
             </v-avatar>
           </template>
           <template #[`item.date`]="{ item }">
@@ -105,10 +108,12 @@
 <script>
 import { mapState } from "pinia";
 import { useAppStore } from "@/stores/app";
+import iconDocument from "@/assets/document.png";
 export default {
   name: "MaterialsPage",
   data() {
     return {
+      iconDocument,
       permission: {},
       search: "",
       headersMaterials: [

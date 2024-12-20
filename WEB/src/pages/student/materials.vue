@@ -43,9 +43,7 @@
                 v-if="item.photo"
                 :src="`${baseUrl}${item.photo}`"
               />
-              <v-icon color="primary" v-else size="45"
-                >mdi-notebook-edit</v-icon
-              >
+              <v-img v-else :src="iconDocument" />
             </v-avatar>
           </template>
 
@@ -70,12 +68,14 @@ import { mapState } from "pinia";
 import { useAppStore } from "@/stores/app";
 
 import WebViewer from "@pdftron/webviewer";
+import iconDocument from "@/assets/document.png";
 
 export default {
   name: "StudentMaterials",
 
   data() {
     return {
+      iconDocument,
       isFullScreen: false,
       search: "",
       headers: [
