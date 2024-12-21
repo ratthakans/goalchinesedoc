@@ -16,10 +16,7 @@ const app = express();
 // Log application startup
 logger.info("Application is starting...");
 
-if (process.env.NODE_ENV === "development") {
-  console.log("Running in development mode");
-  app.use(cors()); // Allow unrestricted CORS in development
-}
+app.use(cors()); // Allow unrestricted CORS in development
 
 // Middleware
 app.use(bodyParser.json());

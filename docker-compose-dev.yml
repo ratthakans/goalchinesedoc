@@ -19,34 +19,23 @@ services:
     environment:
       - NODE_ENV=development
 
-# api-server:
-#     build: ./api-server
-#     ports:
-#       - "3000:3000"
-      # depends_on:
-      #   - db
-#     volumes:
-#       - ./api-server:/usr/src/app
-#     environment:
-#       - NODE_ENV=development
-
-  # api:
-  #   build:
-  #     context: ./API
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "3000:3000"
-  #   container_name: api
-  #   restart: always
-  #   environment:
-  #     MONGO_URL: mongodb://mongo:27017/hap_db
-  #   depends_on:
-  #     - mongo
+api:
+    build: ./API
+    dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+      depends_on:
+        - db
+    volumes:
+      - ./API:/usr/src/app
+    environment:
+      - NODE_ENV=development
+    restart: always
 
   db:
     image: mysql
     environment:
-      MYSQL_ROOT_PASSWORD: example
+      MYSQL_ROOT_PASSWORD: my-strong-password
     volumes:
       - db_data:/var/lib/mysql 
 volumes:

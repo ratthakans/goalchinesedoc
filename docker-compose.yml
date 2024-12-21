@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  backend:
+    container_name: api-backend
+    build:
+      context: ./API
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - DB_HOST=db
+      - DB_USER=root
+      - DB_PASSWORD=@numberoneOFschool01
+      - DB_NAME=dailychineseclass
+    depends_on:
+      - db
+
+  frontend:
+    container_name: web-frontend
+    build:
+      context: ./WEB
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    environment:
+      - BASE_URL=/
+      - VUE_APP_API_URL=http://localhost:3000/api
+      - VUE_APP_API_IMAGE=http://localhost:3000/
+      - VUE_APP_PDF_LICENSE=demo:1734577804655:7ea8e4310300000000c8233fd7af5b03b95ca487e4adb98e8228071952
+
+  db:
+    container_name: mysql-db
+    image: mysql:latest
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=@numberoneOFschool01
+      - MYSQL_DATABASE=dailychineseclass
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:
