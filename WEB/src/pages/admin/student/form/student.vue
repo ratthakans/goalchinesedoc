@@ -17,6 +17,7 @@
                   single-line
                   hide-details="auto"
                   placeholder="Enter Student name"
+                  :readonly="flagView"
                   :rules="[(v) => !!v || 'Name is required']"
                 />
               </v-col>
@@ -28,6 +29,7 @@
                   row
                   hide-details="auto"
                   v-model="formInput.gender"
+                  :readonly="flagView"
                 >
                   <v-radio label="Male" value="Male" />
                   <v-radio label="Female" value="Female" />
@@ -35,9 +37,7 @@
                 </v-radio-group>
               </v-col>
               <v-col cols="12" md="">
-                <label class="v-label mb-2 text-subtitle-2"
-                  ><span class="red--text mr-2">*</span>Age :
-                </label>
+                <label class="v-label mb-2 text-subtitle-2">Age : </label>
                 <v-text-field
                   v-model="age"
                   dense
@@ -72,6 +72,7 @@
                       hide-details="auto"
                       :rules="[(v) => !!v || 'Birthday is required']"
                       readonly
+                      :disabled="flagView"
                       v-bind="attrs"
                       v-on="on"
                     ></v-text-field>
@@ -102,6 +103,7 @@
                   hide-details="auto"
                   placeholder="Enter address"
                   rows="2"
+                  :readonly="flagView"
                 />
               </v-col>
               <v-col cols="12" md="4">
@@ -113,6 +115,7 @@
                   single-line
                   hide-details="auto"
                   placeholder="Enter phone number"
+                  :readonly="flagView"
                 />
               </v-col>
 
@@ -130,6 +133,7 @@
                   hide-details="auto"
                   placeholder="Enter school name"
                   :rules="[(v) => !!v || 'School name is required']"
+                  :readonly="flagView"
                 />
               </v-col>
             </v-row>
@@ -156,8 +160,9 @@
                   :filled="flagEdit"
                   hide-details="auto"
                   placeholder="Enter user name"
-                  :disabled="flagEdit"
+                  :disabled="flagEdit || flagView"
                   :rules="[(v) => !!v || 'User Name is required']"
+                  :readonly="flagView"
                 />
               </v-col>
               <v-col cols="12" md="4">
@@ -174,6 +179,7 @@
                   placeholder="Enter password"
                   :append-icon="showPassword ? 'mdi-eye-off' : 'mdi-eye'"
                   @click:append="showPassword = !showPassword"
+                  :readonly="flagView"
                   :rules="[
                     (v) => (flagEdit ? true : !!v || 'Password is required'),
                   ]"
@@ -186,6 +192,7 @@
                   </label>
                   <v-checkbox
                     v-model="notExpired"
+                    :readonly="flagView"
                     label="not yet"
                     hide-details="auto"
                     dense
@@ -213,6 +220,7 @@
                           notExpired ? true : !!v || 'Expire date is required',
                       ]"
                       readonly
+                      :disabled="flagView"
                       v-bind="attrs"
                       v-on="on"
                     ></v-text-field>
@@ -258,6 +266,7 @@
                       hide-details="auto"
                       :rules="[(v) => !!v || 'Addmission date is required']"
                       readonly
+                      :disabled="flagView"
                       v-bind="attrs"
                       v-on="on"
                     ></v-text-field>
@@ -285,6 +294,7 @@
                   hide-details="auto"
                   placeholder="Select class"
                   :rules="[(v) => !!v || 'Student type is required']"
+                  :readonly="flagView"
                 />
               </v-col>
               <v-col cols="12" md="4">
@@ -301,6 +311,7 @@
                   hide-details="auto"
                   placeholder="Select class"
                   :rules="[(v) => !!v || 'Class type is required']"
+                  :readonly="flagView"
                 />
               </v-col>
 
@@ -326,6 +337,7 @@
                       hide-details="auto"
                       :rules="[(v) => !!v || 'EndClass date is required']"
                       readonly
+                      :disabled="flagView"
                       v-bind="attrs"
                       v-on="on"
                     ></v-text-field>
@@ -349,6 +361,7 @@
                   hide-details="auto"
                   placeholder="Enter addmission number"
                   :rules="[(v) => !!v || 'Addmission number is required']"
+                  :readonly="flagView"
                 />
               </v-col>
               <v-col cols="12" md="4">
@@ -361,6 +374,7 @@
                   outlined
                   label="Choose a file..."
                   hide-details="auto"
+                  :readonly="flagView"
                 />
               </v-col>
 
@@ -377,6 +391,7 @@
                     hide-details="auto"
                     placeholder="Select class"
                     :rules="[(v) => !!v || 'Status is required']"
+                    :readonly="flagView"
                   />
                 </v-col>
                 <v-col cols="12">
@@ -392,6 +407,7 @@
                     outlined
                     hide-details="auto"
                     placeholder="Select branch"
+                    :readonly="flagView"
                   />
                 </v-col>
               </v-col>
@@ -407,6 +423,7 @@
                   single-line
                   hide-details="auto"
                   placeholder="Enter note details"
+                  :readonly="flagView"
                 />
               </v-col>
             </v-row>
@@ -415,9 +432,9 @@
       </v-col>
     </v-row>
 
-    <FeeStructureComponent />
+    <FeeStructureComponent :flagView="true" />
 
-    <ScoreStructureComponent />
+    <ScoreStructureComponent :flagView="true" />
   </div>
 </template>
 
@@ -436,6 +453,10 @@ export default {
       default: () => ({}),
     },
     flagEdit: {
+      type: Boolean,
+      default: false,
+    },
+    flagView: {
       type: Boolean,
       default: false,
     },

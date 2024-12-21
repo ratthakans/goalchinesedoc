@@ -49,7 +49,7 @@
           <v-tab :key="1"> General </v-tab>
           <v-tab :key="2"> Materials list </v-tab>
           <v-tab :key="3"> Payment History </v-tab>
-          <v-tab :key="4"> Class list </v-tab>
+          <v-tab :key="4"> Class History </v-tab>
         </v-tabs>
 
         <v-tabs-items v-model="tab">
@@ -57,11 +57,19 @@
             <v-container fluid>
               <v-row>
                 <v-col cols="12">
-                  <v-card outlined height="250">
+                  <v-card outlined min-height="250">
                     <v-card-title primary-title>
                       General <v-spacer></v-spacer>
-                      <v-icon>mdi-pencil-box-outline</v-icon>
+                      <v-btn
+                        icon
+                        :to="`/admin/student/edit/${$route.params.id}`"
+                      >
+                        <v-icon>mdi-pencil-box-outline</v-icon>
+                      </v-btn>
                     </v-card-title>
+                    <v-card-text>
+                      <FormStudent :editItems="dataStudent" :flagView="true" />
+                    </v-card-text>
                   </v-card>
                 </v-col>
               </v-row>
@@ -142,7 +150,7 @@
                 <v-col cols="12">
                   <v-card outlined height="250">
                     <v-card-title primary-title>
-                      Class list<v-spacer></v-spacer>
+                      Class History<v-spacer></v-spacer>
                       <v-icon>mdi-pencil-box-outline</v-icon>
                     </v-card-title>
                   </v-card>
@@ -158,8 +166,12 @@
 
 <script>
 import iconStudent from "@/assets/student.png";
+import FormStudent from "./form/student.vue";
 export default {
   name: "ViewStudent",
+  components: {
+    FormStudent,
+  },
   data() {
     return {
       iconStudent,
@@ -171,7 +183,7 @@ export default {
   watch: {
     tab(val) {
       if (val === 0) {
-        // this.fetchDataById();
+        this.fetchDataById();
       } else if (val === 1) {
         this.fetchDataMaterials();
       } else if (val === 2) {
@@ -180,7 +192,7 @@ export default {
     },
   },
   created() {
-    this.fetchDataById();
+    // this.fetchDataById();
   },
   methods: {
     async fetchDataById() {
@@ -188,7 +200,26 @@ export default {
         const { data } = await this.axios.get(
           `/account/${this.$route.params.id}`
         );
-        this.dataStudent = data;
+        this.dataStudent = {
+          ...data,
+          dateOfBirth: new Date(data.dateOfBirth)
+            .toISOString()
+            .substring(0, 10),
+
+          addmissionDate: new Date(data.addmissionDate)
+            .toISOString()
+            .substring(0, 10),
+
+          endClassDate: new Date(data.endClassDate)
+            .toISOString()
+            .substring(0, 10),
+
+          username: data?.user?.username,
+          password: "",
+          expireDate: data?.user?.expireDate
+            ? new Date(data?.user?.expireDate).toISOString().substring(0, 10)
+            : "",
+        };
       } catch (error) {
         this.$swal.fire({
           title: error.response.data.error,

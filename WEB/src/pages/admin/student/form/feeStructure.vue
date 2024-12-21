@@ -18,6 +18,7 @@
                 icon
                 @click="saveFeestructure(item.id, item, inx)"
                 v-if="userInfo?.role !== 'user' || permission?.edit"
+                v-show="!flagView"
               >
                 <v-icon>mdi-content-save</v-icon>
               </v-btn>
@@ -26,6 +27,7 @@
                 dense
                 icon
                 @click="deleteFeeStructure(item.id, inx)"
+                v-show="!flagView"
                 v-if="userInfo?.role !== 'user' || permission?.delete"
               >
                 <v-icon>mdi-trash-can</v-icon>
@@ -47,6 +49,7 @@
                       hide-details="auto"
                       placeholder="Select update date"
                       background-color="surface"
+                      :readonly="flagView"
                       :rules="[(v) => !!v || 'Update date is required']"
                     />
                   </v-col>
@@ -60,6 +63,7 @@
                       outlined
                       hide-details="auto"
                       background-color="surface"
+                      :readonly="flagView"
                       :rules="[(v) => !!v || 'Class type is required']"
                     />
                   </v-col>
@@ -77,6 +81,7 @@
                       hide-details="auto"
                       placeholder="Select class"
                       background-color="surface"
+                      :readonly="flagView"
                       :rules="[(v) => !!v || 'Branch is required']"
                     />
                   </v-col>
@@ -93,6 +98,7 @@
                       hide-details="auto"
                       placeholder="Enter amount"
                       background-color="surface"
+                      :readonly="flagView"
                       :rules="[(v) => !!v || 'Amount is required']"
                     />
                   </v-col>
@@ -109,6 +115,7 @@
                       hide-details="auto"
                       placeholder="Enter fee"
                       background-color="surface"
+                      :readonly="flagView"
                       :rules="[(v) => !!v || 'Fee is required']"
                     />
                   </v-col>
@@ -123,6 +130,7 @@
                       single-line
                       hide-details="auto"
                       placeholder="Enter discount"
+                      :readonly="flagView"
                       background-color="surface"
                     />
                   </v-col>
@@ -135,6 +143,7 @@
                       single-line
                       hide-details="auto"
                       placeholder="Enter note"
+                      :readonly="flagView"
                       background-color="surface"
                     />
                   </v-col>
@@ -151,6 +160,7 @@
           top
           small
           @click="addFeeStructure"
+          v-show="!flagView"
           v-if="userInfo?.role !== 'user' || permission?.create"
         >
           <v-icon>mdi-plus</v-icon>
@@ -164,6 +174,12 @@
 import { mapState } from "pinia";
 import { useAppStore } from "@/stores/app";
 export default {
+  props: {
+    flagView: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data() {
     return {
       permission: {},

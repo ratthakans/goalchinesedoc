@@ -97,6 +97,10 @@ exports.findAll = async (req, res) => {
     }
 
     const accounts = await Account.findAll({
+      order: [
+        ["status", "ASC"],
+        ["createdAt", "DESC"],
+      ],
       include: [
         {
           model: User,

@@ -118,6 +118,7 @@ exports.findAll = async (req, res, next) => {
 
     const materials = await Materials.findAll({
       where,
+      order: [["createdAt", "DESC"]],
       include: [
         {
           association: "materialCategory",

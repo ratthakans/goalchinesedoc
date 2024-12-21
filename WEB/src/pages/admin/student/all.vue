@@ -133,7 +133,7 @@ export default {
       headers: [
         {
           align: "start",
-          value: "id",
+          value: "addmissionNo",
           sortable: false,
           text: "Admission No.",
           width: "2%",
