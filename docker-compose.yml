@@ -19,8 +19,7 @@ services:
       - DB_PASSWORD=@numberoneOFschool01
       - DB_NAME=dailychineseclass
     depends_on:
-        db:
-          condition: service_healthy
+      - db
 
   frontend:
     container_name: web-frontend
