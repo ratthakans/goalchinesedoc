@@ -41,7 +41,7 @@ services:
       - MYSQL_ROOT_PASSWORD=@numberoneOFschool01
       - MYSQL_DATABASE=dailychineseclass
     volumes:
-      - db_data:/var/lib/mysql
+      - ./db_data:/var/lib/mysql
 
 volumes:
   db_data:
