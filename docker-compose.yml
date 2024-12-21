@@ -26,10 +26,23 @@ services:
     build:
       context: ./WEB
       dockerfile: Dockerfile
-    volumes:
-      - ./WEB/nginx.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - "8080:80"
+    environment:
+      - NODE_ENV=production
+
+  nginx:
+    image: nginx:stable-alpine
+    container_name: nginx-server
     ports:
       - "80:80"
+    depends_on:
+      - frontend
+      - backend
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./API/uploads:/var/www/backend/uploads
+      - ./API/logs:/var/www/backend/logs
 
   db:
     container_name: mysql-db
