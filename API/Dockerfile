@@ -14,6 +14,10 @@ COPY . .
 # Create uploads and logs directories
 RUN mkdir -p /usr/src/app/uploads /usr/src/app/logs
 
+RUN chown -R www-data:www-data /usr/src/app/uploads /usr/src/app/logs
+
+RUN chmod -R 755 /usr/src/app/uploads /usr/src/app/logs
+
 # Expose port 3000
 EXPOSE 3000
 
