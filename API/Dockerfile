@@ -18,4 +18,4 @@ RUN mkdir -p /usr/src/app/uploads /usr/src/app/logs
 EXPOSE 3000
 
 # Start the backend application
-CMD ["node", "src/app.js"]
+CMD [ "npm", "start" ]
