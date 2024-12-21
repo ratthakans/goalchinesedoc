@@ -18,6 +18,7 @@
                   hide-details="auto"
                   placeholder="Enter name"
                   :rules="[(v) => !!v || 'Name is required']"
+                  :readonly="flagView"
                 />
               </v-col>
               <v-col cols="12" md="auto">
@@ -28,6 +29,7 @@
                   row
                   hide-details="auto"
                   v-model="formInput.gender"
+                  :readonly="flagView"
                 >
                   <v-radio label="Male" value="Male" />
                   <v-radio label="Female" value="Female" />
@@ -72,6 +74,7 @@
                       hide-details="auto"
                       :rules="[(v) => !!v || 'Birthday is required']"
                       readonly
+                      :disabled="flagView"
                       v-bind="attrs"
                       v-on="on"
                     ></v-text-field>
@@ -105,6 +108,7 @@
                   placeholder="Enter user name"
                   :disabled="flagEdit"
                   :rules="[(v) => !!v || 'User Name is required']"
+                  :readonly="flagView"
                 />
               </v-col>
               <v-col cols="12" md="4">
@@ -121,6 +125,7 @@
                   placeholder="Enter password"
                   :append-icon="showPassword ? 'mdi-eye-off' : 'mdi-eye'"
                   @click:append="showPassword = !showPassword"
+                  :readonly="flagView"
                   :rules="[
                     (v) => (flagEdit ? true : !!v || 'Password is required'),
                   ]"
@@ -136,6 +141,7 @@
                   single-line
                   hide-details="auto"
                   placeholder="Enter address"
+                  :readonly="flagView"
                   rows="2"
                 />
               </v-col>
@@ -148,6 +154,7 @@
                   single-line
                   hide-details="auto"
                   placeholder="Enter phone number"
+                  :readonly="flagView"
                 />
               </v-col>
 
@@ -163,6 +170,7 @@
                   hide-details="auto"
                   placeholder="Enter resume number"
                   :rules="[(v) => !!v || 'Resume No is required']"
+                  :readonly="flagView"
                 />
               </v-col>
             </v-row>
@@ -199,6 +207,7 @@
                       hide-details="auto"
                       :rules="[(v) => !!v || 'Birthday is required']"
                       readonly
+                      :disabled="flagView"
                       v-bind="attrs"
                       v-on="on"
                     ></v-text-field>
@@ -223,6 +232,7 @@
                   hide-details="auto"
                   placeholder="Enter Score"
                   :rules="[(v) => !!v || 'Score is required']"
+                  :readonly="flagView"
                 />
               </v-col>
               <v-col cols="12" md="4">
@@ -237,6 +247,7 @@
                   hide-details="auto"
                   placeholder="Enter Score"
                   :rules="[(v) => !!v || 'Score is required']"
+                  :readonly="flagView"
                 />
               </v-col>
 
@@ -254,6 +265,7 @@
                   hide-details="auto"
                   placeholder="Select teacher type"
                   :rules="[(v) => !!v || 'Teacher type is required']"
+                  :readonly="flagView"
                 />
               </v-col>
               <v-col cols="12" md="4">
@@ -268,6 +280,7 @@
                   hide-details="auto"
                   placeholder="Enter register number"
                   :rules="[(v) => !!v || 'Register No is required']"
+                  :readonly="flagView"
                 />
               </v-col>
               <v-col cols="12" md="4">
@@ -279,6 +292,7 @@
                   dense
                   outlined
                   hide-details="auto"
+                  :readonly="flagView"
                 />
               </v-col>
               <v-col cols="12" md="8">
@@ -294,6 +308,7 @@
                       outlined
                       hide-details="auto"
                       placeholder="Select class"
+                      :readonly="flagView"
                     />
                   </v-col>
                   <v-col cols="12" md="6">
@@ -307,6 +322,7 @@
                       single-line
                       hide-details="auto"
                       placeholder="Enter language"
+                      :readonly="flagView"
                     />
                   </v-col>
                   <v-col cols="12" md="6">
@@ -321,6 +337,7 @@
                       hide-details="auto"
                       placeholder="Select class"
                       :rules="[(v) => !!v || 'Status is required']"
+                      :readonly="flagView"
                     />
                   </v-col>
                 </v-row>
@@ -337,6 +354,7 @@
                   single-line
                   hide-details="auto"
                   placeholder="Enter note details"
+                  :readonly="flagView"
                   rows="2"
                 />
               </v-col>
@@ -346,9 +364,9 @@
       </v-col>
     </v-row>
 
-    <FeeStructureComponent />
+    <FeeStructureComponent :flagView="flagView" />
 
-    <ScoreStructureComponent />
+    <ScoreStructureComponent :flagView="flagView" />
   </div>
 </template>
 
@@ -367,6 +385,10 @@ export default {
       default: () => ({}),
     },
     flagEdit: {
+      type: Boolean,
+      default: false,
+    },
+    flagView: {
       type: Boolean,
       default: false,
     },

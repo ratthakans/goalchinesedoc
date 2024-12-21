@@ -61,7 +61,7 @@ export default {
             .substring(0, 10),
 
           username: data.user.username,
-          password: null,
+          password: "",
         };
       } catch (error) {
         this.$swal.fire({

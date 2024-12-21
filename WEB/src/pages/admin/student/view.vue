@@ -79,7 +79,7 @@
             <v-container fluid>
               <v-row>
                 <v-col cols="12">
-                  <v-card outlined height="250">
+                  <v-card outlined min-height="250">
                     <v-card-title primary-title>
                       Materials list <v-spacer></v-spacer>
                       <v-icon>mdi-pencil-box-outline</v-icon>
@@ -115,7 +115,7 @@
             <v-container fluid>
               <v-row>
                 <v-col cols="12">
-                  <v-card outlined height="250">
+                  <v-card outlined min-height="250">
                     <v-card-title primary-title>
                       Payment History <v-spacer></v-spacer>
                       <v-icon>mdi-pencil-box-outline</v-icon>

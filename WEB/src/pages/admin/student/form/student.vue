@@ -432,9 +432,9 @@
       </v-col>
     </v-row>
 
-    <FeeStructureComponent :flagView="true" />
+    <FeeStructureComponent :flagView="flagView" />
 
-    <ScoreStructureComponent :flagView="true" />
+    <ScoreStructureComponent :flagView="flagView" />
   </div>
 </template>
 

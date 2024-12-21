@@ -87,7 +87,10 @@ exports.findAll = async (req, res) => {
 
     const classes = await Class.findAll({
       where,
-      order: [["createdAt", "DESC"]],
+      order: [
+        ["status", "ASC"],
+        ["createdAt", "DESC"],
+      ],
       include: [
         { model: ClassStudy, as: "classStudy" },
         {

@@ -17,7 +17,8 @@
                 dense
                 icon
                 @click="saveScorestructure(item.id, item, inx)"
-                v-if="permission?.edit"
+                v-show="!flagView"
+                v-if="userInfo?.role !== 'user' || permission?.edit"
               >
                 <v-icon>mdi-content-save</v-icon>
               </v-btn>
@@ -26,7 +27,8 @@
                 dense
                 icon
                 @click="deleteScoreStructure(item.id, inx)"
-                v-if="permission?.delete"
+                v-show="!flagView"
+                v-if="userInfo?.role !== 'user' || permission?.delete"
               >
                 <v-icon>mdi-trash-can</v-icon>
               </v-btn>
@@ -48,6 +50,7 @@
                       placeholder="Select update date"
                       background-color="surface"
                       :rules="[(v) => !!v || 'Update date is required']"
+                      :readonly="flagView"
                     />
                   </v-col>
 
@@ -64,6 +67,7 @@
                           single-line
                           hide-details="auto"
                           background-color="surface"
+                          :readonly="flagView"
                         />
                       </v-col>
 
@@ -78,6 +82,7 @@
                           single-line
                           hide-details="auto"
                           background-color="surface"
+                          :readonly="flagView"
                         />
                       </v-col>
                       <v-col cols="12" md="">
@@ -91,6 +96,7 @@
                           single-line
                           hide-details="auto"
                           background-color="surface"
+                          :readonly="flagView"
                         />
                       </v-col>
                     </v-row>
@@ -107,6 +113,7 @@
                       single-line
                       hide-details="auto"
                       background-color="surface"
+                      :readonly="flagView"
                     />
                   </v-col>
                   <v-col cols="12" md="8">
@@ -120,6 +127,7 @@
                       single-line
                       hide-details="auto"
                       background-color="surface"
+                      :readonly="flagView"
                     />
                   </v-col>
                   <v-col cols="12" md="4">
@@ -148,7 +156,8 @@
           top
           small
           @click="addFeeStructure"
-          v-if="permission?.create"
+          v-show="!flagView"
+          v-if="userInfo?.role !== 'user' || permission?.create"
         >
           <v-icon>mdi-plus</v-icon>
         </v-btn>
@@ -161,6 +170,12 @@
 import { mapState } from "pinia";
 import { useAppStore } from "@/stores/app";
 export default {
+  props: {
+    flagView: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data() {
     return {
       permission: {},

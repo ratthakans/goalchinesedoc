@@ -94,6 +94,7 @@ const Account = sequelize.define(
     },
     status: {
       type: DataTypes.STRING,
+      defaultValue: "Active",
     },
   },
   {

@@ -54,11 +54,19 @@
             <v-container fluid>
               <v-row>
                 <v-col cols="12">
-                  <v-card outlined height="250">
+                  <v-card outlined nin-height="250">
                     <v-card-title primary-title>
                       General <v-spacer></v-spacer>
-                      <v-icon>mdi-pencil-box-outline</v-icon>
+                      <v-btn
+                        icon
+                        :to="`/admin/teacher/edit/${$route.params.id}`"
+                      >
+                        <v-icon>mdi-pencil-box-outline</v-icon>
+                      </v-btn>
                     </v-card-title>
+                    <v-card-text>
+                      <FormTeacher :editItems="dataTeacher" :flagView="true" />
+                    </v-card-text>
                   </v-card>
                 </v-col>
               </v-row>
@@ -68,7 +76,7 @@
             <v-container fluid>
               <v-row>
                 <v-col cols="12">
-                  <v-card outlined height="250">
+                  <v-card outlined min-height="250">
                     <v-card-title primary-title>
                       Materials list <v-spacer></v-spacer>
                       <v-icon>mdi-pencil-box-outline</v-icon>
@@ -102,13 +110,16 @@
           </v-tab-item>
           <v-tab-item :key="2">
             <v-container fluid>
-              <v-row>
+              <v-row class="fill-height">
                 <v-col cols="12">
-                  <v-card outlined height="250">
-                    <v-card-title primary-title>
-                      Class list <v-spacer></v-spacer>
-                      <v-icon>mdi-pencil-box-outline</v-icon>
-                    </v-card-title>
+                  <v-card outlined class="fill-height">
+                    <v-card-title primary-title> Class list </v-card-title>
+                    <v-card-text>
+                      <CalendarComponent
+                        @fetchEvents="onFetchEvents"
+                        :eventsItems="events"
+                      />
+                    </v-card-text>
                   </v-card>
                 </v-col>
               </v-row>
@@ -122,29 +133,36 @@
 
 <script>
 import iconTeacher from "@/assets/teacher.png";
+import FormTeacher from "./form/teacher.vue";
+import CalendarComponent from "@/components/Calendar.vue";
 export default {
   name: "TeacherView",
+  components: {
+    FormTeacher,
+    CalendarComponent,
+  },
   data() {
     return {
       iconTeacher,
       tab: null,
       dataTeacher: {},
       dataMaterials: [],
+      events: [],
     };
   },
   watch: {
     tab(val) {
       if (val === 0) {
-        // this.fetchDataById();
+        this.fetchDataById();
       } else if (val === 1) {
         this.fetchDataMaterials();
       } else if (val === 2) {
-        // this.fetchDataById();
+        this.onFetchEvents();
       }
     },
   },
   created() {
-    this.fetchDataById();
+    // this.fetchDataById();
   },
   methods: {
     async fetchDataById() {
@@ -152,7 +170,19 @@ export default {
         const { data } = await this.axios.get(
           `/account/${this.$route.params.id}`
         );
-        this.dataTeacher = data;
+        this.dataTeacher = {
+          ...data,
+          dateOfBirth: new Date(data.dateOfBirth)
+            .toISOString()
+            .substring(0, 10),
+
+          registerDate: new Date(data.registerDate)
+            .toISOString()
+            .substring(0, 10),
+
+          username: data.user.username,
+          password: "",
+        };
       } catch (error) {
         this.$swal.fire({
           title: error.response.data.error,
@@ -174,6 +204,20 @@ export default {
             text: error.response.data.details,
             icon: "error",
           });
+      }
+    },
+    async onFetchEvents() {
+      try {
+        const { data } = await this.axios.get(
+          `/classEvents?teacherId=${this.$route.params.id}`
+        );
+        this.events = data || [];
+      } catch (error) {
+        this.$swal.fire({
+          title: error.response.data.error,
+          text: error.response.data.details,
+          icon: "error",
+        });
       }
     },
   },
