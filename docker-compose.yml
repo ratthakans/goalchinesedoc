@@ -8,6 +8,7 @@ services:
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
+    restart: always
     environment:
       - NODE_ENV=production
       - DB_HOST=db
@@ -26,8 +27,8 @@ services:
       - "80:80"
     environment:
       - BASE_URL=/
-      - VUE_APP_API_URL=http://localhost:3000/api
-      - VUE_APP_API_IMAGE=http://localhost:3000/
+      - VUE_APP_API_URL=http://backend:3000/api
+      - VUE_APP_API_IMAGE=http://backend:3000/
       - VUE_APP_PDF_LICENSE=demo:1734577804655:7ea8e4310300000000c8233fd7af5b03b95ca487e4adb98e8228071952
 
   db:
