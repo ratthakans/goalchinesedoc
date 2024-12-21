@@ -23,7 +23,7 @@ services:
       context: ./WEB
       dockerfile: Dockerfile
     ports:
-      - "8080:80"
+      - "80:80"
     environment:
       - BASE_URL=/
       - VUE_APP_API_URL=http://localhost:3000/api
