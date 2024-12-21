@@ -27,7 +27,7 @@ services:
       context: ./WEB
       dockerfile: Dockerfile
     volumes:
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./WEB/nginx.conf:/etc/nginx/conf.d/default.conf
     ports:
       - "80:80"
 
