@@ -26,7 +26,12 @@ exports.login = async (req, res) => {
       return res.status(400).json({ error: "Invalid username or password" });
     }
 
-    const account = await Account.findOne({ where: { id: user.accountID } });
+    const account = await Account.findOne({
+      where: { id: user.accountID, status: "Active" },
+    });
+    if (!account) {
+      return res.status(400).json({ error: "Account is not active" });
+    }
 
     const permissions = await Permission.findAll({
       where: { accountID: user.accountID },
