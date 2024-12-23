@@ -222,10 +222,10 @@ export default {
       // } else {
       if (["pptx", "pdf"].includes(item.material.documentType))
         this.fileUrl = `https://view.officeapps.live.com/op/embed.aspx?src=${this.baseUrl}${item.material.document}`;
-      else if (
-        ["canva", "link", "youtube"].includes(item.material.documentType)
-      ) {
+      else if (["link", "youtube"].includes(item.material.documentType)) {
         this.fileUrl = item.material.link;
+      } else if (["canva"].includes(item.material.documentType)) {
+        this.fileUrl = item.material.link + "?embed";
       } else if (item.material.documentType === "mp4") {
         this.fileUrl = `${this.baseUrl}${item.material.document}`;
       }

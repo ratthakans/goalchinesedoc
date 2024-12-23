@@ -179,7 +179,9 @@ export default {
       } else if (["link"].includes(item?.material?.documentType)) {
         const canvaLink = item?.material?.link;
         window.open(canvaLink, "_blank"); // Open in a new tab
-      } else if (["canva", "youtube"].includes(item?.material?.documentType)) {
+      } else if (["canva"].includes(item?.material?.documentType)) {
+        this.fileUrl = item?.material?.link + "?embed";
+      } else if (["youtube"].includes(item?.material?.documentType)) {
         this.fileUrl = item?.material?.link;
       } else if (item?.material?.documentType === "mp4") {
         this.fileUrl = `${this.baseUrl}${item?.material?.document}`;
