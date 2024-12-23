@@ -716,7 +716,7 @@ export default {
           title: this.selectedEvent.name,
           startDate: this.selectedEvent.start,
           startTime: new Date(this.selectedEvent.start).toLocaleTimeString(
-            "en-US",
+            "en-GB",
             {
               hour: "2-digit",
               minute: "2-digit",
@@ -724,7 +724,7 @@ export default {
           ),
           endDate: this.selectedEvent.end,
           endTime: new Date(this.selectedEvent.end).toLocaleTimeString(
-            "en-US",
+            "en-GB",
             {
               hour: "2-digit",
               minute: "2-digit",
@@ -880,8 +880,8 @@ export default {
       for (let i = 0; i < temp.length; i++) {
         const event = temp[i];
         event.name = event.title;
-        event.start = new Date(event.startDate);
-        event.end = new Date(event.endDate);
+        event.start = new Date(event.startDate).toUTCString();
+        event.end = new Date(event.endDate).toUTCString();
         event.timed = true;
       }
       this.events = temp;
