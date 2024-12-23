@@ -28,32 +28,57 @@
           </template>
 
           <template #item.teacherLeave="{ item }">
-            <!-- <v-text-field
-              v-model="item.teacherLeave"
-              dense
-              outlined
-              single-line
-              hide-details="auto"
-              suffix="/ 5"
-              class="w-50"
-              style="inline-size: 70px"
-            ></v-text-field> -->
-
-            <div class="d-flex justify-center">/ {{ item.teacherLeave }}</div>
+            <v-form ref="formTeacherLeave" lazy-validation>
+              <v-text-field
+                v-model="item.inputTeacherLeave"
+                dense
+                outlined
+                single-line
+                hide-details="auto"
+                :suffix="`/ ${item.teacherLeave}`"
+                class="w-50"
+                style="inline-size: 80px"
+                :rules="[
+                  () => item.inputTeacherLeave >= 0 || 'Required',
+                  () =>
+                    (item.inputTeacherLeave >= 0 &&
+                      item.inputTeacherLeave <= item.teacherLeave) ||
+                    'Invalid',
+                ]"
+                @keydown.enter.prevent="
+                  updateClass(item.id, {
+                    inputTeacherLeave: item.inputTeacherLeave,
+                  })
+                "
+              ></v-text-field>
+            </v-form>
           </template>
 
           <template #item.studentLeave="{ item }">
-            <!-- <v-text-field
-              v-model="item.studentLeave"
-              dense
-              outlined
-              single-line
-              hide-details="auto"
-              suffix="/ 5"
-              class="w-50"
-              style="inline-size: 70px"
-            ></v-text-field> -->
-            <div class="d-flex justify-center">0 / {{ item.studentLeave }}</div>
+            <v-form ref="formStudentLeave" lazy-validation>
+              <v-text-field
+                v-model="item.inputStudentLeave"
+                dense
+                outlined
+                single-line
+                hide-details="auto"
+                :suffix="`/ ${item.studentLeave}`"
+                class="w-50"
+                style="inline-size: 80px"
+                :rules="[
+                  () => item.inputStudentLeave >= 0 || 'Required',
+                  () =>
+                    (item.inputStudentLeave >= 0 &&
+                      item.inputStudentLeave <= item.studentLeave) ||
+                    'Invalid',
+                ]"
+                @keydown.enter.prevent="
+                  updateClass(item.id, {
+                    inputStudentLeave: item.inputStudentLeave,
+                  })
+                "
+              ></v-text-field>
+            </v-form>
           </template>
 
           <template #item.times="{ item }">
@@ -202,7 +227,7 @@ export default {
         },
         { value: "name", text: "Class Name", width: "20%" },
         { value: "studyDay", text: "Study day", width: "10%" },
-        { value: "timeSlot", text: "Time slot", width: "10%" },
+        { value: "timeSlot", text: "Time slot", width: "12%" },
         { value: "teacherLeave", text: "Teacher leave", width: "5%" },
         { value: "studentLeave", text: "Student leave", width: "5%" },
         {
@@ -323,6 +348,28 @@ export default {
           status: "",
         };
         this.selectedStatus = "regular";
+        this.fetchData();
+      } catch (error) {
+        this.$swal.fire({
+          title: error.response.data.error,
+          text: error.response.data.details,
+          icon: "error",
+        });
+      }
+    },
+    async updateClass(id, item) {
+      if (item?.inputTeacherLeave) {
+        if (!this.$refs.formTeacherLeave.validate()) return;
+      }
+
+      if (item?.inputStudentLeave) {
+        if (!this.$refs.formStudentLeave.validate()) return;
+      }
+
+      try {
+        const { data } = await this.axios.put(`/classes/${id}`, item);
+
+        this.$swal(data?.message, "", "success");
         this.fetchData();
       } catch (error) {
         this.$swal.fire({

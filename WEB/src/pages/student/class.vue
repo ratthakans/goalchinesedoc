@@ -62,7 +62,9 @@
         >
           <div class="text-grey">Leave class:</div>
           <div class="d-flex justify-center align-center fill-height pb-4">
-            <h3 class="text-h3 font-weight-bold">0 / {{ totalClassTimes }}</h3>
+            <h3 class="text-h3 font-weight-bold">
+              {{ studentLeaveTimes }} / {{ totalLeaveTimes }}
+            </h3>
             <small class="mt-5 text-grey pl-4"> times</small>
           </div>
         </v-sheet>
@@ -97,6 +99,8 @@ export default {
       dataClass: [],
       events: [],
       totalClassTimes: 0,
+      totalLeaveTimes: 0,
+      studentLeaveTimes: 0,
     };
   },
   computed: {
@@ -147,6 +151,12 @@ export default {
         this.dataClass = data;
         this.totalClassTimes = data.reduce((acc, cur) => {
           return acc + cur.registeredTimes;
+        }, 0);
+        this.totalLeaveTimes = data.reduce((acc, cur) => {
+          return acc + cur.studentLeave;
+        }, 0);
+        this.studentLeaveTimes = data.reduce((acc, cur) => {
+          return acc + cur.inputStudentLeave;
         }, 0);
       } catch (error) {
         this.$swal.fire({
