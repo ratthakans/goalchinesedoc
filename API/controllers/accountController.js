@@ -268,7 +268,7 @@ exports.delete = async (req, res, next) => {
     await Permission.destroy({ where: { accountID: id } });
     await User.destroy({ where: { accountID: id } });
 
-    res.status(204).send({ message: "Account deleted successfully" });
+    res.status(200).json({ message: "Account deleted successfully" });
 
     logger.info(
       `Account deleted: ${id} by [${req.user.id}]${req.user.username}`

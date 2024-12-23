@@ -155,11 +155,11 @@ export default {
       this.menus = [
         { text: "Classes", icon: "mdi-table-account", to: "/student/class" },
         { text: "Materials", icon: "mdi-file", to: "/student/materials" },
-        // {
-        //   text: "Library",
-        //   icon: "mdi-book-open-page-variant",
-        //   to: "/student/library",
-        // },
+        {
+          text: "Library",
+          icon: "mdi-book-open-page-variant",
+          to: "/student/library",
+        },
       ];
     }
 

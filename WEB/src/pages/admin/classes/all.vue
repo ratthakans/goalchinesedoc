@@ -135,6 +135,7 @@
                 <v-list-item
                   link
                   v-if="userInfo?.role !== 'user' || permission?.delete"
+                  @click="deleteData(item.id)"
                 >
                   <v-list-item-title>Delete</v-list-item-title>
                 </v-list-item>
@@ -277,7 +278,7 @@ export default {
 
       //delete data from api
       try {
-        const { data } = await this.axios.delete(`/account/${id}`);
+        const { data } = await this.axios.delete(`/classes/${id}`);
         this.$swal(data?.message, "", "success");
         this.fetchData();
       } catch (error) {
