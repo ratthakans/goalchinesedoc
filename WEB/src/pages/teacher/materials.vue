@@ -218,10 +218,9 @@ export default {
       // } else {
       if (["pptx", "pdf"].includes(item.material.documentType))
         this.fileUrl = `https://view.officeapps.live.com/op/embed.aspx?src=${this.baseUrl}${item.material.document}`;
-      else if (["link"].includes(item.material.documentType)) {
-        const canvaLink = item.material.link;
-        window.open(canvaLink, "_blank"); // Open in a new tab
-      } else if (["canva"].includes(item.material.documentType)) {
+      else if (
+        ["canva", "link", "youtube"].includes(item.material.documentType)
+      ) {
         this.fileUrl = item.material.link;
       } else if (item.material.documentType === "mp4") {
         this.fileUrl = `${this.baseUrl}${item.material.document}`;
