@@ -48,11 +48,7 @@
           </template>
 
           <template #item.action="{ item }">
-            <v-btn
-              color="info"
-              class="text-none"
-              @click="(flagView = false), openDoc(item)"
-            >
+            <v-btn color="info" class="text-none" @click="openDoc(item)">
               view
             </v-btn>
           </template>
@@ -117,60 +113,9 @@ export default {
   created() {
     this.fetchDataMaterials();
   },
-  mounted() {
-    WebViewer(
-      {
-        // disabledElements: ["default-top-header"],
-        path: `${process.env.BASE_URL}webviewer`,
-        initialDoc: this.fileUrl, //`${this.baseUrl}${item.material.document}`, //"https://getsamplefiles.com/download/pptx/sample-2.pptx",
-        licenseKey: process.env.VUE_APP_PDF_LICENSE, // sign up to get a free trial key at https://dev.apryse.com
-      },
-      this.$refs.viewer
-    ).then((instance) => {
-      // hide the ribbons
-      instance.UI.disableElements(["default-ribbon-group"]);
-      instance.UI.disableElements(["tools-header"]);
-      instance.UI.disableElements(["leftPanelButton"]);
-      instance.UI.disableElements(["searchPanelToggle"]);
-      instance.UI.disableElements(["notesPanelToggle"]);
-      instance.UI.disableElements(["groupedLeftHeaderButtons"]);
-
-      const { documentViewer } = instance.Core;
-
-      documentViewer.setWatermark({
-        // Draw diagonal watermark in middle of the document
-        diagonal: {
-          fontSize: 25, // or even smaller size
-          fontFamily: "sans-serif",
-          color: "red",
-          opacity: 50, // from 0 to 100
-          text: this.userInfo.name,
-        },
-      });
-    });
-  },
+  mounted() {},
   methods: {
     toggleFullScreen() {
-      // const iframe = this.$refs.myIframe;
-
-      // if (!this.isFullScreen) {
-      //   if (iframe.requestFullscreen) {
-      //     iframe.requestFullscreen();
-      //   } else if (iframe.webkitRequestFullscreen) {
-      //     iframe.webkitRequestFullscreen(); // Safari
-      //   } else if (iframe.msRequestFullscreen) {
-      //     iframe.msRequestFullscreen(); // IE/Edge
-      //   }
-      // } else {
-      //   if (document.exitFullscreen) {
-      //     document.exitFullscreen();
-      //   } else if (document.webkitExitFullscreen) {
-      //     document.webkitExitFullscreen(); // Safari
-      //   } else if (document.msExitFullscreen) {
-      //     document.msExitFullscreen(); // IE/Edge
-      //   }
-      // }
-
       // Update the fullscreen state
       this.isFullScreen = !this.isFullScreen;
     },
@@ -190,7 +135,8 @@ export default {
       }
     },
     openDoc(item) {
-      this.flagView = true;
+      this.flagView = false;
+
       if (["pptx", "pdf"].includes(item.material.documentType)) {
         this.fileUrl = `${this.baseUrl}${item.material.document}`;
       } else if (["link"].includes(item.material.documentType)) {
@@ -202,6 +148,10 @@ export default {
         this.fileUrl = `${this.baseUrl}${item.material.document}`;
       }
       console.log("🚀 ~ openDoc ~  this.fileUrl:", this.fileUrl);
+
+      setTimeout(() => {
+        this.flagView = true;
+      }, 200);
     },
   },
 };

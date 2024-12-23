@@ -79,6 +79,9 @@
             height="600px"
             frameborder="0"
             allowfullscreen
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin"
+            rel="noopener noreferrer"
           ></iframe>
           <div
             :style="{
