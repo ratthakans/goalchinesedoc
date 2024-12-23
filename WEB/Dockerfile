@@ -14,8 +14,15 @@ COPY . .
 # Build the Vue.js application
 RUN npm run build
 
+
 # Stage 2: Serve the application with Nginx
 FROM nginx:stable-alpine AS production-stage
+
+# Set timezone to Bangkok
+RUN apk add --no-cache tzdata \
+    && cp /usr/share/zoneinfo/Asia/Bangkok /etc/localtime \
+    && echo "Asia/Bangkok" > /etc/timezone \
+    && apk del tzdata
 
 # Copy built files from the build stage to Nginx
 COPY --from=build-stage /app/dist /usr/share/nginx/html
