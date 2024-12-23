@@ -68,7 +68,7 @@ exports.findOne = async (req, res) => {
 exports.getMaterialsByAccountId = async (req, res) => {
   try {
     const { accountID } = req.params;
-    const { last } = req.query;
+    const { last, type } = req.query;
 
     let where = { accountID };
     if (last) {
@@ -98,6 +98,22 @@ exports.getMaterialsByAccountId = async (req, res) => {
           ],
         },
       };
+    }
+
+    if (type) {
+      if (type === "all") {
+        where = {
+          ...where,
+          "$material.materialFor.name$": {
+            [Op.ne]: "library",
+          },
+        };
+      } else {
+        where = {
+          ...where,
+          "$material.materialFor.name$": type,
+        };
+      }
     }
 
     const myMaterials = await MyMaterial.findAll({

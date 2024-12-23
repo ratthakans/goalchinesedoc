@@ -212,6 +212,7 @@ export default {
       }
     },
     openDoc(item) {
+      this.fileUrl = "";
       this.showDocument = true;
       // if (process.env.NODE_ENV === "development") {
       //   this.fileUrl = `https://view.officeapps.live.com/op/embed.aspx?src=https://getsamplefiles.com/download/pptx/sample-2.pptx`;

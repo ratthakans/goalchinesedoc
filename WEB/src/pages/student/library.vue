@@ -24,11 +24,15 @@
         >
           <v-img
             height="200px"
-            :src="item.photo ? `${baseUrl}${item.photo}` : iconDocument"
+            :src="
+              item?.material?.photo
+                ? `${baseUrl}${item?.material?.photo}`
+                : iconDocument
+            "
           />
 
           <v-card-title class="info white--text">
-            {{ item.title }}</v-card-title
+            {{ item?.material?.title }}</v-card-title
           >
         </v-card>
       </v-col>
@@ -76,16 +80,24 @@
 </template>
 
 <script>
+import { mapState } from "pinia";
+import { useAppStore } from "@/stores/app";
 import iconDocument from "@/assets/document.png";
 export default {
   name: "StudentLibrary",
   data() {
     return {
+      fileUrl: "",
       iconDocument,
       isFullScreen: false,
       showDocument: false,
       itemsLibrary: [],
     };
+  },
+  computed: {
+    ...mapState(useAppStore, {
+      userInfo: "getUserinfo",
+    }),
   },
   mounted() {
     this.fetchDataMaterials();
@@ -93,7 +105,9 @@ export default {
   methods: {
     async fetchDataMaterials() {
       try {
-        const { data } = await this.axios.get(`/materials?materialFor=library`);
+        const { data } = await this.axios.get(
+          `/myMaterial/account/${this.userInfo.accountID}?type=library`
+        );
         this.itemsLibrary = data;
       } catch (error) {
         this.$swal.fire({
@@ -104,20 +118,23 @@ export default {
       }
     },
     openDoc(item) {
+      this.fileUrl = "";
       this.showDocument = true;
       // if (process.env.NODE_ENV === "development") {
       //   this.fileUrl = `https://view.officeapps.live.com/op/embed.aspx?src=https://getsamplefiles.com/download/pptx/sample-2.pptx`;
       // } else {
-      if (["pptx", "pdf"].includes(item.documentType))
-        this.fileUrl = `https://view.officeapps.live.com/op/embed.aspx?src=${this.baseUrl}${item.document}`;
-      else if (["link"].includes(item.documentType)) {
-        const canvaLink = item.link;
+      if (["pptx", "pdf"].includes(item?.material?.documentType))
+        this.fileUrl = `https://view.officeapps.live.com/op/embed.aspx?src=${this.baseUrl}${item?.material?.document}`;
+      else if (["link"].includes(item?.material?.documentType)) {
+        const canvaLink = item?.material?.link;
         window.open(canvaLink, "_blank"); // Open in a new tab
-      } else if (["canva", "youtube"].includes(item.documentType)) {
-        this.fileUrl = item.link;
-      } else if (item.documentType === "mp4") {
-        this.fileUrl = `${this.baseUrl}${item.document}`;
+      } else if (["canva", "youtube"].includes(item?.material?.documentType)) {
+        this.fileUrl = item?.material?.link;
+      } else if (item?.material?.documentType === "mp4") {
+        this.fileUrl = `${this.baseUrl}${item?.material?.document}`;
       }
+
+      console.log("object :>> ", this.fileUrl);
       // }
     },
   },

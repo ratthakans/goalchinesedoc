@@ -48,14 +48,18 @@
           </template>
 
           <template #item.action="{ item }">
-            <v-btn color="info" class="text-none" @click="openDoc(item)">
+            <v-btn
+              color="info"
+              class="text-none"
+              @click="(flagView = false), openDoc(item)"
+            >
               view
             </v-btn>
           </template>
         </v-data-table>
       </v-col>
     </v-row>
-    <v-row>
+    <v-row v-show="flagView">
       <v-col cols="12">
         <div ref="viewer"></div>
       </v-col>
@@ -77,6 +81,7 @@ export default {
     return {
       iconDocument,
       isFullScreen: false,
+      flagView: false,
       search: "",
       headers: [
         {
@@ -100,6 +105,7 @@ export default {
         { value: "action", text: "Action", sortable: false },
       ],
       items: [],
+      fileUrl: "",
     };
   },
   computed: {
@@ -111,17 +117,36 @@ export default {
     this.fetchDataMaterials();
   },
   mounted() {
-    // Wait for the iframe to load
-    // document.getElementById("myIframe").addEventListener("load", function () {
-    //   const iframe = document.getElementById("myIframe");
-    //   const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-    //   console.log("🚀 ~ iframeDoc:", iframeDoc);
-    //   // Hide the element with ID 'WACStatusBarContainer'
-    //   const statusBar = iframeDoc.getElementById("WACStatusBarContainer");
-    //   if (statusBar) {
-    //     statusBar.style.display = "none"; // Hides the element
-    //   }
-    // });
+    WebViewer(
+      {
+        // disabledElements: ["default-top-header"],
+        path: `${process.env.BASE_URL}webviewer`,
+        initialDoc: this.fileUrl, //`${this.baseUrl}${item.material.document}`, //"https://getsamplefiles.com/download/pptx/sample-2.pptx",
+        licenseKey: process.env.VUE_APP_PDF_LICENSE, // sign up to get a free trial key at https://dev.apryse.com
+      },
+      this.$refs.viewer
+    ).then((instance) => {
+      // hide the ribbons
+      instance.UI.disableElements(["default-ribbon-group"]);
+      instance.UI.disableElements(["tools-header"]);
+      instance.UI.disableElements(["leftPanelButton"]);
+      instance.UI.disableElements(["searchPanelToggle"]);
+      instance.UI.disableElements(["notesPanelToggle"]);
+      instance.UI.disableElements(["groupedLeftHeaderButtons"]);
+
+      const { documentViewer } = instance.Core;
+
+      documentViewer.setWatermark({
+        // Draw diagonal watermark in middle of the document
+        diagonal: {
+          fontSize: 25, // or even smaller size
+          fontFamily: "sans-serif",
+          color: "red",
+          opacity: 50, // from 0 to 100
+          text: this.userInfo.name,
+        },
+      });
+    });
   },
   methods: {
     toggleFullScreen() {
@@ -151,7 +176,7 @@ export default {
     async fetchDataMaterials() {
       try {
         const { data } = await this.axios.get(
-          `/myMaterial/account/${this.userInfo.accountID}`
+          `/myMaterial/account/${this.userInfo.accountID}?type=all`
         );
         this.items = data;
       } catch (error) {
@@ -164,45 +189,18 @@ export default {
       }
     },
     openDoc(item) {
+      this.flagView = true;
       if (["pptx", "pdf"].includes(item.material.documentType)) {
-        WebViewer(
-          {
-            // disabledElements: ["default-top-header"],
-            path: `${process.env.BASE_URL}webviewer`,
-            initialDoc: `${this.baseUrl}${item.material.document}`, //"https://getsamplefiles.com/download/pptx/sample-2.pptx",
-            licenseKey: process.env.VUE_APP_PDF_LICENSE, // sign up to get a free trial key at https://dev.apryse.com
-          },
-          this.$refs.viewer
-        ).then((instance) => {
-          // hide the ribbons
-          instance.UI.disableElements(["default-ribbon-group"]);
-          instance.UI.disableElements(["tools-header"]);
-          instance.UI.disableElements(["leftPanelButton"]);
-          instance.UI.disableElements(["searchPanelToggle"]);
-          instance.UI.disableElements(["notesPanelToggle"]);
-          instance.UI.disableElements(["groupedLeftHeaderButtons"]);
-
-          const { documentViewer } = instance.Core;
-
-          documentViewer.setWatermark({
-            // Draw diagonal watermark in middle of the document
-            diagonal: {
-              fontSize: 25, // or even smaller size
-              fontFamily: "sans-serif",
-              color: "red",
-              opacity: 50, // from 0 to 100
-              text: this.userInfo.name,
-            },
-          });
-        });
+        this.fileUrl = `${this.baseUrl}${item.material.document}`;
       } else if (["link"].includes(item.material.documentType)) {
         const canvaLink = item.material.link;
         window.open(canvaLink, "_blank"); // Open in a new tab
-      } else if (["canva"].includes(item.material.documentType)) {
+      } else if (["canva", "youtube"].includes(item.material.documentType)) {
         this.fileUrl = item.material.link;
       } else if (item.material.documentType === "mp4") {
         this.fileUrl = `${this.baseUrl}${item.material.document}`;
       }
+      console.log("🚀 ~ openDoc ~  this.fileUrl:", this.fileUrl);
     },
   },
 };

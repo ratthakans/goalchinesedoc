@@ -9,6 +9,8 @@
     <div class="d-flex align-center">
       <v-avatar size="42" color="grey">
         <v-img v-if="userInfo.photo" :src="`${baseUrl}${userInfo.photo}`" />
+        <v-img v-else-if="userInfo?.role === 'student'" :src="iconStudent" />
+        <v-img v-else-if="userInfo?.role === 'teacher'" :src="iconTeacher" />
         <v-icon v-else>mdi-account</v-icon>
       </v-avatar>
       <div class="ml-2">
@@ -25,10 +27,14 @@
 <script>
 import { mapState, mapActions } from "pinia";
 import { useAppStore } from "@/stores/app";
+import iconStudent from "@/assets/student.png";
+import iconTeacher from "@/assets/teacher.png";
 export default {
   data() {
     return {
       drawer: false,
+      iconStudent,
+      iconTeacher,
     };
   },
   computed: {

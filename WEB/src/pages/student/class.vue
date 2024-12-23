@@ -21,7 +21,7 @@
               v-if="dataStudent.photo"
               :src="`${baseUrl}${dataStudent.photo}`"
             />
-            <v-icon v-else>mdi-account</v-icon>
+            <v-img v-else :src="iconStudent" />
           </v-avatar>
           <div class="d-flex white--text flex-column justify-center">
             <h4 class="text-h4 font-weight-bold">{{ dataStudent?.name }}</h4>
@@ -88,6 +88,7 @@ import { mapState } from "pinia";
 import { useAppStore } from "@/stores/app";
 
 import CalendarComponent from "@/components/Calendar.vue";
+import iconStudent from "@/assets/student.png";
 export default {
   name: "StudentClass",
   components: {
@@ -95,6 +96,7 @@ export default {
   },
   data() {
     return {
+      iconStudent,
       dataStudent: {},
       dataClass: [],
       events: [],
