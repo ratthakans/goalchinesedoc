@@ -103,8 +103,11 @@ export default {
         this.setUserInfo(data.user);
         localStorage.setItem("token", data.user.token);
 
-        if (["user", "admin", "superadmin"].includes(data.user.role)) {
+        if (["admin", "superadmin"].includes(data.user.role)) {
           this.$router.push({ name: "dashboard" });
+        } else if (data.user.role === "user") {
+          const firstPage = data.user?.permissions?.[0]?.link;
+          if (firstPage) this.$router.push(firstPage);
         } else if (data.user.role === "teacher") {
           this.$router.push({ name: "teacherClass" });
         } else if (data.user.role === "student") {
