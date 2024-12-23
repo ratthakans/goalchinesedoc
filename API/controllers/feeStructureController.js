@@ -46,7 +46,10 @@ exports.findByAccountId = async (req, res) => {
   try {
     const { accountID } = req.params;
 
-    const feeStructure = await FeeStructure.findAll({ where: { accountID } });
+    const feeStructure = await FeeStructure.findAll({
+      where: { accountID },
+      order: [["payDate", "DESC"]],
+    });
     if (!feeStructure) {
       return res.status(404).json({ error: "FeeStructure not found" });
     }

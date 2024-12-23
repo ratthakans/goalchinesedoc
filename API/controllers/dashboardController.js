@@ -36,17 +36,19 @@ SELECT
 	) as totalClass,
 	(
 	SELECT 
-		(
-		select
-			count(cs.id)
-		from
-			ClassStudent cs
+    	SUM(student_count) 
+	FROM (
+		SELECT 
+			COUNT(cs.id) AS student_count
+		FROM
+			Class
+		LEFT JOIN
+			ClassStudent cs ON cs.classID = Class.id
 		WHERE
-			cs.classID = Class.id )
-	FROM
-		Class
-	WHERE
-		Class.branchID = b.id
+			Class.branchID = b.id
+		GROUP BY
+			Class.id
+	) subquery
 	) as totalStudent,
 	(
 	SELECT 
@@ -70,6 +72,37 @@ FROM
 	Branch b ;
 
       `,
+      { type: sequelize.QueryTypes.SELECT }
+    );
+
+    res.status(200).json(result);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error retrieving summary", error: error.message });
+  }
+};
+
+// summary income by year and branch optional
+exports.getSummaryIncome = async (req, res) => {
+  try {
+    let year = new Date().getFullYear();
+
+    let where = ` AND YEAR(FeeStructure.payDate) = ${year}`;
+
+    const result = await sequelize.query(
+      `
+SELECT
+	YEAR(FeeStructure.payDate) as year,
+	SUM(FeeStructure.classFee) as totalIncome
+FROM
+	FeeStructure
+WHERE
+	FeeStructure.classFee > 0
+	${where}
+GROUP BY
+	YEAR(FeeStructure.payDate)
+	  `,
       { type: sequelize.QueryTypes.SELECT }
     );
 

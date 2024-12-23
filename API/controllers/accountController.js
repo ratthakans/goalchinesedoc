@@ -169,6 +169,11 @@ exports.findOne = async (req, res) => {
           as: "teacherType",
           attributes: ["id", "name"],
         },
+        {
+          model: PointStructure,
+          as: "pointStructure",
+          order: [["updateDate", "DESC"]],
+        },
       ],
     });
     if (!account) {

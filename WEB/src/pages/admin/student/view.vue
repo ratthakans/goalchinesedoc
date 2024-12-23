@@ -36,7 +36,7 @@
             <h4 class="text-h4 font-weight-bold">{{ dataStudent?.name }}</h4>
             <div>
               <v-icon color="yellow"> mdi-star-circle </v-icon>
-              100 points
+              {{ dataStudent?.pointStructure?.pointAfterUpdate }} points
             </div>
           </div>
         </v-sheet>
@@ -53,7 +53,7 @@
         </v-tabs>
 
         <v-tabs-items v-model="tab">
-          <v-tab-item :key="1">
+          <v-tab-item :key="0">
             <v-container fluid>
               <v-row>
                 <v-col cols="12">
@@ -75,7 +75,7 @@
               </v-row>
             </v-container>
           </v-tab-item>
-          <v-tab-item :key="2">
+          <v-tab-item :key="1">
             <v-container fluid>
               <v-row>
                 <v-col cols="12">
@@ -111,15 +111,12 @@
               </v-row>
             </v-container>
           </v-tab-item>
-          <v-tab-item :key="3">
+          <v-tab-item :key="2">
             <v-container fluid>
               <v-row>
                 <v-col cols="12">
                   <v-card outlined min-height="250">
-                    <v-card-title primary-title>
-                      Payment History <v-spacer></v-spacer>
-                      <v-icon>mdi-pencil-box-outline</v-icon>
-                    </v-card-title>
+                    <v-card-title primary-title> Payment History </v-card-title>
                     <v-simple-table height="300px" fixed-header>
                       <thead>
                         <tr>
@@ -133,9 +130,22 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <tr v-for="item in []" :key="item.name">
-                          <td>{{ item.name }}</td>
-                          <td>{{ item.calories }}</td>
+                        <tr v-for="(item, inx) in dataPayment" :key="inx">
+                          <td>{{ item.payDate }}</td>
+                          <td>{{ item.classType }}</td>
+                          <td>{{ item.amount.toLocaleString() }}</td>
+                          <td>{{ item.classFee.toLocaleString() }}</td>
+                          <td>{{ item.discount.toLocaleString() }}</td>
+                          <td>
+                            {{
+                              (
+                                item.amount +
+                                item.classFee -
+                                item.discount
+                              ).toLocaleString()
+                            }}
+                          </td>
+                          <td>{{ item.note || "N/A" }}</td>
                         </tr>
                       </tbody>
                     </v-simple-table>
@@ -144,15 +154,40 @@
               </v-row>
             </v-container>
           </v-tab-item>
-          <v-tab-item :key="4">
+          <v-tab-item :key="3">
             <v-container fluid>
               <v-row>
                 <v-col cols="12">
                   <v-card outlined height="250">
-                    <v-card-title primary-title>
-                      Class History<v-spacer></v-spacer>
-                      <v-icon>mdi-pencil-box-outline</v-icon>
-                    </v-card-title>
+                    <v-card-title primary-title> Class History </v-card-title>
+                    <v-simple-table height="300px" fixed-header>
+                      <thead>
+                        <tr>
+                          <th class="text-left">Create Date</th>
+                          <th class="text-left">Class Name</th>
+                          <th class="text-left">Update date</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr v-for="(item, inx) in dataClass" :key="inx">
+                          <td width="150px">
+                            {{
+                              new Date(item.createdAt).toLocaleDateString(
+                                "en-GB"
+                              )
+                            }}
+                          </td>
+                          <td>{{ item?.name }}</td>
+                          <td>
+                            {{
+                              new Date(item.createdAt).toLocaleDateString(
+                                "en-GB"
+                              )
+                            }}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </v-simple-table>
                   </v-card>
                 </v-col>
               </v-row>
@@ -178,6 +213,8 @@ export default {
       tab: null,
       dataStudent: {},
       dataMaterials: [],
+      dataPayment: [],
+      dataClass: [],
     };
   },
   watch: {
@@ -187,7 +224,9 @@ export default {
       } else if (val === 1) {
         this.fetchDataMaterials();
       } else if (val === 2) {
-        // this.fetchDataById();
+        this.fetchDataPayment();
+      } else if (val === 3) {
+        this.fetchDataClass();
       }
     },
   },
@@ -228,6 +267,36 @@ export default {
           `/myMaterial/account/${this.$route.params.id}?last=true`
         );
         this.dataMaterials = data;
+      } catch (error) {
+        if (error.response.status !== 404)
+          this.$swal.fire({
+            title: error.response.data.error,
+            text: error.response.data.details,
+            icon: "error",
+          });
+      }
+    },
+    async fetchDataPayment() {
+      try {
+        const { data } = await this.axios.get(
+          `/feeStructure/account/${this.$route.params.id}`
+        );
+        this.dataPayment = data;
+      } catch (error) {
+        if (error.response.status !== 404)
+          this.$swal.fire({
+            title: error.response.data.error,
+            text: error.response.data.details,
+            icon: "error",
+          });
+      }
+    },
+    async fetchDataClass() {
+      try {
+        const { data } = await this.axios.get(
+          `/classes/student/${this.$route.params.id}`
+        );
+        this.dataClass = data;
       } catch (error) {
         if (error.response.status !== 404)
           this.$swal.fire({

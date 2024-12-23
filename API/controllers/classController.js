@@ -9,6 +9,7 @@ const {
   ClassType,
   Currency,
   Sequelize,
+  MaterialType,
 } = require("../models"); // Adjust the path to your models folder
 const logger = require("../logger");
 
@@ -189,7 +190,18 @@ exports.findOne = async (req, res) => {
       where: { id },
       include: [
         { model: ClassStudy, as: "classStudy" },
-        { model: ClassStudent, as: "classStudent" },
+        {
+          model: ClassStudent,
+          as: "classStudent",
+          include: [{ model: Account, as: "account" }],
+        },
+        { model: ClassType, as: "classType" },
+        { model: Account, as: "teacher" },
+        { model: Account, as: "updatedBy" },
+        { model: Attendance, as: "attendance" },
+        { model: Branch, as: "branch" },
+        { model: Currency, as: "currency" },
+        { model: MaterialType, as: "materialType" },
       ],
     });
     if (!classData) {

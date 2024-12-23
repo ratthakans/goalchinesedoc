@@ -104,22 +104,32 @@
                 <div class="d-flex flex-row">
                   <div class="d-flex flex-column">
                     <h6 class="subtitle-1">
-                      {{ new Date(event.start).toLocaleTimeString() }}
+                      {{
+                        new Date(event.start).toLocaleTimeString("en-GB", {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })
+                      }}
                     </h6>
                     <span class="body-2">
-                      {{ new Date(event.end).toLocaleTimeString() }}
+                      {{
+                        new Date(event.end).toLocaleTimeString("en-GB", {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })
+                      }}
                     </span>
                   </div>
                   <v-divider
                     vertical
-                    :class="['mx-4', getEventColor(event)]"
-                    style="border: 3px solid"
+                    :class="['mx-4']"
+                    :style="`border: 3px solid; color: ${event.color};`"
                   ></v-divider>
                   <div class="d-flex flex-column">
                     <h6 class="subtitle-1">{{ event.name }}</h6>
-                    <span class="body-2">
-                      {{ new Date(event.end).toLocaleTimeString() }}
-                    </span>
+                    <small class="text-caption">
+                      {{ event?.class?.studyPlatform }} , {{ event?.link }}
+                    </small>
                   </div>
                 </div>
               </v-list-item-content>
@@ -628,6 +638,7 @@ export default {
       color: "",
       note: "",
     },
+    flagCreate: true,
   }),
   computed: {
     ...mapState(useAppStore, {
@@ -649,6 +660,13 @@ export default {
     },
     branch(val) {
       if (val) this.$emit("fetchEvents", val);
+    },
+    dialog(val) {
+      if (!val) {
+        this.$refs.formCreateClass.reset();
+        this.selectedClass = {};
+        this.selectedOpen = false;
+      }
     },
   },
   mounted() {
@@ -675,6 +693,7 @@ export default {
     },
 
     openDialog() {
+      this.flagCreate = true;
       this.formInput = {
         title: "",
         startDate: this.selectedEventDay.date,
@@ -717,6 +736,7 @@ export default {
         };
       }, 100);
       this.dialog = true;
+      this.flagCreate = false;
     },
 
     async createClassEvent() {
@@ -724,7 +744,16 @@ export default {
 
       try {
         let response = null;
-        if (this.selectedEvent?.id) {
+        if (this.flagCreate) {
+          const body = {
+            ...this.formInput,
+            classId: this.selectedClass.id,
+            startDate: `${this.formInput.startDate} ${this.formInput.startTime}`,
+            endDate: `${this.formInput.endDate} ${this.formInput.endTime}`,
+            updateBy: this.userInfo.accountID,
+          };
+          response = await this.axios.post(`/classEvents`, body);
+        } else {
           const body = {
             ...this.formInput,
             classId: this.selectedClass.id,
@@ -740,21 +769,13 @@ export default {
             `/classEvents/${this.selectedEvent?.id}`,
             body
           );
-        } else {
-          const body = {
-            ...this.formInput,
-            classId: this.selectedClass.id,
-            startDate: `${this.formInput.startDate} ${this.formInput.startTime}`,
-            endDate: `${this.formInput.endDate} ${this.formInput.endTime}`,
-            updateBy: this.userInfo.accountID,
-          };
-          response = await this.axios.post(`/classEvents`, body);
         }
 
         this.$swal(response?.data?.message, "", "success");
-        // this.selectedEvent = {};
+
         this.dialog = false;
         this.selectedOpen = false;
+
         this.$emit("fetchEvents");
         this.$refs.calendar.checkChange();
       } catch (error) {

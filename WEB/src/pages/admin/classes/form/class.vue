@@ -1010,7 +1010,7 @@ export default {
         checkList: this.selectedCheckList.join(","),
         classStudy: this.itemsTimes.filter((item) => item.checked),
         classStudent: this.selectedStudent,
-        updatedBy: this.userInfo.accountID,
+        updateBy: this.userInfo.accountID,
       });
     },
   },

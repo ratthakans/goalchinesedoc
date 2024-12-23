@@ -68,6 +68,9 @@
           <template #[`item.age`]="{ item }">
             {{ calulateAge(item.dateOfBirth) }}
           </template>
+          <template #[`item.points`]="{ item }">
+            {{ item.pointStructure?.pointAfterUpdate || 0 }}
+          </template>
         </v-data-table>
       </v-col>
     </v-row>
@@ -161,7 +164,7 @@ export default {
           width: "2%",
         },
         { value: "name", text: "Student Name", width: "*" },
-        { value: "parentsPhone", text: "Mobile No.", width: "10%" },
+        { value: "phone", text: "Mobile No.", width: "10%" },
         { value: "points", text: "Points", width: "7%" },
         { value: "studentType.name", text: "Student Type", width: "12%" },
         { value: "classType.name", text: "Class Type", width: "10%" },

@@ -14,7 +14,7 @@
           <v-card-text>
             <v-row align="center" justify="center">
               <v-col class="text-h3" cols="auto">
-                {{ target.toLocaleString() }}</v-col
+                {{ totalIncome?.toLocaleString() }}</v-col
               >
             </v-row>
           </v-card-text>
@@ -136,6 +136,7 @@ export default {
         { name: "Total admin", value: 0, color: "success" },
       ],
       summaryList: [],
+      totalIncome: 0,
     };
   },
   computed: {
@@ -148,6 +149,7 @@ export default {
     this.onFetchEvents();
     this.onFetchSummaryUser();
     this.onFetchSummaryBranch();
+    this.onFetchSummaryIncome();
 
     this.permission = this.userInfo.permissions.find(
       (it) => it.link === this.$route.path
@@ -246,11 +248,25 @@ export default {
       }
     },
     async onFetchEvents(branchId) {
+      this.events = [];
       try {
         const { data } = await this.axios.get(
           `/classEvents${branchId ? `?branchId=${branchId}` : ""}`
         );
         this.events = data || [];
+      } catch (error) {
+        this.$swal.fire({
+          title: error.response.data.error,
+          text: error.response.data.details,
+          icon: "error",
+        });
+      }
+    },
+    async onFetchSummaryIncome() {
+      try {
+        const { data } = await this.axios.get(`/dashboard/getSummaryIncome`);
+
+        if (data.length) this.totalIncome = data[0].totalIncome || 0;
       } catch (error) {
         this.$swal.fire({
           title: error.response.data.error,

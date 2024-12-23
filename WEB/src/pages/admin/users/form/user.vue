@@ -418,6 +418,17 @@ export default {
           flagDelete: true,
           flagCreate: true,
         },
+        {
+          name: "Library Management",
+          link: "/admin/library",
+          view: false,
+          edit: false,
+          delete: false,
+          create: false,
+          flagEdit: false,
+          flagDelete: false,
+          flagCreate: false,
+        },
         // {
         //   name: "Library Management",
         //   view: false,

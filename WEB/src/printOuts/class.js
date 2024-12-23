@@ -42,7 +42,7 @@ const genarateTable = (data) => {
 
 export async function exportPdf(data) {
   const content = [];
-  data.forEach((it) => {
+  data.forEach((it, i) => {
     let result = [
       {
         text: [
@@ -339,9 +339,7 @@ export async function exportPdf(data) {
           },
           it.note,
         ],
-      },
-      {
-        pageBreak: "after",
+        pageBreak: i === 0 || i === data.length - 1 ? "" : "after",
       },
     ];
     content.push(...result);

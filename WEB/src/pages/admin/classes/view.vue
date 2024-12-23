@@ -9,18 +9,24 @@
       </v-col>
     </v-row>
 
-    <v-form ref="form" lazy-validation>
-      <FormClass v-model="formInput" :editItems="editItems" :flagView="true" />
-    </v-form>
+    <v-row>
+      <v-col cols="12">
+        <v-card outlined min-height="250">
+          <v-card-text>
+            <ViewDetailClass :itemData="editItems" />
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
 <script>
-import FormClass from "./form/class.vue";
+import ViewDetailClass from "./form/viewDetail.vue";
 export default {
   name: "CreateClass",
   components: {
-    FormClass,
+    ViewDetailClass,
   },
   data() {
     return {

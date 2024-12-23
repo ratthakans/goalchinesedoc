@@ -44,6 +44,7 @@ export default {
   methods: {
     async onFetchEvents(branchId) {
       try {
+        this.events = [];
         const { data } = await this.axios.get(
           `/classEvents${branchId ? `?branchId=${branchId}` : ""}`
         );

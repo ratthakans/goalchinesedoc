@@ -147,7 +147,10 @@ Class.associate = (models) => {
   });
   Class.belongsTo(models.Account, { foreignKey: "teacherID", as: "teacher" });
   Class.belongsTo(models.Account, { foreignKey: "updateBy", as: "updatedBy" });
-  Class.belongsTo(models.MaterialType, { foreignKey: "materialTypeID" });
+  Class.belongsTo(models.MaterialType, {
+    foreignKey: "materialTypeID",
+    as: "materialType",
+  });
   Class.belongsTo(models.Currency, {
     foreignKey: "currencyID",
     as: "currency",
