@@ -4,11 +4,6 @@ FROM node:18 AS build-stage
 # Set the working directory
 WORKDIR /app
 
-# Set timezone to Bangkok
-RUN apk add --no-cache tzdata \
-    && cp /usr/share/zoneinfo/Asia/Bangkok /etc/localtime \
-    && echo "Asia/Bangkok" > /etc/timezone \
-    && apk del tzdata
 
 # Copy the package files and install dependencies
 COPY package*.json ./
@@ -23,8 +18,6 @@ RUN npm run build
 
 # Stage 2: Serve the application with Nginx
 FROM nginx:stable-alpine AS production-stage
-
-USER root
 
 # Set timezone to Bangkok
 RUN apk add --no-cache tzdata \
