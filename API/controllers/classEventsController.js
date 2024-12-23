@@ -48,11 +48,11 @@ exports.copy = async (req, res) => {
         link: link,
         color: color,
         note: note,
-        startDate: `${date} ${new Date(startDate).toLocaleTimeString("th-TH", {
+        startDate: `${date} ${new Date(startDate).toLocaleTimeString("en-US", {
           hour: "2-digit",
           minute: "2-digit",
         })}`,
-        endDate: `${date} ${new Date(endDate).toLocaleTimeString("th-TH", {
+        endDate: `${date} ${new Date(endDate).toLocaleTimeString("en-US", {
           hour: "2-digit",
           minute: "2-digit",
         })}`,

@@ -105,7 +105,7 @@
                   <div class="d-flex flex-column">
                     <h6 class="subtitle-1">
                       {{
-                        new Date(event.start).toLocaleTimeString("th-TH", {
+                        new Date(event.start).toLocaleTimeString("en-US", {
                           hour: "2-digit",
                           minute: "2-digit",
                         })
@@ -113,7 +113,7 @@
                     </h6>
                     <span class="body-2">
                       {{
-                        new Date(event.end).toLocaleTimeString("th-TH", {
+                        new Date(event.end).toLocaleTimeString("en-US", {
                           hour: "2-digit",
                           minute: "2-digit",
                         })
@@ -208,7 +208,7 @@
               </h6>
               <h4 class="text-h5">
                 {{
-                  new Date(selectedEvent.start)?.toLocaleTimeString("th-TH", {
+                  new Date(selectedEvent.start)?.toLocaleTimeString("en-US", {
                     hourCycle: "h23",
                     hour: "2-digit",
                     minute: "2-digit",
@@ -225,7 +225,7 @@
               </h6>
               <h4 class="text-h5">
                 {{
-                  new Date(selectedEvent.end)?.toLocaleTimeString("th-TH", {
+                  new Date(selectedEvent.end)?.toLocaleTimeString("en-US", {
                     hourCycle: "h23",
                     hour: "2-digit",
                     minute: "2-digit",
@@ -716,7 +716,7 @@ export default {
           title: this.selectedEvent.name,
           startDate: this.selectedEvent.start,
           startTime: new Date(this.selectedEvent.start).toLocaleTimeString(
-            "th-TH",
+            "en-US",
             {
               hour: "2-digit",
               minute: "2-digit",
@@ -724,7 +724,7 @@ export default {
           ),
           endDate: this.selectedEvent.end,
           endTime: new Date(this.selectedEvent.end).toLocaleTimeString(
-            "th-TH",
+            "en-US",
             {
               hour: "2-digit",
               minute: "2-digit",
@@ -885,6 +885,7 @@ export default {
         event.timed = true;
       }
       this.events = temp;
+      console.log("🚀 ~ getEvents ~ this.events:", this.events);
       this.$nextTick(() => {
         this.$refs.calendar.checkChange();
       });
@@ -897,7 +898,7 @@ export default {
         day: "numeric",
       };
 
-      return date.toLocaleDateString("th-TH", options);
+      return date.toLocaleDateString("en-US", options);
     },
     dateToYMDShort(dateParam, year = false) {
       const date = new Date(dateParam);
@@ -908,7 +909,7 @@ export default {
         year: year ? "numeric" : undefined,
       };
 
-      return date.toLocaleDateString("th-TH", options);
+      return date.toLocaleDateString("en-US", options);
     },
     async onDeleteEvent() {
       // confirm delete
