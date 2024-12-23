@@ -38,8 +38,11 @@
       </v-col>
     </v-row>
 
-    <v-row v-if="showDocument">
-      <v-col cols="12">
+    <v-row v-show="showDocument">
+      <v-col cols="12" v-if="fileType === 'pdf'">
+        <WebViewer :initialDoc="fileUrl" :hideHeader="true" />
+      </v-col>
+      <v-col cols="12" v-else>
         <div class="d-flex justify-end align-center">
           <v-btn @click="isFullScreen = !isFullScreen" icon>
             <v-icon>mdi-fullscreen</v-icon>
@@ -56,6 +59,8 @@
             height="600px"
             frameborder="0"
             allowfullscreen
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin"
           ></iframe>
           <div
             :style="{
@@ -83,8 +88,13 @@
 import { mapState } from "pinia";
 import { useAppStore } from "@/stores/app";
 import iconDocument from "@/assets/document.png";
+
+import WebViewer from "@/components/WebViewer.vue";
 export default {
   name: "StudentLibrary",
+  components: {
+    WebViewer,
+  },
   data() {
     return {
       fileUrl: "",
@@ -92,6 +102,7 @@ export default {
       isFullScreen: false,
       showDocument: false,
       itemsLibrary: [],
+      fileType: null,
     };
   },
   computed: {
@@ -101,8 +112,44 @@ export default {
   },
   mounted() {
     this.fetchDataMaterials();
+
+    // this.$nextTick(() => {
+    //   this.initWebViewer();
+    // });
   },
   methods: {
+    // initWebViewer() {
+    //   WebViewer(
+    //     {
+    //       // disabledElements: ["default-top-header"],
+    //       path: `${process.env.BASE_URL}webviewer`,
+    //       initialDoc: this.fileUrl, //`${this.baseUrl}${item.material.document}`, //"https://getsamplefiles.com/download/pptx/sample-2.pptx",
+    //       licenseKey: process.env.VUE_APP_PDF_LICENSE, // sign up to get a free trial key at https://dev.apryse.com
+    //     },
+    //     this.$refs.viewer
+    //   ).then((instance) => {
+    //     // hide the ribbons
+    //     instance.UI.disableElements(["default-ribbon-group"]);
+    //     instance.UI.disableElements(["tools-header"]);
+    //     instance.UI.disableElements(["leftPanelButton"]);
+    //     instance.UI.disableElements(["searchPanelToggle"]);
+    //     instance.UI.disableElements(["notesPanelToggle"]);
+    //     instance.UI.disableElements(["groupedLeftHeaderButtons"]);
+
+    //     const { documentViewer } = instance.Core;
+
+    //     documentViewer.setWatermark({
+    //       // Draw diagonal watermark in middle of the document
+    //       diagonal: {
+    //         fontSize: 25, // or even smaller size
+    //         fontFamily: "sans-serif",
+    //         color: "red",
+    //         opacity: 50, // from 0 to 100
+    //         text: this.userInfo.name,
+    //       },
+    //     });
+    //   });
+    // },
     async fetchDataMaterials() {
       try {
         const { data } = await this.axios.get(
@@ -119,13 +166,17 @@ export default {
     },
     openDoc(item) {
       this.fileUrl = "";
+      this.fileType = "";
       this.showDocument = true;
       // if (process.env.NODE_ENV === "development") {
       //   this.fileUrl = `https://view.officeapps.live.com/op/embed.aspx?src=https://getsamplefiles.com/download/pptx/sample-2.pptx`;
       // } else {
-      if (["pptx", "pdf"].includes(item?.material?.documentType))
+      if (["pptx"].includes(item?.material?.documentType))
         this.fileUrl = `https://view.officeapps.live.com/op/embed.aspx?src=${this.baseUrl}${item?.material?.document}`;
-      else if (["link"].includes(item?.material?.documentType)) {
+      else if (item?.material?.documentType === "pdf") {
+        this.fileUrl = `${this.baseUrl}${item?.material?.document}`;
+        this.fileType = "pdf";
+      } else if (["link"].includes(item?.material?.documentType)) {
         const canvaLink = item?.material?.link;
         window.open(canvaLink, "_blank"); // Open in a new tab
       } else if (["canva", "youtube"].includes(item?.material?.documentType)) {

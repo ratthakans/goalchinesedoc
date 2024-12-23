@@ -59,9 +59,9 @@
         </v-data-table>
       </v-col>
     </v-row>
-    <v-row v-show="flagView">
+    <v-row v-if="flagView">
       <v-col cols="12">
-        <div ref="viewer"></div>
+        <WebViewer :initialDoc="fileUrl" :waterMark="userInfo.name" />
       </v-col>
     </v-row>
   </v-container>
@@ -70,13 +70,14 @@
 <script>
 import { mapState } from "pinia";
 import { useAppStore } from "@/stores/app";
-
-import WebViewer from "@pdftron/webviewer";
+import WebViewer from "@/components/WebViewer.vue";
 import iconDocument from "@/assets/document.png";
 
 export default {
   name: "StudentMaterials",
-
+  components: {
+    WebViewer,
+  },
   data() {
     return {
       iconDocument,

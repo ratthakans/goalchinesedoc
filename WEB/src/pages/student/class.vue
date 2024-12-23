@@ -27,7 +27,7 @@
             <h4 class="text-h4 font-weight-bold">{{ dataStudent?.name }}</h4>
             <div>
               <v-icon color="yellow"> mdi-star-circle </v-icon>
-              100 points
+              {{ dataStudent?.pointStructure?.pointAfterUpdate }} points
             </div>
           </div>
         </v-sheet>
