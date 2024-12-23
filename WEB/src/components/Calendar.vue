@@ -874,14 +874,30 @@ export default {
 
       nativeEvent.stopPropagation();
     },
+    formatDateTime(date, timeZone = "UTC") {
+      const options = {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        hourCycle: "h23",
+        timeZone, // Default: UTC, can be adjusted to a specific timezone
+      };
+
+      return new Intl.DateTimeFormat("en-CA", options)
+        .format(date)
+        .replace(", ", " ");
+    },
+
     getEvents() {
       let temp = this.eventsItems;
       // if (this.eventsItems.length === 0) return;
       for (let i = 0; i < temp.length; i++) {
         const event = temp[i];
         event.name = event.title;
-        event.start = new Date(event.startDate).toUTCString();
-        event.end = new Date(event.endDate).toUTCString();
+        event.start = this.formatDateTime(new Date(event.startDate));
+        event.end = this.formatDateTime(new Date(event.endDate));
         event.timed = true;
       }
       this.events = temp;
