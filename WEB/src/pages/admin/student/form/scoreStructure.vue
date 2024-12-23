@@ -40,18 +40,38 @@
                     <label class="v-label mb-2 text-subtitle-2">
                       <span class="red--text mr-2">*</span> Update point Date :
                     </label>
-                    <v-select
-                      v-model="item.updateDate"
-                      :items="['daliy', 'weekly', 'monthly', 'yearly']"
-                      dense
-                      outlined
-                      single-line
-                      hide-details="auto"
-                      placeholder="Select update date"
-                      background-color="surface"
-                      :readonly="flagView"
-                      :rules="[(v) => !!v || 'Update date is required']"
-                    />
+
+                    <v-menu
+                      ref="refUpdateDate"
+                      :close-on-content-click="false"
+                      :nudge-right="40"
+                      transition="scale-transition"
+                      offset-y
+                      min-width="auto"
+                    >
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-text-field
+                          v-model="item.updateDate"
+                          label="Select date"
+                          append-icon="mdi-calendar"
+                          dense
+                          outlined
+                          single-line
+                          :disabled="flagView"
+                          hide-details="auto"
+                          readonly
+                          background-color="surface"
+                          :rules="[(v) => !!v || 'Pay date is required']"
+                          v-bind="attrs"
+                          v-on="on"
+                        ></v-text-field>
+                      </template>
+                      <v-date-picker
+                        v-model="item.updateDate"
+                        :min="new Date().toISOString().substring(0, 10)"
+                        @change="$refs.refUpdateDate[inx].save(item.updateDate)"
+                      ></v-date-picker>
+                    </v-menu>
                   </v-col>
 
                   <v-col cols="12" md="4">

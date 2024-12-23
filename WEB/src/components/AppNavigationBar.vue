@@ -2,7 +2,11 @@
   <v-navigation-drawer v-model="drawer" color="info" app>
     <div class="py-4">
       <v-list-item>
-        <v-img height="100" src="@/assets/logo.png" contain />
+        <v-img
+          height="100"
+          :src="logo ? `${baseUrl}${logo}` : vueLogo"
+          contain
+        />
       </v-list-item>
     </div>
 
@@ -57,11 +61,13 @@
 </template>
 
 <script>
+import vueLogo from "@/assets/logo.png";
 import { mapState } from "pinia";
 import { useAppStore } from "@/stores/app";
 export default {
   data() {
     return {
+      vueLogo,
       drawer: null,
       menus: [],
     };
@@ -69,6 +75,7 @@ export default {
   computed: {
     ...mapState(useAppStore, {
       userInfo: "getUserinfo",
+      logo: "logo",
     }),
   },
   mounted() {

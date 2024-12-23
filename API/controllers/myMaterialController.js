@@ -1,5 +1,6 @@
 const logger = require("../logger");
 const { MyMaterial, Materials } = require("../models"); // Ensure correct path to your models
+const { Op } = require("sequelize");
 
 // Create a new MyMaterial record
 exports.create = async (req, res) => {
@@ -67,9 +68,40 @@ exports.findOne = async (req, res) => {
 exports.getMaterialsByAccountId = async (req, res) => {
   try {
     const { accountID } = req.params;
+    const { last } = req.query;
+
+    let where = { accountID };
+    if (last) {
+      const lastMaterial = await MyMaterial.findOne({
+        where: { accountID },
+        order: [["updatedAt", "DESC"]],
+      });
+
+      if (!lastMaterial) {
+        return res.status(404).json({ error: "MyMaterial not found" });
+      }
+
+      where = {
+        accountID,
+        updatedAt: {
+          [Op.between]: [
+            new Date(
+              `${new Date(lastMaterial.updatedAt)
+                .toISOString()
+                .substring(0, 10)}T00:00:00`
+            ),
+            new Date(
+              `${new Date(lastMaterial.updatedAt)
+                .toISOString()
+                .substring(0, 10)}T23:59:59`
+            ),
+          ],
+        },
+      };
+    }
 
     const myMaterials = await MyMaterial.findAll({
-      where: { accountID },
+      where,
       include: {
         model: Materials,
         as: "material",

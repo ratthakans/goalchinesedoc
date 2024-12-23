@@ -1,23 +1,24 @@
 <template>
   <v-app-bar flat app color="white">
+    <v-app-bar-nav-icon
+      class="hidden-lg-and-up"
+      @click="(drawer = !drawer), $emit('toggle-drawer', drawer)"
+    ></v-app-bar-nav-icon>
     <v-spacer />
-    <v-list dense color="transparent">
-      <v-list-item>
-        <v-list-item-avatar>
-          <v-avatar size="42" color="grey">
-            <v-icon>mdi-account</v-icon>
-          </v-avatar>
-        </v-list-item-avatar>
 
-        <v-list-item-content>
-          <v-list-item-title>{{ userInfo?.name }}</v-list-item-title>
-          <v-list-item-subtitle>{{ userInfo?.role }}</v-list-item-subtitle>
-        </v-list-item-content>
-      </v-list-item>
-    </v-list>
-    <v-btn icon @click="logout">
-      <v-icon>mdi-logout</v-icon>
-    </v-btn>
+    <div class="d-flex align-center">
+      <v-avatar size="42" color="grey">
+        <v-img v-if="userInfo.photo" :src="`${baseUrl}${userInfo.photo}`" />
+        <v-icon v-else>mdi-account</v-icon>
+      </v-avatar>
+      <div class="ml-2">
+        <v-list-item-title>{{ userInfo?.name }}</v-list-item-title>
+        <v-list-item-subtitle>{{ userInfo?.role }}</v-list-item-subtitle>
+      </div>
+      <v-btn icon @click="logout">
+        <v-icon>mdi-logout</v-icon>
+      </v-btn>
+    </div>
   </v-app-bar>
 </template>
 
@@ -25,6 +26,11 @@
 import { mapState, mapActions } from "pinia";
 import { useAppStore } from "@/stores/app";
 export default {
+  data() {
+    return {
+      drawer: false,
+    };
+  },
   computed: {
     ...mapState(useAppStore, {
       userInfo: "getUserinfo",

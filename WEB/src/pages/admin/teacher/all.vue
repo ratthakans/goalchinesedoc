@@ -73,6 +73,9 @@
           <template #[`item.age`]="{ item }">
             {{ calulateAge(item.dateOfBirth) }}
           </template>
+          <template #[`item.score`]="{ item }">
+            {{ item.pointStructure?.pointAfterUpdate || 0 }}
+          </template>
 
           <template #[`item.registerDate`]="{ item }">
             {{ new Date(item.registerDate).toLocaleDateString("en-GB") }}

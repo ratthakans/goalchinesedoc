@@ -10,7 +10,10 @@ const {
   Permission,
   sequelize,
   StudentType,
+  TeacherType,
   ClassType,
+  Branch,
+  PointStructure,
 } = require("../models"); // Ensure correct path to your models
 const { validationResult } = require("express-validator");
 
@@ -118,6 +121,11 @@ exports.findAll = async (req, res) => {
           as: "classType",
           attributes: ["name"],
         },
+        {
+          model: PointStructure,
+          as: "pointStructure",
+          order: [["updateDate", "DESC"]],
+        },
       ],
     });
     res.status(200).json(accounts);
@@ -140,6 +148,26 @@ exports.findOne = async (req, res) => {
           model: Permission,
           as: "permissions",
           attributes: ["name", "view", "edit", "delete", "create"],
+        },
+        {
+          model: StudentType,
+          as: "studentType",
+          attributes: ["name"],
+        },
+        {
+          model: ClassType,
+          as: "classType",
+          attributes: ["name"],
+        },
+        {
+          model: Branch,
+          as: "branch",
+          attributes: ["name"],
+        },
+        {
+          model: TeacherType,
+          as: "teacherType",
+          attributes: ["id", "name"],
         },
       ],
     });
@@ -235,7 +263,7 @@ exports.delete = async (req, res, next) => {
     await Permission.destroy({ where: { accountID: id } });
     await User.destroy({ where: { accountID: id } });
 
-    res.status(204).send();
+    res.status(204).send({ message: "Account deleted successfully" });
 
     logger.info(
       `Account deleted: ${id} by [${req.user.id}]${req.user.username}`

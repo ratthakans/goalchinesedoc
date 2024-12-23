@@ -40,28 +40,52 @@
                     <label class="v-label mb-2 text-subtitle-2">
                       <span class="red--text mr-2">*</span> Pay Date :
                     </label>
-                    <v-select
-                      v-model="item.payDate"
-                      :items="['daliy', 'weekly', 'monthly', 'yearly']"
-                      dense
-                      outlined
-                      single-line
-                      hide-details="auto"
-                      placeholder="Select update date"
-                      background-color="surface"
-                      :readonly="flagView"
-                      :rules="[(v) => !!v || 'Update date is required']"
-                    />
+
+                    <v-menu
+                      ref="refUpdateDate"
+                      :close-on-content-click="false"
+                      :nudge-right="40"
+                      transition="scale-transition"
+                      offset-y
+                      min-width="auto"
+                    >
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-text-field
+                          v-model="item.payDate"
+                          label="Select date"
+                          append-icon="mdi-calendar"
+                          dense
+                          outlined
+                          single-line
+                          :disabled="flagView"
+                          hide-details="auto"
+                          readonly
+                          background-color="surface"
+                          :rules="[(v) => !!v || 'Pay date is required']"
+                          v-bind="attrs"
+                          v-on="on"
+                        ></v-text-field>
+                      </template>
+                      <v-date-picker
+                        v-model="item.payDate"
+                        :min="new Date().toISOString().substring(0, 10)"
+                        @change="$refs.refUpdateDate[inx].save(item.payDate)"
+                      ></v-date-picker>
+                    </v-menu>
                   </v-col>
                   <v-col cols="12" md="2">
                     <label class="v-label mb-2 text-subtitle-2">
                       <span class="red--text mr-2">*</span> Class type :
                     </label>
-                    <v-text-field
+                    <v-select
                       v-model="item.classType"
+                      :items="itemsOptions.classType"
+                      item-text="name"
+                      item-value="name"
                       dense
                       outlined
                       hide-details="auto"
+                      placeholder="Select class"
                       background-color="surface"
                       :readonly="flagView"
                       :rules="[(v) => !!v || 'Class type is required']"
@@ -79,7 +103,7 @@
                       dense
                       outlined
                       hide-details="auto"
-                      placeholder="Select class"
+                      placeholder="Select branch"
                       background-color="surface"
                       :readonly="flagView"
                       :rules="[(v) => !!v || 'Branch is required']"
@@ -195,6 +219,7 @@ export default {
       },
       itemsOptions: {
         branch: [],
+        classType: [],
       },
     };
   },
@@ -223,6 +248,9 @@ export default {
       try {
         const { data: dataBranch } = await this.axios.get(`/branch`);
         this.itemsOptions.branch = dataBranch;
+
+        const { data: dataClassType } = await this.axios.get(`/classType`);
+        this.itemsOptions.classType = dataClassType;
       } catch (error) {
         this.$swal.fire({
           title: error.response.data.error,

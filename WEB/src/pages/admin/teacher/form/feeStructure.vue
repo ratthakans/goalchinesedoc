@@ -42,18 +42,40 @@
                         <label class="v-label mb-2 text-subtitle-2">
                           <span class="red--text mr-2">*</span> Update Date :
                         </label>
-                        <v-select
-                          v-model="item.updateDate"
-                          :items="['daliy', 'weekly', 'monthly', 'yearly']"
-                          dense
-                          outlined
-                          single-line
-                          hide-details="auto"
-                          placeholder="Select update date"
-                          background-color="surface"
-                          :rules="[(v) => !!v || 'Update date is required']"
-                          :readonly="flagView"
-                        />
+
+                        <v-menu
+                          ref="refUpdateDate"
+                          :close-on-content-click="false"
+                          :nudge-right="40"
+                          transition="scale-transition"
+                          offset-y
+                          min-width="auto"
+                        >
+                          <template v-slot:activator="{ on, attrs }">
+                            <v-text-field
+                              v-model="item.updateDate"
+                              label="Select date"
+                              append-icon="mdi-calendar"
+                              dense
+                              outlined
+                              single-line
+                              :disabled="flagView"
+                              hide-details="auto"
+                              readonly
+                              background-color="surface"
+                              :rules="[(v) => !!v || 'Update date is required']"
+                              v-bind="attrs"
+                              v-on="on"
+                            ></v-text-field>
+                          </template>
+                          <v-date-picker
+                            v-model="item.updateDate"
+                            :min="new Date().toISOString().substring(0, 10)"
+                            @change="
+                              $refs.refUpdateDate[inx].save(item.updateDate)
+                            "
+                          ></v-date-picker>
+                        </v-menu>
                       </v-col>
                       <v-col cols="12">
                         <label class="v-label mb-2 text-subtitle-2">
@@ -73,18 +95,34 @@
                     </v-row>
                   </v-col>
 
-                  <v-col cols="12" md="8">
+                  <v-col cols="12" md="4">
                     <label class="v-label mb-2 text-subtitle-2">
                       Salary for group class :
                     </label>
 
                     <v-textarea
-                      v-model="item.salaryForGroup"
+                      v-model="item.salaryForGroupClass"
                       dense
                       outlined
                       single-line
                       hide-details="auto"
                       placeholder="Enter salary for group class"
+                      background-color="surface"
+                      :readonly="flagView"
+                    />
+                  </v-col>
+                  <v-col cols="12" md="4">
+                    <label class="v-label mb-2 text-subtitle-2">
+                      Salary for private class :
+                    </label>
+
+                    <v-textarea
+                      v-model="item.salaryForPrivateClass"
+                      dense
+                      outlined
+                      single-line
+                      hide-details="auto"
+                      placeholder="Enter salary for private class"
                       background-color="surface"
                       :readonly="flagView"
                     />
@@ -127,7 +165,8 @@ export default {
       itemsFeeStruture: [],
       defaultValue: {
         updateDate: "",
-        salaryForGroup: "",
+        salaryForGroupClass: "",
+        salaryForPrivateClass: "",
         note: "",
       },
     };
@@ -156,12 +195,19 @@ export default {
         const { data } = await this.axios.get(
           `/feeStructure/account/${this.$route.params.id}`
         );
-        this.itemsFeeStruture = data;
+        this.itemsFeeStruture = data.map((it) => {
+          return {
+            ...it,
+            updateDate: it.updateDate.substring(0, 10),
+          };
+        });
       } catch (error) {
         if (error.response.status !== 404)
           this.$swal.fire({
             title: error.response.data.error,
-            text: error.response.data.details,
+            text: error.response.data.details
+              .map((it) => it.message)
+              .join("\n"),
             icon: "error",
           });
       }
@@ -191,7 +237,9 @@ export default {
         if (error.response.status !== 404)
           this.$swal.fire({
             title: error.response.data.error,
-            text: error.response.data.details,
+            text: error.response.data.details
+              .map((it) => it.message)
+              .join("\n"),
             icon: "error",
           });
       }

@@ -340,6 +340,9 @@ export async function exportPdf(data) {
           it.note,
         ],
       },
+      {
+        pageBreak: "after",
+      },
     ];
     content.push(...result);
   });

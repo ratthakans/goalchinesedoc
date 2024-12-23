@@ -68,7 +68,7 @@
                       </v-btn>
                     </v-card-title>
                     <v-card-text>
-                      <FormStudent :editItems="dataStudent" :flagView="true" />
+                      <ViewDetailStudent :itemData="dataStudent" />
                     </v-card-text>
                   </v-card>
                 </v-col>
@@ -166,11 +166,11 @@
 
 <script>
 import iconStudent from "@/assets/student.png";
-import FormStudent from "./form/student.vue";
+import ViewDetailStudent from "./form/viewDetail.vue";
 export default {
   name: "ViewStudent",
   components: {
-    FormStudent,
+    ViewDetailStudent,
   },
   data() {
     return {
@@ -202,22 +202,16 @@ export default {
         );
         this.dataStudent = {
           ...data,
-          dateOfBirth: new Date(data.dateOfBirth)
-            .toISOString()
-            .substring(0, 10),
+          dateOfBirth: data.dateOfBirth.substring(0, 10),
 
-          addmissionDate: new Date(data.addmissionDate)
-            .toISOString()
-            .substring(0, 10),
+          addmissionDate: data.addmissionDate.substring(0, 10),
 
-          endClassDate: new Date(data.endClassDate)
-            .toISOString()
-            .substring(0, 10),
+          endClassDate: data.endClassDate.substring(0, 10),
 
           username: data?.user?.username,
           password: "",
           expireDate: data?.user?.expireDate
-            ? new Date(data?.user?.expireDate).toISOString().substring(0, 10)
+            ? data?.user?.expireDate.substring(0, 10)
             : "",
         };
       } catch (error) {
@@ -231,7 +225,7 @@ export default {
     async fetchDataMaterials() {
       try {
         const { data } = await this.axios.get(
-          `/myMaterial/account/${this.$route.params.id}`
+          `/myMaterial/account/${this.$route.params.id}?last=true`
         );
         this.dataMaterials = data;
       } catch (error) {

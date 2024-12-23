@@ -1,8 +1,8 @@
 <template>
   <v-app>
-    <AppNavigationBar />
+    <AppNavigationBar ref="appNavigationBar" />
 
-    <AppBar />
+    <AppBar @toggle-drawer="togleDrawer" />
 
     <v-main>
       <slot />
@@ -19,6 +19,11 @@ export default {
   components: {
     AppNavigationBar,
     AppBar,
+  },
+  methods: {
+    togleDrawer() {
+      this.$refs.appNavigationBar.drawer = true;
+    },
   },
 };
 </script>

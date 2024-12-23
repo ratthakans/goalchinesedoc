@@ -89,7 +89,10 @@ export default {
     this.fetchSetting();
   },
   methods: {
-    ...mapActions(useAppStore, { setUserInfo: "setUserInfo" }),
+    ...mapActions(useAppStore, {
+      setUserInfo: "setUserInfo",
+      setLogo: "setLogo",
+    }),
     async loginUser() {
       try {
         const { data } = await this.axios.post("/auth/login", {
@@ -117,8 +120,10 @@ export default {
         const { data } = await this.axios.get(`/setting`);
 
         if (data.length) {
-          if (data[0].logo)
-            this.formInput.logo = process.env.VUE_APP_API_IMAGE + data[0].logo;
+          if (data[0].logo) {
+            this.formInput.logo = this.baseUrl + data[0].logo;
+            this.setLogo(data[0].logo);
+          }
           this.formInput.academyName = data[0].academyName;
         } else {
           this.formInput.logo = null;

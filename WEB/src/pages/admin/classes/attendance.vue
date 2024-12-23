@@ -39,7 +39,7 @@
               style="inline-size: 70px"
             ></v-text-field> -->
 
-            <div class="d-flex justify-center">0 / {{ item.teacherLeave }}</div>
+            <div class="d-flex justify-center">/ {{ item.teacherLeave }}</div>
           </template>
 
           <template #item.studentLeave="{ item }">

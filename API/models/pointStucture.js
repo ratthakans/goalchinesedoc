@@ -13,7 +13,7 @@ const PointStructure = sequelize.define(
       },
     },
     updateDate: {
-      type: DataTypes.STRING,
+      type: DataTypes.DATE,
     },
     totalPoint: {
       type: DataTypes.INTEGER,

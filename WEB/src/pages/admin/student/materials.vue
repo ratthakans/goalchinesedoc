@@ -38,6 +38,7 @@
     <v-row dense>
       <v-col cols="12">
         <v-data-table
+          v-model="selectedStudent"
           :headers="headers"
           :filter-keys="['title', 'category', 'type']"
           :items="items"

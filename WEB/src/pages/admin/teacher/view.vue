@@ -54,7 +54,7 @@
             <v-container fluid>
               <v-row>
                 <v-col cols="12">
-                  <v-card outlined nin-height="250">
+                  <v-card outlined min-height="250">
                     <v-card-title primary-title>
                       General <v-spacer></v-spacer>
                       <v-btn
@@ -65,7 +65,7 @@
                       </v-btn>
                     </v-card-title>
                     <v-card-text>
-                      <FormTeacher :editItems="dataTeacher" :flagView="true" />
+                      <ViewTeacher :itemData="dataTeacher" />
                     </v-card-text>
                   </v-card>
                 </v-col>
@@ -133,12 +133,12 @@
 
 <script>
 import iconTeacher from "@/assets/teacher.png";
-import FormTeacher from "./form/teacher.vue";
+import ViewTeacher from "./form/view.vue";
 import CalendarComponent from "@/components/Calendar.vue";
 export default {
   name: "TeacherView",
   components: {
-    FormTeacher,
+    ViewTeacher,
     CalendarComponent,
   },
   data() {
@@ -172,13 +172,9 @@ export default {
         );
         this.dataTeacher = {
           ...data,
-          dateOfBirth: new Date(data.dateOfBirth)
-            .toISOString()
-            .substring(0, 10),
+          dateOfBirth: data.dateOfBirth.substring(0, 10),
 
-          registerDate: new Date(data.registerDate)
-            .toISOString()
-            .substring(0, 10),
+          registerDate: data.registerDate.substring(0, 10),
 
           username: data.user.username,
           password: "",
@@ -194,7 +190,7 @@ export default {
     async fetchDataMaterials() {
       try {
         const { data } = await this.axios.get(
-          `/myMaterial/account/${this.$route.params.id}`
+          `/myMaterial/account/${this.$route.params.id}?last=true`
         );
         this.dataMaterials = data;
       } catch (error) {

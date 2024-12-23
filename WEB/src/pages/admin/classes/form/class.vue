@@ -81,15 +81,17 @@
                   <span class="red--text mr-2">*</span>Number Of Student :
                 </label>
                 <v-text-field
-                  v-model="formInput.numberOfStudent"
+                  v-model.number="formInput.numberOfStudent"
                   :readonly="flagView"
                   dense
                   outlined
-                  type="number"
                   single-line
                   hide-details="auto"
                   placeholder="Enter number of student"
-                  :rules="[(v) => !!v || 'Number of student is required']"
+                  :rules="[
+                    (v) => !!v || 'Number of student is required',
+                    (v) => /^[0-9]*$/.test(v) || 'Number is invalid',
+                  ]"
                 />
               </v-col>
 
@@ -103,10 +105,12 @@
                   dense
                   outlined
                   single-line
-                  type="number"
                   hide-details="auto"
                   placeholder="Enter fee"
-                  :rules="[(v) => !!v || 'Fee is required']"
+                  :rules="[
+                    (v) => !!v || 'Fee is required',
+                    (v) => /^[0-9]*$/.test(v) || 'Number is invalid',
+                  ]"
                 />
               </v-col>
 
@@ -116,7 +120,6 @@
                   v-model="formInput.discount"
                   :readonly="flagView"
                   dense
-                  type="number"
                   outlined
                   single-line
                   hide-details="auto"
@@ -233,8 +236,8 @@
                   </v-col>
                   <v-col cols="12" md="4">
                     <label class="v-label mb-2 text-subtitle-2">
-                      <span class="red--text mr-2">*</span>Number of time
-                      registered (time) :
+                      <span class="red--text mr-1">*</span>Number of time
+                      registered (times):
                     </label>
                     <v-text-field
                       v-model="formInput.registeredTimes"
@@ -248,8 +251,8 @@
                   </v-col>
                   <v-col cols="12" md="4">
                     <label class="v-label mb-2 text-subtitle-2">
-                      <span class="red--text mr-2">*</span> Teacher can leave
-                      (time) :
+                      <span class="red--text mr-2">*</span>Teacher can leave
+                      (times) :
                     </label>
 
                     <v-text-field
@@ -265,7 +268,7 @@
                   <v-col cols="12" md="4">
                     <label class="v-label mb-2 text-subtitle-2">
                       <span class="red--text mr-2">*</span> Student can leave
-                      (time) :
+                      (times) :
                     </label>
                     <v-text-field
                       v-model="formInput.studentLeave"
@@ -330,9 +333,7 @@
                 </v-menu>
               </v-col>
               <v-col cols="12" md="4">
-                <label class="v-label mb-2 text-subtitle-2">
-                  <span class="red--text mr-2">*</span>End date :
-                </label>
+                <label class="v-label mb-2 text-subtitle-2"> End date : </label>
                 <v-menu
                   ref="refEndDate"
                   :close-on-content-click="false"
@@ -352,7 +353,6 @@
                       :disabled="flagView"
                       hide-details="auto"
                       readonly
-                      :rules="[(v) => !!v || 'End date is required']"
                       v-bind="attrs"
                       v-on="on"
                     ></v-text-field>

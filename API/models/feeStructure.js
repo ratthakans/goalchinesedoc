@@ -13,9 +13,12 @@ const FeeStructure = sequelize.define(
       },
     },
     updateDate: {
+      type: DataTypes.DATE,
+    },
+    salaryForGroupClass: {
       type: DataTypes.STRING,
     },
-    salaryForGroup: {
+    salaryForPrivateClass: {
       type: DataTypes.STRING,
     },
     payDate: {

@@ -103,7 +103,10 @@ const Account = sequelize.define(
 );
 
 Account.associate = (models) => {
-  Account.belongsTo(models.TeacherType, { foreignKey: "teacherTypeID" });
+  Account.belongsTo(models.TeacherType, {
+    foreignKey: "teacherTypeID",
+    as: "teacherType",
+  });
   Account.belongsTo(models.StudentType, {
     foreignKey: "studentTypeID",
     as: "studentType",
@@ -112,11 +115,15 @@ Account.associate = (models) => {
     foreignKey: "classTypeID",
     as: "classType",
   });
-  Account.belongsTo(models.Branch, { foreignKey: "branchID" });
+  Account.belongsTo(models.Branch, { foreignKey: "branchID", as: "branch" });
   Account.hasOne(models.User, { foreignKey: "accountID", as: "user" });
   Account.hasMany(models.Permission, {
     foreignKey: "accountID",
     as: "permissions",
+  });
+  Account.hasOne(models.PointStructure, {
+    foreignKey: "accountID",
+    as: "pointStructure",
   });
 };
 

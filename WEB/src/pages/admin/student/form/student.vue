@@ -335,8 +335,8 @@
                       outlined
                       single-line
                       hide-details="auto"
-                      :rules="[(v) => !!v || 'EndClass date is required']"
                       readonly
+                      clearable
                       :disabled="flagView"
                       v-bind="attrs"
                       v-on="on"

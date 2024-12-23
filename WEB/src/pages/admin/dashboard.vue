@@ -6,7 +6,7 @@
           <v-list-item two-line>
             <v-list-item-content>
               <v-list-item-title class="text-subtitle-2">
-                Total Income [2024]
+                Total Income [{{ new Date().getFullYear() }}]
               </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
@@ -25,7 +25,7 @@
           <v-list-item two-line>
             <v-list-item-content>
               <v-list-item-title class="text-subtitle-2">
-                Total Target [2024]
+                Total Target [{{ new Date().getFullYear() }}]
               </v-list-item-title>
             </v-list-item-content>
             <v-list-item-action
