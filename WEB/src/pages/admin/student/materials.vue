@@ -42,6 +42,7 @@
           :headers="headers"
           :filter-keys="['title', 'category', 'type']"
           :items="items"
+          mobile-breakpoint="0"
           show-select
         >
           <template #item.name="{ item }">
@@ -102,6 +103,7 @@
           :filter-keys="['title', 'category', 'type']"
           :items="itemsMaterials"
           show-select
+          mobile-breakpoint="0"
         >
           <template #item.photo="{ item }">
             <v-avatar size="64" rounded color="grey lighten-4" class="my-2">

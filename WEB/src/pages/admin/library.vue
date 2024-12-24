@@ -42,6 +42,7 @@
           :headers="headers"
           :filter-keys="['title', 'category', 'type']"
           :items="items"
+          mobile-breakpoint="0"
           show-select
         >
           <template #item.name="{ item }">
@@ -101,6 +102,7 @@
           :headers="headersMaterials"
           :filter-keys="['title', 'category', 'type']"
           :items="itemsMaterials"
+          mobile-breakpoint="0"
           show-select
         >
           <template #item.photo="{ item }">

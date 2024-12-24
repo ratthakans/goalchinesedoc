@@ -49,6 +49,7 @@
           :filter-keys="['title', 'category', 'type']"
           :items="items"
           show-select
+          mobile-breakpoint="0"
         >
           <template #[`item.name`]="{ item }">
             <div class="d-flex align-center">

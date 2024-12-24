@@ -50,6 +50,7 @@
           :filter-keys="['title', 'category', 'type']"
           :items="itemsMaterials"
           show-select
+          mobile-breakpoint="0"
         >
           <template #[`item.photo`]="{ item }">
             <v-avatar

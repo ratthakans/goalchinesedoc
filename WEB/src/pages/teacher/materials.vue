@@ -33,6 +33,7 @@
           :headers="headers"
           :filter-keys="['title', 'category', 'type']"
           :items="items"
+          mobile-breakpoint="0"
         >
           <template #item.photo="{ item }">
             <v-avatar

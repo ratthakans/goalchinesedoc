@@ -14,6 +14,7 @@
         <v-data-table
           :headers="headers"
           :filter-keys="['title', 'category', 'type']"
+          mobile-breakpoint="0"
           :items="items"
         >
           <template #item.studyDay="{ item }">

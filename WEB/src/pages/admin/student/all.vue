@@ -49,6 +49,7 @@
           :headers="headers"
           :filter-keys="['title', 'category', 'type']"
           :items="items"
+          mobile-breakpoint="0"
           show-select
         >
           <template #item.name="{ item }">

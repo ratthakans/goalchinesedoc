@@ -62,6 +62,7 @@
           v-model="selectedClass"
           :headers="headers"
           :filter-keys="['title', 'category', 'type']"
+          mobile-breakpoint="0"
           :items="items"
           show-select
           class="text-subtitle-1 grey--text text--darken-3"
