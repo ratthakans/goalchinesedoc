@@ -87,7 +87,7 @@
         </v-card>
       </v-col>
 
-      <v-col cols="12" md="3" v-for="(item, i) in summaryList" :key="i">
+      <v-col cols="6" md="3" v-for="(item, i) in summaryList" :key="i">
         <v-alert
           :color="item.color"
           border="left"
