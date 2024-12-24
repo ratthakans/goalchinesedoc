@@ -106,6 +106,7 @@
                     <h6 class="subtitle-1">
                       {{
                         new Date(event.start).toLocaleTimeString("en-US", {
+                          hourCycle: "h23",
                           hour: "2-digit",
                           minute: "2-digit",
                         })
@@ -114,6 +115,7 @@
                     <span class="body-2">
                       {{
                         new Date(event.end).toLocaleTimeString("en-US", {
+                          hourCycle: "h23",
                           hour: "2-digit",
                           minute: "2-digit",
                         })
@@ -125,9 +127,11 @@
                     :class="['mx-4']"
                     :style="`border: 3px solid; color: ${event.color};`"
                   ></v-divider>
-                  <div class="d-flex flex-column">
-                    <h6 class="subtitle-1">{{ event.name }}</h6>
-                    <small class="text-caption">
+                  <div class="d-flex flex-column" style="max-width: 250px">
+                    <h6 class="subtitle-1 d-inline-block text-truncate">
+                      {{ event.name }}
+                    </h6>
+                    <small class="text-caption text-truncate">
                       {{ event?.class?.studyPlatform }} , {{ event?.link }}
                     </small>
                   </div>

@@ -339,7 +339,14 @@ export async function exportPdf(data) {
           },
           it.note,
         ],
-        pageBreak: i === 0 || i === data.length - 1 ? "" : "after",
+        pageBreak:
+          data.length > 1
+            ? i === 0
+              ? "after"
+              : ""
+            : i === 0 || i === data.length - 1
+            ? ""
+            : "after",
       },
     ];
     content.push(...result);
