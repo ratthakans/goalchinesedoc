@@ -18,7 +18,7 @@
                 icon
                 @click="saveFeestructure(item.id, item, inx)"
                 v-if="userInfo?.role !== 'user' || permission?.edit"
-                v-show="!flagView"
+                v-show="!flagCreate"
               >
                 <v-icon>mdi-content-save</v-icon>
               </v-btn>
@@ -27,7 +27,6 @@
                 dense
                 icon
                 @click="deleteFeeStructure(item.id, inx)"
-                v-show="!flagView"
                 v-if="userInfo?.role !== 'user' || permission?.delete"
               >
                 <v-icon>mdi-trash-can</v-icon>
@@ -203,6 +202,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    flagCreate: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -228,7 +231,14 @@ export default {
       userInfo: "getUserinfo",
     }),
   },
-  watch: {},
+  watch: {
+    itemsFeeStruture: {
+      handler() {
+        this.$emit("input", this.itemsFeeStruture);
+      },
+      deep: true,
+    },
+  },
   async mounted() {
     this.fetchOption();
 
@@ -242,6 +252,10 @@ export default {
     this.permission = this.userInfo.permissions.find(
       (it) => it.link === this.$route.path
     );
+
+    this.$nextTick(() => {
+      this.$emit("refForm", this.$refs.formFee);
+    });
   },
   methods: {
     async fetchOption() {
@@ -264,7 +278,12 @@ export default {
         const { data } = await this.axios.get(
           `/feeStructure/account/${this.$route.params.id}`
         );
-        this.itemsFeeStruture = data;
+        this.itemsFeeStruture = data.map((it) => {
+          return {
+            ...it,
+            payDate: it.payDate.substring(0, 10),
+          };
+        });
       } catch (error) {
         if (error.response.status !== 404)
           this.$swal.fire({

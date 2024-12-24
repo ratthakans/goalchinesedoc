@@ -18,7 +18,7 @@
                 icon
                 @click="saveFeestructure(item.id, item, inx)"
                 v-if="userInfo?.role !== 'user' || permission?.edit"
-                v-show="!flagView"
+                v-show="!flagCreate"
               >
                 <v-icon>mdi-content-save</v-icon>
               </v-btn>
@@ -159,6 +159,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    flagCreate: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -176,7 +180,14 @@ export default {
       userInfo: "getUserinfo",
     }),
   },
-  watch: {},
+  watch: {
+    itemsFeeStruture: {
+      handler() {
+        this.$emit("input", this.itemsFeeStruture);
+      },
+      deep: true,
+    },
+  },
   async mounted() {
     if (this.$route.params.id) {
       await this.getFeeStructure();
@@ -188,6 +199,10 @@ export default {
     this.permission = this.userInfo.permissions.find(
       (it) => it.link === this.$route.path
     );
+
+    this.$nextTick(() => {
+      this.$emit("refForm", this.$refs.formFee);
+    });
   },
   methods: {
     async getFeeStructure() {

@@ -10,7 +10,14 @@
     </v-row>
 
     <v-form ref="form" lazy-validation>
-      <FormTeacher v-model="formInput" />
+      <FormTeacher
+        v-model="formInput"
+        :flagCreate="true"
+        @refFormFee="(ref) => (refFormFee = ref)"
+        @dataFormFee="(data) => (formFeeStructure = data)"
+        @refFormScore="(ref) => (refFormScore = ref)"
+        @dataFormScore="(data) => (formScoreStructure = data)"
+      />
     </v-form>
 
     <v-row justify="end">
@@ -44,6 +51,10 @@ export default {
     return {
       permission: {},
       formInput: {},
+      refFormFee: null,
+      formFeeStructure: [],
+      refFormScore: null,
+      formScoreStructure: [],
     };
   },
   computed: {
@@ -59,6 +70,12 @@ export default {
   methods: {
     async create() {
       if (!this.$refs.form.validate()) return;
+      for (let i = 0; i < this.refFormFee?.length; i++) {
+        if (!this.refFormFee[i].validate()) return;
+      }
+      for (let i = 0; i < this.refFormScore?.length; i++) {
+        if (!this.refFormScore[i].validate()) return;
+      }
       try {
         this.formInput.role = "teacher";
         let formData = new FormData();
@@ -70,6 +87,23 @@ export default {
           }
         }
         const { data } = await this.axios.post(`/account`, formData);
+
+        const accountID = data.account.id;
+
+        for (let i = 0; i < this.formFeeStructure.length; i++) {
+          await this.axios.post(`/feeStructure`, {
+            ...this.formFeeStructure[i],
+            accountID: accountID,
+          });
+        }
+
+        for (let i = 0; i < this.formScoreStructure.length; i++) {
+          await this.axios.post(`/pointStructure`, {
+            ...this.formScoreStructure[i],
+            accountID: accountID,
+            updateBy: this.userInfo.accountID,
+          });
+        }
 
         this.$swal(data?.message, "", "success");
         this.$router.push({ name: "teacher" });

@@ -364,9 +364,19 @@
       </v-col>
     </v-row>
 
-    <FeeStructureComponent :flagView="flagView" />
+    <FeeStructureComponent
+      :flagView="flagView"
+      :flagCreate="flagCreate"
+      v-model="formFeeStructure"
+      @refForm="(ref) => (refFormFee = ref)"
+    />
 
-    <ScoreStructureComponent :flagView="flagView" />
+    <ScoreStructureComponent
+      :flagView="flagView"
+      :flagCreate="flagCreate"
+      v-model="formScoreStructure"
+      @refForm="(ref) => (refFormScore = ref)"
+    />
   </div>
 </template>
 
@@ -389,6 +399,10 @@ export default {
       default: false,
     },
     flagView: {
+      type: Boolean,
+      default: false,
+    },
+    flagCreate: {
       type: Boolean,
       default: false,
     },
@@ -424,6 +438,10 @@ export default {
       itemsOptions: {
         teacherType: [],
       },
+      formFeeStructure: [],
+      refFormFee: null,
+      formScoreStructure: [],
+      refFormScore: null,
     };
   },
   watch: {
@@ -440,6 +458,10 @@ export default {
     formInput: {
       handler() {
         this.$emit("input", this.formInput);
+        this.$emit("refFormFee", this.refFormFee);
+        this.$emit("dataFormFee", this.formFeeStructure);
+        this.$emit("refFormScore", this.refFormScore);
+        this.$emit("dataFormScore", this.formScoreStructure);
       },
       deep: true,
     },

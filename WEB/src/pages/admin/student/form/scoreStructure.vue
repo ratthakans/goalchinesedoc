@@ -18,7 +18,7 @@
                 icon
                 @click="saveScorestructure(item.id, item, inx)"
                 v-if="userInfo?.role !== 'user' || permission?.edit"
-                v-show="!flagView"
+                v-show="!flagCreate"
               >
                 <v-icon>mdi-content-save</v-icon>
               </v-btn>
@@ -195,6 +195,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    flagCreate: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -211,7 +215,14 @@ export default {
       },
     };
   },
-  watch: {},
+  watch: {
+    itemsScoreStruture: {
+      handler() {
+        this.$emit("input", this.itemsScoreStruture);
+      },
+      deep: true,
+    },
+  },
   computed: {
     ...mapState(useAppStore, {
       userInfo: "getUserinfo",
@@ -228,6 +239,10 @@ export default {
     this.permission = this.userInfo.permissions.find(
       (it) => it.link === this.$route.path
     );
+
+    this.$nextTick(() => {
+      this.$emit("refForm", this.$refs.formPoint);
+    });
   },
   methods: {
     async getPointStructure() {
@@ -235,7 +250,12 @@ export default {
         const { data } = await this.axios.get(
           `/pointStructure/account/${this.$route.params.id}`
         );
-        this.itemsScoreStruture = data;
+        this.itemsScoreStruture = data.map((it) => {
+          return {
+            ...it,
+            updateDate: it.updateDate.substring(0, 10),
+          };
+        });
       } catch (error) {
         if (error.response.status !== 404)
           this.$swal.fire({
