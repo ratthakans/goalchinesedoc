@@ -14,7 +14,7 @@
       </v-col>
     </v-row>
 
-    <v-row class="fill-height">
+    <v-row style="height: 750px">
       <v-col cols="12">
         <CalendarComponent
           :eventsItems="events"

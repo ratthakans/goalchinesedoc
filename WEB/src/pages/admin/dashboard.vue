@@ -101,7 +101,21 @@
       </v-col>
     </v-row>
 
-    <v-row class="fill-height">
+    <v-row>
+      <v-col cols="12">
+        <v-sheet
+          rounded="lg"
+          color="info"
+          class="mx-auto d-flex justify-center align-center"
+          height="50"
+          width="100%"
+        >
+          <h4 class="text-h4 white--text font-weight-bold">Class Calendar</h4>
+        </v-sheet>
+      </v-col>
+    </v-row>
+
+    <v-row style="height: 750px">
       <v-col cols="12">
         <CalendarComponent
           class="mt-6"
