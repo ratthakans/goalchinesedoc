@@ -48,7 +48,11 @@ const PointStructure = sequelize.define(
 );
 
 PointStructure.associate = (models) => {
-  PointStructure.belongsTo(models.Account, { foreignKey: "updateBy" });
+  PointStructure.belongsTo(models.Account, {
+    foreignKey: "updateBy",
+    onDelete: "cascade",
+    hooks: true,
+  });
 };
 
 module.exports = PointStructure;

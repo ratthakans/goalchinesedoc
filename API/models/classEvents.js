@@ -6,11 +6,7 @@ const ClassEvents = sequelize.define(
   {
     classId: {
       type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: "Class", // Name of the related table
-        key: "id",
-      },
+      allowNull: true,
     },
     title: {
       type: DataTypes.STRING,
@@ -47,8 +43,15 @@ ClassEvents.associate = (models) => {
   ClassEvents.belongsTo(models.Account, {
     foreignKey: "updateBy",
     as: "updatedBy",
+    onDelete: "cascade",
+    hooks: true,
   });
-  ClassEvents.belongsTo(models.Class, { foreignKey: "classId", as: "class" });
+  ClassEvents.belongsTo(models.Class, {
+    foreignKey: "classId",
+    as: "class",
+    onDelete: "cascade",
+    hooks: true,
+  });
 };
 
 module.exports = ClassEvents;

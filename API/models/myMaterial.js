@@ -7,18 +7,10 @@ const MyMaterial = sequelize.define(
     accountID: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      references: {
-        model: "Account", // Name of the related table
-        key: "id",
-      },
     },
     materialID: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      references: {
-        model: "Materials", // Name of the related table
-        key: "id",
-      },
     },
   },
   {
@@ -27,7 +19,11 @@ const MyMaterial = sequelize.define(
 );
 
 MyMaterial.associate = (models) => {
-  MyMaterial.belongsTo(models.Account, { foreignKey: "accountID" });
+  MyMaterial.belongsTo(models.Account, {
+    foreignKey: "accountID",
+    onDelete: "cascade",
+    hooks: true,
+  });
   MyMaterial.belongsTo(models.Materials, {
     foreignKey: "materialID",
     as: "material",

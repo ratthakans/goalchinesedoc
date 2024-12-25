@@ -116,14 +116,23 @@ Account.associate = (models) => {
     as: "classType",
   });
   Account.belongsTo(models.Branch, { foreignKey: "branchID", as: "branch" });
-  Account.hasOne(models.User, { foreignKey: "accountID", as: "user" });
+  Account.hasOne(models.User, {
+    foreignKey: "accountID",
+    as: "user",
+    onDelete: "cascade",
+    hooks: true,
+  });
   Account.hasMany(models.Permission, {
     foreignKey: "accountID",
     as: "permissions",
+    onDelete: "cascade",
+    hooks: true,
   });
   Account.hasOne(models.PointStructure, {
     foreignKey: "accountID",
     as: "pointStructure",
+    onDelete: "cascade",
+    hooks: true,
   });
 };
 

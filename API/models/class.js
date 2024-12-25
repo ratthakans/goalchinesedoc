@@ -107,6 +107,7 @@ const Class = sequelize.define(
     },
     updateBy: {
       type: DataTypes.INTEGER,
+      allowNull: true,
       references: {
         model: "Account", // Name of the related table
         key: "id",
@@ -153,8 +154,18 @@ Class.associate = (models) => {
     foreignKey: "classTypeID",
     as: "classType",
   });
-  Class.belongsTo(models.Account, { foreignKey: "teacherID", as: "teacher" });
-  Class.belongsTo(models.Account, { foreignKey: "updateBy", as: "updatedBy" });
+  Class.belongsTo(models.Account, {
+    foreignKey: "teacherID",
+    as: "teacher",
+    onDelete: "cascade",
+    hooks: true,
+  });
+  Class.belongsTo(models.Account, {
+    foreignKey: "updateBy",
+    as: "updatedBy",
+    onDelete: "cascade",
+    hooks: true,
+  });
   Class.belongsTo(models.MaterialType, {
     foreignKey: "materialTypeID",
     as: "materialType",
@@ -167,16 +178,22 @@ Class.associate = (models) => {
   Class.hasMany(models.ClassStudent, {
     foreignKey: "classID",
     as: "classStudent",
+    onDelete: "cascade",
+    hooks: true,
   });
 
   Class.hasMany(models.ClassStudy, {
     foreignKey: "classID",
     as: "classStudy",
+    onDelete: "cascade",
+    hooks: true,
   });
 
   Class.hasMany(models.Attendance, {
     foreignKey: "classId",
     as: "attendance",
+    onDelete: "cascade",
+    hooks: true,
   });
 };
 

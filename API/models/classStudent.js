@@ -6,11 +6,7 @@ const ClassStudent = sequelize.define(
   {
     accountID: {
       type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: "Account", // Name of the related table
-        key: "id",
-      },
+      allowNull: true,
     },
     classID: {
       type: DataTypes.INTEGER,
