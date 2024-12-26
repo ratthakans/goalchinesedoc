@@ -23,84 +23,86 @@ exports.getSummaryBranch = async (req, res) => {
     const currentDate = new Date();
     const result = await sequelize.query(
       `
-
-	  SELECT 
+SELECT 
 	  id,
 	  name,
 	  (
-	  SELECT 
+	SELECT 
 		  count(Class.id)
-	  FROM
+	FROM
 		  Class
-	  WHERE
+	WHERE
 		  Class.branchID = b.id
 	  ) as totalClass,
 	  (
-	  SELECT
+	SELECT
 		  SUM(student_count)
-	  FROM
+	FROM
 		  (
-		  SELECT 
+		SELECT 
 			  COUNT(cs.id) AS student_count
-		  FROM
+		FROM
 			  Class
-		  LEFT JOIN
+		LEFT JOIN
 			  ClassStudent cs ON
 			  cs.classID = Class.id
-		  WHERE
+		WHERE
 			  Class.branchID = b.id
-		  GROUP BY
+		GROUP BY
 			  Class.id
 	  ) subquery
 	  ) as totalStudent,
 	  (
-	  SELECT
+	SELECT
 		  count(id)
-	  FROM
+	FROM
 		  (
-		  SELECT 
+		SELECT 
 			  id
-		  FROM
+		FROM
 			  Class c
-		  WHERE
+		WHERE
 			  c.id in (
-			  select
+			select
 				  classId
-			  from
+			from
 				  Attendance a
-			  GROUP by
+			GROUP by
 				  classId
-			  having
+			having
 				  c.registeredTimes - count(a.id) < 3 
 	  )
-				  and c.branchID = b.id
-			  GROUP BY
+				and c.branchID = b.id
+			GROUP BY
 				  id,
 				  b.id
 	  ) subquery
 	  ) as totalExpireClass,
 	  (
-	  SELECT
-		  sum(totalIncomeClass)
-	  FROM
-		  (
-		  SELECT
-			  sum(Class.totalFeePerClass) as totalIncomeClass
-		  FROM
-			  Class
-		  WHERE
-			  Class.branchID = b.id
-			  AND 
-			  MONTH(Class.createdAt) = MONTH(CURRENT_DATE())
-				  and YEAR(Class.createdAt) = YEAR(CURRENT_DATE())
-			  GROUP BY
-				  Class.id
-	  )subquery
+	SELECT
+		sum(totalIncomeClass)
+	FROM
+		(
+		SELECT
+			sum(fs.classFee) as totalIncomeClass
+		FROM
+			Account a,
+			FeeStructure fs
+		WHERE
+			a.id = fs.accountID
+			and
+			a.branchID = b.id
+			AND
+          MONTH(fs.payDate) = MONTH(CURRENT_DATE())
+				and YEAR(fs.payDate) = YEAR(CURRENT_DATE())
+			GROUP BY
+				a.branchID
+          )subquery
   
   ) as totalIncomeClass
-  FROM
+FROM
 	  Branch b ;
-
+	  
       `,
       { type: sequelize.QueryTypes.SELECT }
     );
