@@ -23,7 +23,8 @@ exports.getSummaryBranch = async (req, res) => {
     const currentDate = new Date();
     const result = await sequelize.query(
       `
-SELECT 
+
+	  SELECT 
 	  id,
 	  name,
 	  (
@@ -35,22 +36,17 @@ SELECT
 		  Class.branchID = b.id
 	  ) as totalClass,
 	  (
-	SELECT
-		  SUM(student_count)
-	FROM
-		  (
-		SELECT 
-			  COUNT(cs.id) AS student_count
+	SELECT 
+			  COUNT(a.id) AS student_count
 		FROM
-			  Class
-		LEFT JOIN
-			  ClassStudent cs ON
-			  cs.classID = Class.id
-		WHERE
-			  Class.branchID = b.id
+		Account a
+		WHERE 
+			a.branchID = b.id
+		AND
+          MONTH(a.addmissionDate) = MONTH(CURRENT_DATE())
+		and YEAR(a.addmissionDate) = YEAR(CURRENT_DATE())
 		GROUP BY
-			  Class.id
-	  ) subquery
+			 	a.branchID
 	  ) as totalStudent,
 	  (
 	SELECT
