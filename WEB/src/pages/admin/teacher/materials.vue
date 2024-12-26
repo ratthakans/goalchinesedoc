@@ -16,9 +16,17 @@
       </v-col>
     </v-row>
 
-    <v-row justify="space-between">
+    <v-row>
       <v-col cols="4">
         <h5 class="text-h5"><span class="red--text">*</span> Select teacher</h5>
+      </v-col>
+      <v-col cols="auto" class="ml-auto">
+        <v-btn
+          color="info"
+          :disabled="!selectedTeacher.length"
+          @click="clearMaterials"
+          >Clear Materials Data</v-btn
+        >
       </v-col>
       <v-col cols="4">
         <v-text-field
@@ -159,7 +167,7 @@ export default {
       headers: [
         {
           align: "start",
-          value: "id",
+          value: "teacherNo",
           sortable: false,
           text: "Teacher No.",
         },
@@ -257,6 +265,32 @@ export default {
           materials: this.selectedMaterials.map((item) => item.id),
         };
         const { data } = await this.axios.post(`/myMaterial`, body);
+
+        this.$swal(data?.message, "", "success");
+      } catch (error) {
+        this.$swal.fire({
+          title: error.response.data.error,
+          text: error.response.data.details,
+          icon: "error",
+        });
+      }
+    },
+    async clearMaterials() {
+      // confirm delete
+      const { isDismissed } = await this.$swal({
+        title: "Are you sure?",
+        text: "Once deleted, you will not be able to recover this data!",
+        icon: "warning",
+        buttons: true,
+      });
+
+      if (isDismissed) return;
+
+      try {
+        const { data } = await this.axios.put(`/myMaterial/clear/account`, {
+          accountIDs: this.selectedTeacher.map((item) => item.id),
+          type: "all",
+        });
 
         this.$swal(data?.message, "", "success");
       } catch (error) {

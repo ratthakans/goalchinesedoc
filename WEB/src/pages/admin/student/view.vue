@@ -48,8 +48,8 @@
         <v-tabs v-model="tab" color="deep-purple-accent-4">
           <v-tab :key="1"> General </v-tab>
           <v-tab :key="2"> Materials list </v-tab>
-          <v-tab :key="3"> Payment History </v-tab>
-          <v-tab :key="4"> Class History </v-tab>
+          <!-- <v-tab :key="3"> Payment History </v-tab>
+          <v-tab :key="4"> Class History </v-tab> -->
         </v-tabs>
 
         <v-tabs-items v-model="tab">
@@ -241,11 +241,11 @@ export default {
         );
         this.dataStudent = {
           ...data,
-          dateOfBirth: data.dateOfBirth.substring(0, 10),
+          dateOfBirth: data.dateOfBirth?.substring(0, 10),
 
-          addmissionDate: data.addmissionDate.substring(0, 10),
+          addmissionDate: data.addmissionDate?.substring(0, 10),
 
-          endClassDate: data.endClassDate.substring(0, 10),
+          endClassDate: data.endClassDate?.substring(0, 10),
 
           username: data?.user?.username,
           password: "",

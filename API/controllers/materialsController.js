@@ -197,3 +197,35 @@ exports.delete = async (req, res, next) => {
     next(error); // Pass the error to the centralized error handler
   }
 };
+
+// Delete image from an Account by ID
+exports.deleteImage = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    let material = await Materials.findByPk(id);
+    if (!material) {
+      return res.status(404).json({ error: "Material not found" });
+    }
+
+    if (material.photo) {
+      const imagePath = path.resolve(material.photo);
+      // Remove the image file
+      fs.unlink(imagePath, (err) => {
+        if (err) {
+          console.error(err);
+        }
+      });
+    }
+
+    // Update the Account with the filtered data
+    await material.update({ photo: null });
+    res.status(200).json({ message: "Image deleted successfully" });
+
+    logger.info(
+      `Material image deleted: ${id} by [${req.user.id}] ${req.user.username}`
+    );
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};

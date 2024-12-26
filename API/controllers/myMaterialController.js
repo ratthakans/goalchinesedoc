@@ -1,5 +1,5 @@
 const logger = require("../logger");
-const { MyMaterial, Materials } = require("../models"); // Ensure correct path to your models
+const { MyMaterial, Materials, User } = require("../models"); // Ensure correct path to your models
 const { Op } = require("sequelize");
 
 // Create a new MyMaterial record
@@ -29,10 +29,10 @@ exports.create = async (req, res) => {
     }
 
     res.status(201).json({
-      message: "MyMaterial created successfully",
+      message: "My Material created successfully",
     });
 
-    logger.info(`MyMaterial created: by [${req.user.id}]${req.user.username}`);
+    logger.info(`My Material created: by [${req.user.id}]${req.user.username}`);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -55,7 +55,7 @@ exports.findOne = async (req, res) => {
     const myMaterial = await MyMaterial.findByPk(id);
 
     if (!myMaterial) {
-      return res.status(404).json({ error: "MyMaterial not found" });
+      return res.status(404).json({ error: "My Material not found" });
     }
 
     res.status(200).json(myMaterial);
@@ -78,7 +78,7 @@ exports.getMaterialsByAccountId = async (req, res) => {
       });
 
       if (!lastMaterial) {
-        return res.status(404).json({ error: "MyMaterial not found" });
+        return res.status(404).json({ error: "My Material not found" });
       }
 
       where = {
@@ -140,7 +140,7 @@ exports.getMaterialsByAccountId = async (req, res) => {
     });
 
     if (!myMaterials.length) {
-      return res.status(404).json({ error: "MyMaterial not found" });
+      return res.status(404).json({ error: "My Material not found" });
     }
 
     res.status(200).json(myMaterials);
@@ -158,7 +158,7 @@ exports.update = async (req, res) => {
     const myMaterial = await MyMaterial.findByPk(id);
 
     if (!myMaterial) {
-      return res.status(404).json({ error: "MyMaterial not found" });
+      return res.status(404).json({ error: "My Material not found" });
     }
 
     if (accountID) myMaterial.accountID = accountID;
@@ -167,7 +167,7 @@ exports.update = async (req, res) => {
     await myMaterial.save();
 
     res.status(200).json({
-      message: "MyMaterial updated successfully",
+      message: "My Material updated successfully",
       myMaterial,
     });
 
@@ -187,13 +187,68 @@ exports.delete = async (req, res) => {
     const deleted = await MyMaterial.destroy({ where: { id } });
 
     if (!deleted) {
-      return res.status(404).json({ error: "MyMaterial not found" });
+      return res.status(404).json({ error: "My Material not found" });
     }
 
     res.status(204).send();
 
     logger.info(
-      `MyMaterial deleted: ${id} by [${req.user.id}]${req.user.username}`
+      `My Material deleted: ${id} by [${req.user.id}]${req.user.username}`
+    );
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Delete all MyMaterial records by user role
+exports.deleteByAccountIDs = async (req, res) => {
+  try {
+    const { accountIDs, type } = req.body;
+
+    let where = {
+      accountID: accountIDs,
+    };
+    if (type === "all") {
+      where = {
+        ...where,
+        "$material.materialFor.name$": {
+          [Op.ne]: "library",
+        },
+      };
+    } else {
+      where = {
+        ...where,
+        "$material.materialFor.name$": type,
+      };
+    }
+
+    const material = await MyMaterial.findAll({
+      where,
+      include: {
+        model: Materials,
+        as: "material",
+        attributes: { exclude: ["updatedAt"] },
+        include: [
+          {
+            association: "materialFor",
+            attributes: ["id", "name"],
+          },
+        ],
+      },
+    });
+
+    material.forEach(async (myMaterial) => {
+      await MyMaterial.destroy({ where: { id: myMaterial.id } });
+    });
+
+    return res.status(200).json({
+      message: "My Material deleted successfully",
+    });
+
+    logger.info(
+      `My Material deleted: ${accountIDs.join(",")} by [${req.user.id}]${
+        req.user.username
+      }`
     );
   } catch (error) {
     res.status(500).json({ error: error.message });

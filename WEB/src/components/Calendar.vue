@@ -767,12 +767,12 @@ export default {
           const body = {
             ...this.formInput,
             classId: this.selectedClass.id,
-            startDate: `${new Date(this.formInput.startDate)
-              .toISOString()
-              .substring(0, 10)} ${this.formInput.startTime}`,
-            endDate: `${new Date(this.formInput.endDate)
-              .toISOString()
-              .substring(0, 10)} ${this.formInput.endTime}`,
+            startDate: `${this.formInput.startDate.substring(0, 10)} ${
+              this.formInput.startTime
+            }`,
+            endDate: `${this.formInput.endDate.substring(0, 10)} ${
+              this.formInput.endTime
+            }`,
             updateBy: this.userInfo.accountID,
           };
           response = await this.axios.put(

@@ -271,6 +271,7 @@ export default {
         studyDate: "",
         classId: null,
         status: "",
+        note: "",
       },
     };
   },
@@ -331,12 +332,14 @@ export default {
             studyDate: this.editItem.studyDate,
             classId: this.editClassID,
             status: this.editItem.status,
+            note: this.editItem.note,
           });
         } else {
           await this.axios.post(`/attendances`, {
             studyDate: this.editItem.studyDate,
             classId: this.editClassID,
             status: this.editItem.status,
+            note: this.editItem.note,
           });
         }
 

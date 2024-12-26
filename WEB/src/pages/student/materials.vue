@@ -84,7 +84,7 @@ export default {
       headers: [
         {
           align: "start",
-          value: "material.id",
+          value: "material.no",
           sortable: false,
           text: "Materials No.",
         },

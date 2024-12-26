@@ -60,8 +60,8 @@
         <label for="">{{ itemData.teacherType?.name || "N/A" }}</label>
       </v-col>
       <v-col cols="12" md="8">
-        <label class="v-label mb-2 text-subtitle-2 mr-2">Register No : </label>
-        <label for="">{{ itemData.registerNo || "N/A" }}</label>
+        <label class="v-label mb-2 text-subtitle-2 mr-2">Teacher No : </label>
+        <label for="">{{ itemData.teacherNo || "N/A" }}</label>
       </v-col>
       <v-col cols="12" md="4">
         <label class="v-label mb-2 text-subtitle-2 mr-2"

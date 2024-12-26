@@ -44,7 +44,7 @@ const Account = sequelize.define(
         key: "id",
       },
     },
-    registerNo: {
+    teacherNo: {
       type: DataTypes.STRING,
     },
     registerDate: {

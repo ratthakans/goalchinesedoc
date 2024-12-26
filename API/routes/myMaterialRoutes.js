@@ -13,4 +13,7 @@ router.delete("/:id", myMaterialController.delete); // Delete
 // Custom routes
 router.get("/account/:accountID", myMaterialController.getMaterialsByAccountId); // Read all by accountId
 
+// Clear all records by deleteByAccountIDs
+router.put("/clear/account", myMaterialController.deleteByAccountIDs);
+
 module.exports = router;

@@ -29,4 +29,6 @@ router.get("/", materialsController.findAll); // Get all Materials
 router.get("/:id", materialsController.findOne); // Get a specific Material
 router.delete("/:id", materialsController.delete); // Delete a Material
 
+router.delete("/image/:id", materialsController.deleteImage);
+
 module.exports = router;

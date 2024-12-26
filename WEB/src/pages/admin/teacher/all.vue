@@ -138,7 +138,7 @@ export default {
       headers: [
         {
           align: "start",
-          value: "id",
+          value: "teacherNo",
           sortable: false,
           text: "Teacher No.",
         },

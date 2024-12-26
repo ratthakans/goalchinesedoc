@@ -18,4 +18,6 @@ router.get("/:id", accountController.findOne);
 router.put("/:id", upload.single("profile"), accountController.update);
 router.delete("/:id", accountController.delete);
 
+router.delete("/image/:id", accountController.deleteImage);
+
 module.exports = router;

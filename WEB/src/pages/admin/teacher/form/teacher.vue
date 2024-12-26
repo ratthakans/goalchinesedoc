@@ -270,30 +270,39 @@
               </v-col>
               <v-col cols="12" md="4">
                 <label class="v-label mb-2 text-subtitle-2">
-                  <span class="red--text mr-2">*</span>Register No :
+                  <span class="red--text mr-2">*</span>Teacher No :
                 </label>
                 <v-text-field
-                  v-model="formInput.registerNo"
+                  v-model="formInput.teacherNo"
                   dense
                   outlined
                   single-line
                   hide-details="auto"
                   placeholder="Enter register number"
-                  :rules="[(v) => !!v || 'Register No is required']"
+                  :rules="[(v) => !!v || 'Teacher No is required']"
                   :readonly="flagView"
                 />
               </v-col>
               <v-col cols="12" md="4">
-                <label class="v-label mb-2 text-subtitle-2">
-                  Upload Photo :
-                </label>
-                <v-file-input
-                  v-model="formInput.photo"
-                  dense
-                  outlined
-                  hide-details="auto"
-                  :readonly="flagView"
-                />
+                <v-row align="center">
+                  <v-col cols="">
+                    <label class="v-label mb-2 text-subtitle-2">
+                      Upload Photo :
+                    </label>
+                    <v-file-input
+                      v-model="formInput.photo"
+                      dense
+                      outlined
+                      hide-details="auto"
+                      :readonly="flagView"
+                    />
+                  </v-col>
+                  <v-col cols="auto" v-if="!flagCreate && formInput.photo">
+                    <v-btn color="error" icon @click="deletePhoto">
+                      <v-icon>mdi-trash-can</v-icon>
+                    </v-btn>
+                  </v-col>
+                </v-row>
               </v-col>
               <v-col cols="12" md="8">
                 <v-row>
@@ -345,7 +354,7 @@
 
               <v-col cols="12" md="4">
                 <label class="v-label mb-2 text-subtitle-2">
-                  Inter view note details :
+                  Interview note details :
                 </label>
                 <v-textarea
                   v-model="formInput.note"
@@ -427,7 +436,7 @@ export default {
         scoreForKids: null,
         scoreForAdult: null,
         teacherTypeID: null,
-        registerNo: "",
+        teacherNo: "",
         photo: null,
         avaliableForClass: "",
         language: "",
@@ -482,6 +491,31 @@ export default {
       try {
         const { data } = await this.axios.get(`/teacherType`);
         this.itemsOptions.teacherType = data;
+      } catch (error) {
+        this.$swal.fire({
+          title: error.response.data.error,
+          text: error.response.data.details,
+          icon: "error",
+        });
+      }
+    },
+    async deletePhoto() {
+      const { isDismissed } = await this.$swal({
+        title: "Are you sure?",
+        text: "Once deleted, you will not be able to recover this data!",
+        icon: "warning",
+        buttons: true,
+      });
+
+      if (isDismissed) return;
+
+      //delete data from api
+      try {
+        const { data } = await this.axios.delete(
+          `/account/image/${this.$route.params.id}`
+        );
+        this.$swal(data?.message, "", "success");
+        this.fetchData();
       } catch (error) {
         this.$swal.fire({
           title: error.response.data.error,

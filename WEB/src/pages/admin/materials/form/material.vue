@@ -71,17 +71,26 @@
         </v-select>
       </v-col>
       <v-col cols="12" md="6">
-        <label class="v-label mb-2 text-subtitle-2"> Upload Photo : </label>
-        <v-file-input
-          v-model="formInput.photo"
-          dense
-          outlined
-          hide-details="auto"
-          placeholder="No file chosen"
-          persistent-placeholder
-          accept="image/*"
-        >
-        </v-file-input>
+        <v-row align="center">
+          <v-col cols="">
+            <label class="v-label mb-2 text-subtitle-2"> Upload Photo : </label>
+            <v-file-input
+              v-model="formInput.photo"
+              dense
+              outlined
+              hide-details="auto"
+              placeholder="No file chosen"
+              persistent-placeholder
+              accept="image/*"
+            >
+            </v-file-input>
+          </v-col>
+          <v-col cols="auto" v-if="flagEdit && formInput.photo">
+            <v-btn color="error" icon @click="deletePhoto">
+              <v-icon>mdi-trash-can</v-icon>
+            </v-btn>
+          </v-col>
+        </v-row>
       </v-col>
     </v-row>
 
@@ -164,6 +173,10 @@ export default {
   name: "FormMaterial",
   props: {
     editItems: Object,
+    flagEdit: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -215,6 +228,31 @@ export default {
         this.items[items] = data;
       } catch (error) {
         console.log(error);
+      }
+    },
+    async deletePhoto() {
+      const { isDismissed } = await this.$swal({
+        title: "Are you sure?",
+        text: "Once deleted, you will not be able to recover this data!",
+        icon: "warning",
+        buttons: true,
+      });
+
+      if (isDismissed) return;
+
+      //delete data from api
+      try {
+        const { data } = await this.axios.delete(
+          `/materials/image/${this.$route.params.id}`
+        );
+        this.$swal(data?.message, "", "success");
+        this.fetchData();
+      } catch (error) {
+        this.$swal.fire({
+          title: error.response.data.error,
+          text: error.response.data.details,
+          icon: "error",
+        });
       }
     },
   },

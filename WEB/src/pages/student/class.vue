@@ -46,7 +46,7 @@
           <div class="text-grey">Remaining class:</div>
           <div class="d-flex justify-center align-center fill-height pb-4">
             <h3 class="text-h3 font-weight-bold">
-              {{ totalClassTimes - events.length }} / {{ totalClassTimes }}
+              {{ totalClassTimes - totalAttendTimes }} / {{ totalClassTimes }}
             </h3>
             <small class="mt-5 text-grey pl-4"> times</small>
           </div>
@@ -101,6 +101,7 @@ export default {
       dataClass: [],
       events: [],
       totalClassTimes: 0,
+      totalAttendTimes: 0,
       totalLeaveTimes: 0,
       studentLeaveTimes: 0,
     };
@@ -153,6 +154,9 @@ export default {
         this.dataClass = data;
         this.totalClassTimes = data.reduce((acc, cur) => {
           return acc + cur.registeredTimes;
+        }, 0);
+        this.totalAttendTimes = data.reduce((acc, cur) => {
+          return acc + cur.attendance.length;
         }, 0);
         this.totalLeaveTimes = data.reduce((acc, cur) => {
           return acc + cur.studentLeave;

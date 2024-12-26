@@ -10,7 +10,11 @@
     </v-row>
 
     <v-form ref="form" lazy-validation>
-      <FormMaterial v-model="formInput" :editItems="editItems" />
+      <FormMaterial
+        v-model="formInput"
+        :editItems="editItems"
+        :flagEdit="true"
+      />
     </v-form>
     <v-row justify="end">
       <v-col cols="auto">

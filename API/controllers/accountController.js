@@ -1,6 +1,7 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-
+const path = require("path");
+const fs = require("fs");
 const logger = require("../logger");
 const { Op } = require("sequelize");
 
@@ -275,5 +276,36 @@ exports.delete = async (req, res, next) => {
     );
   } catch (error) {
     next(error); // Pass the error to the centralized error handler
+  }
+};
+
+// Delete image from an Account by ID
+exports.deleteImage = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const account = await Account.findByPk(id);
+    if (!account) {
+      return res.status(404).json({ error: "Account not found" });
+    }
+
+    if (account.photo) {
+      const imagePath = path.resolve(account.photo);
+      // Remove the image file
+      fs.unlink(imagePath, (err) => {
+        if (err) {
+          console.error(err);
+        }
+      });
+    }
+
+    // Update the Account with the filtered data
+    await account.update({ photo: null });
+    res.status(200).json({ message: "Image deleted successfully", account });
+
+    logger.info(
+      `Account image deleted: ${id} by [${req.user.id}]${req.user.username}`
+    );
+  } catch (error) {
+    res.status(400).json({ error: error.message });
   }
 };

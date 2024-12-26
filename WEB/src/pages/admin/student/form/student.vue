@@ -365,17 +365,26 @@
                 />
               </v-col>
               <v-col cols="12" md="4">
-                <label class="v-label mb-2 text-subtitle-2">
-                  Upload Photo :
-                </label>
-                <v-file-input
-                  v-model="formInput.photo"
-                  dense
-                  outlined
-                  label="Choose a file..."
-                  hide-details="auto"
-                  :readonly="flagView"
-                />
+                <v-row align="center">
+                  <v-col cols="">
+                    <label class="v-label mb-2 text-subtitle-2">
+                      Upload Photo :
+                    </label>
+                    <v-file-input
+                      v-model="formInput.photo"
+                      dense
+                      outlined
+                      label="Choose a file..."
+                      hide-details="auto"
+                      :readonly="flagView"
+                    />
+                  </v-col>
+                  <v-col cols="auto" v-if="!flagCreate && formInput.photo">
+                    <v-btn color="error" icon @click="deletePhoto">
+                      <v-icon>mdi-trash-can</v-icon>
+                    </v-btn>
+                  </v-col>
+                </v-row>
               </v-col>
 
               <v-col cols="12" md="4">
@@ -563,6 +572,31 @@ export default {
 
         const { data: dataBranch } = await this.axios.get(`/branch`);
         this.itemsOptions.branch = dataBranch;
+      } catch (error) {
+        this.$swal.fire({
+          title: error.response.data.error,
+          text: error.response.data.details,
+          icon: "error",
+        });
+      }
+    },
+    async deletePhoto() {
+      const { isDismissed } = await this.$swal({
+        title: "Are you sure?",
+        text: "Once deleted, you will not be able to recover this data!",
+        icon: "warning",
+        buttons: true,
+      });
+
+      if (isDismissed) return;
+
+      //delete data from api
+      try {
+        const { data } = await this.axios.delete(
+          `/account/image/${this.$route.params.id}`
+        );
+        this.$swal(data?.message, "", "success");
+        this.fetchData();
       } catch (error) {
         this.$swal.fire({
           title: error.response.data.error,
