@@ -40,7 +40,11 @@
 
     <v-row v-show="showDocument">
       <v-col cols="12" v-if="fileType === 'pdf'">
-        <WebViewer :initialDoc="fileUrl" :hideHeader="true" />
+        <WebViewer
+          :initialDoc="fileUrl"
+          :hideHeader="true"
+          :waterMark="userInfo.name"
+        />
       </v-col>
       <v-col cols="12" v-else>
         <div class="d-flex justify-end align-center">
