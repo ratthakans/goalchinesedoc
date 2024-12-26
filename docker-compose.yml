@@ -54,13 +54,7 @@ services:
       - ./certbot/www:/var/www/certbot/:rw
       - ./certbot/conf:/etc/letsencrypt/:rw
     entrypoint: >
-      sh -c "mkdir -p /var/www/certbot/ && certbot certonly
-      --webroot
-      --webroot-path=/var/www/certbot/
-      --email dailychineseclass01@gmail.com
-      --agree-tos
-      --no-eff-email
-      -d goalchinesedoc.com"
+      sh -c "certbot renew && nginx -s reload"
 
   db:
     container_name: mysql-db
