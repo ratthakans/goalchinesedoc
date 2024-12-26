@@ -20,6 +20,11 @@ exports.login = async (req, res) => {
       return res.status(400).json({ error: "Invalid username or password" });
     }
 
+    //check if user is expired
+    if (user.expireDate && new Date(user.expireDate) < new Date()) {
+      return res.status(400).json({ error: "User expired" });
+    }
+
     // Step 2: Compare the password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
