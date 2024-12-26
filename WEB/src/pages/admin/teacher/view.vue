@@ -172,11 +172,11 @@ export default {
         );
         this.dataTeacher = {
           ...data,
-          dateOfBirth: data.dateOfBirth.substring(0, 10),
+          dateOfBirth: data.dateOfBirth?.substring(0, 10),
 
-          registerDate: data.registerDate.substring(0, 10),
+          registerDate: data.registerDate?.substring(0, 10),
 
-          username: data.user.username,
+          username: data?.user?.username,
           password: "",
         };
       } catch (error) {

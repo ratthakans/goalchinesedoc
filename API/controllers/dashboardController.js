@@ -6,7 +6,7 @@ exports.getSummaryUser = async (req, res) => {
       `SELECT
             (SELECT COUNT(*) FROM User WHERE role = 'student') AS totalStudent,
             (SELECT COUNT(*) FROM User WHERE role = 'teacher') AS totalTeacher,
-            (SELECT COUNT(*) FROM User WHERE role in ('admin', 'superadmin')) AS totalAdmin`,
+            (SELECT COUNT(*) FROM User WHERE role in ('user', 'admin', 'superadmin')) AS totalAdmin`,
       { type: sequelize.QueryTypes.SELECT }
     );
 
@@ -20,56 +20,86 @@ exports.getSummaryUser = async (req, res) => {
 
 exports.getSummaryBranch = async (req, res) => {
   try {
+    const currentDate = new Date();
     const result = await sequelize.query(
       `
-     
-SELECT 
-	id,
-	name,
-	(
-	SELECT 
-		count(Class.id)
-	FROM
-		Class
-	WHERE
-		Class.branchID = b.id
-	) as totalClass,
-	(
-	SELECT 
-    	SUM(student_count) 
-	FROM (
-		SELECT 
-			COUNT(cs.id) AS student_count
-		FROM
-			Class
-		LEFT JOIN
-			ClassStudent cs ON cs.classID = Class.id
-		WHERE
-			Class.branchID = b.id
-		GROUP BY
-			Class.id
-	) subquery
-	) as totalStudent,
-	(
-	SELECT 
-		count(Class.id)
-	FROM
-		Class
-	WHERE
-		Class.branchID = b.id
-		and Class.endDate < NOW() 
-	) as totalExpireClass,
-    (
-	SELECT 
-		count(Class.id)
-	FROM
-		Class
-	WHERE
-		Class.branchID = b.id
-		and Class.endDate > NOW() 
-	) as totalIncomeClass
-FROM
-	Branch b ;
+
+	  SELECT 
+	  id,
+	  name,
+	  (
+	  SELECT 
+		  count(Class.id)
+	  FROM
+		  Class
+	  WHERE
+		  Class.branchID = b.id
+	  ) as totalClass,
+	  (
+	  SELECT
+		  SUM(student_count)
+	  FROM
+		  (
+		  SELECT 
+			  COUNT(cs.id) AS student_count
+		  FROM
+			  Class
+		  LEFT JOIN
+			  ClassStudent cs ON
+			  cs.classID = Class.id
+		  WHERE
+			  Class.branchID = b.id
+		  GROUP BY
+			  Class.id
+	  ) subquery
+	  ) as totalStudent,
+	  (
+	  SELECT
+		  count(id)
+	  FROM
+		  (
+		  SELECT 
+			  id
+		  FROM
+			  Class c
+		  WHERE
+			  c.id in (
+			  select
+				  classId
+			  from
+				  Attendance a
+			  GROUP by
+				  classId
+			  having
+				  c.registeredTimes - count(a.id) < 3 
+	  )
+				  and c.branchID = b.id
+			  GROUP BY
+				  id,
+				  b.id
+	  ) subquery
+	  ) as totalExpireClass,
+	  (
+	  SELECT
+		  sum(totalIncomeClass)
+	  FROM
+		  (
+		  SELECT
+			  sum(Class.totalFeePerClass) as totalIncomeClass
+		  FROM
+			  Class
+		  WHERE
+			  Class.branchID = b.id
+			  AND 
+			  MONTH(Class.createdAt) = MONTH(CURRENT_DATE())
+				  and YEAR(Class.createdAt) = YEAR(CURRENT_DATE())
+			  GROUP BY
+				  Class.id
+	  )subquery
+  
+  ) as totalIncomeClass
+  FROM
+	  Branch b ;
 
       `,
       { type: sequelize.QueryTypes.SELECT }
@@ -86,9 +116,7 @@ FROM
 // summary income by year and branch optional
 exports.getSummaryIncome = async (req, res) => {
   try {
-    let year = new Date().getFullYear();
-
-    let where = ` AND YEAR(FeeStructure.payDate) = ${year}`;
+    let where = ` AND YEAR(FeeStructure.payDate) = YEAR(CURRENT_DATE())`;
 
     const result = await sequelize.query(
       `

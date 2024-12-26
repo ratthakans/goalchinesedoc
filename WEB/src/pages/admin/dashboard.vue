@@ -14,7 +14,7 @@
           <v-card-text>
             <v-row align="center" justify="center">
               <v-col class="text-h3" cols="auto">
-                {{ totalIncome?.toLocaleString() }}</v-col
+                {{ Number(totalIncome)?.toLocaleString() }}</v-col
               >
             </v-row>
           </v-card-text>
@@ -95,7 +95,7 @@
           colored-border
           class="mb-0"
         >
-          <h6 class="text-h6">{{ item.value }}</h6>
+          <h6 class="text-h6">{{ Number(item.value)?.toLocaleString() }}</h6>
           <div>{{ item.name }}</div>
         </v-alert>
       </v-col>
