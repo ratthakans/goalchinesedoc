@@ -15,7 +15,7 @@ export default {
 
   mounted() {
     const path = `${process.env.BASE_URL}webviewer`;
-    console.log("this.initialDoc, :>> ", this.initialDoc);
+
     WebViewer(
       {
         path,
@@ -46,7 +46,7 @@ export default {
           diagonal: {
             fontSize: 25, // or even smaller size
             fontFamily: "sans-serif",
-            color: "red",
+            color: "grey",
             opacity: 50, // from 0 to 100
             text: this.waterMark,
           },
