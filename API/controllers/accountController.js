@@ -110,7 +110,12 @@ exports.findAll = async (req, res) => {
           model: User,
           as: "user",
           attributes: { exclude: ["password"] },
-          where: { role: role, ...where },
+          where: {
+            role: {
+              [Op.in]: role ? role.split(",") : ["user"],
+            },
+            ...where,
+          },
         },
         {
           model: StudentType,

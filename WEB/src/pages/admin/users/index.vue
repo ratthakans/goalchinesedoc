@@ -86,6 +86,7 @@
               </v-btn>
 
               <v-btn
+                v-show="userInfo?.username !== item.user.username"
                 color="error"
                 v-if="userInfo?.role !== 'user' || permission?.delete"
                 icon
@@ -143,7 +144,9 @@ export default {
     async fetchData() {
       try {
         const { data } = await this.axios.get(
-          `/account?role=user${this.search ? `&search=${this.search}` : ""}`
+          `/account?role=${
+            this.userInfo.role === "user" ? "user" : "user,admin,superadmin"
+          }${this.search ? `&search=${this.search}` : ""}`
         );
         this.items = data;
       } catch (error) {
