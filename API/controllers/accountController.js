@@ -91,6 +91,8 @@ exports.findAll = async (req, res) => {
   try {
     const { role, search } = req.query;
     let where = {};
+    let order = [];
+
     if (search) {
       where = {
         [Op.or]: [
@@ -100,11 +102,22 @@ exports.findAll = async (req, res) => {
       };
     }
 
-    const accounts = await Account.findAll({
-      order: [
+    if (role === "teacher") {
+      order = [
         ["status", "ASC"],
-        ["createdAt", "DESC"],
-      ],
+        ["teacherNo", "ASC"],
+      ];
+    }
+
+    if (role === "student") {
+      order = [
+        ["status", "ASC"],
+        ["addmissionNo", "ASC"],
+      ];
+    }
+
+    const accounts = await Account.findAll({
+      order,
       include: [
         {
           model: User,
