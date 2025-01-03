@@ -253,12 +253,16 @@
 
               <span>{{ selectedEvent?.class?.studyPlatform }}</span>
             </v-col>
-            <v-col cols="12" class="d-flex align-center">
-              <v-icon color="primary">mdi-link</v-icon>
-
-              <span class="subtitle-2 mx-2">Link :</span>
-
-              <span>{{ selectedEvent?.link }}</span>
+            <v-col cols="12" class="align-center">
+              <v-row dense>
+                <v-col cols="auto">
+                  <v-icon color="primary">mdi-link</v-icon>
+                  <span class="subtitle-2 mx-2">Link :</span>
+                </v-col>
+                <v-col cols="">
+                  <span>{{ selectedEvent?.link }}</span>
+                </v-col>
+              </v-row>
             </v-col>
             <v-col cols="12" class="d-flex align-center">
               <v-icon color="primary">mdi-clock-time-five-outline</v-icon>
@@ -277,6 +281,12 @@
                   .map((it) => it.account.name)
                   .join(",")
               }}</span>
+            </v-col>
+          </v-row>
+
+          <v-row justify="center" dense>
+            <v-col cols="auto">
+              <small>{{ selectedEvent?.note }}</small>
             </v-col>
           </v-row>
 
@@ -665,6 +675,7 @@ export default {
     selectedClass: {
       immediate: true,
       handler(val) {
+        this.formInput.title = val?.name;
         this.formInput.link = val?.link;
       },
     },
