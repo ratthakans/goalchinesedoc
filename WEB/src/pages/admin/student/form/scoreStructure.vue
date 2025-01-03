@@ -237,7 +237,7 @@ export default {
       this.addFeeStructure();
     }
     this.permission = this.userInfo.permissions.find(
-      (it) => it.link === this.$route.path
+      (it) => it.link === "/admin/student/point"
     );
 
     this.$nextTick(() => {

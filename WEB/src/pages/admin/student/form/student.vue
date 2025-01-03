@@ -442,12 +442,14 @@
     </v-row>
 
     <FeeStructureComponent
+      v-show="userInfo?.role !== 'user' || feePermission?.view"
       :flagView="flagView"
       :flagCreate="flagCreate"
       v-model="formFeeStructure"
       @refForm="(ref) => (refFormFee = ref)"
     />
     <ScoreStructureComponent
+      v-show="userInfo?.role !== 'user' || pointPermission?.view"
       :flagCreate="flagCreate"
       :flagView="flagView"
       v-model="formScoreStructure"
@@ -457,6 +459,8 @@
 </template>
 
 <script>
+import { mapState } from "pinia";
+import { useAppStore } from "@/stores/app";
 import FeeStructureComponent from "./feeStructure.vue";
 import ScoreStructureComponent from "./scoreStructure.vue";
 export default {
@@ -522,7 +526,15 @@ export default {
       refFormFee: null,
       formScoreStructure: [],
       refFormScore: null,
+
+      pointPermission: {},
+      feePermission: {},
     };
+  },
+  computed: {
+    ...mapState(useAppStore, {
+      userInfo: "getUserinfo",
+    }),
   },
   watch: {
     pickerDOB(val) {
@@ -560,6 +572,13 @@ export default {
   },
   mounted() {
     this.fetchOption();
+
+    this.feePermission = this.userInfo.permissions.find(
+      (it) => it.link === "/admin/student/fee"
+    );
+    this.pointPermission = this.userInfo.permissions.find(
+      (it) => it.link === "/admin/student/point"
+    );
   },
   methods: {
     async fetchOption() {
