@@ -169,22 +169,22 @@ export default {
       this.flagView = false;
       this.fileType = item.material.documentType;
 
-      // this.fileUrl = "../sample-1.pdf";
-      if (["pptx"].includes(item.material.documentType)) {
-        this.fileUrl = `${this.baseUrl}${item.material.document}`;
-      } else if (["pdf"].includes(item.material.documentType)) {
-        this.fileUrl = `${this.baseUrl}${item.material.document}`;
-      } else if (["link"].includes(item.material.documentType)) {
-        const canvaLink = item.material.link;
-        window.open(canvaLink, "_blank"); // Open in a new tab
-      } else if (["canva"].includes(item.material.documentType)) {
-        this.fileUrl = item.material.link + "?embed";
-      } else if (["youtube"].includes(item.material.documentType)) {
-        this.fileUrl = item.material.link;
-      } else if (item.material.documentType === "mp4") {
-        this.fileUrl = `${this.baseUrl}${item.material.document}`;
-      }
-      console.log("🚀 ~ openDoc ~  this.fileUrl:", this.fileUrl);
+      this.fileUrl = "../sample-1.pdf";
+      // if (["pptx"].includes(item.material.documentType)) {
+      //   this.fileUrl = `${this.baseUrl}${item.material.document}`;
+      // } else if (["pdf"].includes(item.material.documentType)) {
+      //   this.fileUrl = `${this.baseUrl}${item.material.document}`;
+      // } else if (["link"].includes(item.material.documentType)) {
+      //   const canvaLink = item.material.link;
+      //   window.open(canvaLink, "_blank"); // Open in a new tab
+      // } else if (["canva"].includes(item.material.documentType)) {
+      //   this.fileUrl = item.material.link + "?embed";
+      // } else if (["youtube"].includes(item.material.documentType)) {
+      //   this.fileUrl = item.material.link;
+      // } else if (item.material.documentType === "mp4") {
+      //   this.fileUrl = `${this.baseUrl}${item.material.document}`;
+      // }
+      // console.log("🚀 ~ openDoc ~  this.fileUrl:", this.fileUrl);
 
       setTimeout(() => {
         this.flagView = true;

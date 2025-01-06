@@ -3,8 +3,8 @@
 </template>
 
 <script>
-import * as pdfjsLib from "pdfjs-dist";
-import "pdfjs-dist/build/pdf.worker.mjs";
+import * as pdfjsLib from "pdfjs-dist/webpack.mjs";
+// import "pdfjs-dist/build/pdf.worker.mjs";
 
 // Setting worker path to worker bundle.
 // pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorker;

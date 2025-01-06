@@ -1,5 +1,5 @@
 # Stage 1: Build the Vue.js application
-FROM node:20 AS build-stage
+FROM node:18 AS build-stage
 
 # Set the working directory
 WORKDIR /app
