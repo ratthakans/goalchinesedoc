@@ -1,13 +1,46 @@
 <template>
-  <div id="pdf-render" class="d-flex flex-column justify-center"></div>
+  <div>
+    <!-- Toolbar -->
+    <v-row dense justify="space-between">
+      <v-col>
+        <v-btn icon @click="prevPage"><v-icon>mdi-chevron-left</v-icon></v-btn>
+        <v-btn icon @click="nextPage"><v-icon>mdi-chevron-right</v-icon></v-btn>
+
+        <span>Page: {{ currentPage }} / {{ totalPages }}</span>
+      </v-col>
+
+      <v-col cols="auto">
+        <v-btn icon @click="zoomIn">
+          <v-icon>mdi-magnify-plus-outline</v-icon>
+        </v-btn>
+        <v-btn icon @click="zoomOut">
+          <v-icon>mdi-magnify-minus-outline</v-icon>
+        </v-btn>
+        <v-btn icon @click="printPDF">
+          <v-icon>mdi-printer-outline</v-icon>
+        </v-btn>
+      </v-col>
+    </v-row>
+
+    <div
+      id="viewerContainer"
+      class="grey lighten-4 mt-4"
+      style="width: 92%; height: 100vh; overflow: auto"
+    >
+      <div id="viewer" class="pdfViewer"></div>
+    </div>
+  </div>
 </template>
 
 <script>
 import * as pdfjsLib from "pdfjs-dist/webpack.mjs";
-// import "pdfjs-dist/build/pdf.worker.mjs";
+// import * as pdfjsViewer from "pdfjs-dist/web/pdf_viewer.mjs";
+// import { getDocument } from "pdfjs-dist";
+import * as pdfjsViewer from "pdfjs-dist/web/pdf_viewer";
 
-// Setting worker path to worker bundle.
-// pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorker;
+import "pdfjs-dist/web/pdf_viewer.css";
+
+import { PDFDocument, rgb, degrees } from "pdf-lib";
 
 export default {
   name: "WebViewer",
@@ -16,88 +49,177 @@ export default {
     waterMark: { type: String, default: "" },
     hideHeader: { type: Boolean, default: false },
   },
+  data() {
+    return {
+      pdfDocument: null,
+      viewer: null,
+      currentPage: 1,
+      totalPages: 0,
+      scale: 1.0,
+    };
+  },
 
-  async mounted() {
-    const pdfPath = this.initialDoc;
+  mounted() {
+    this.initializeViewer(this.initialDoc);
+  },
+  methods: {
+    async initializeViewer(pdfUrl) {
+      const pdfPath = pdfUrl;
 
-    // Function to render a page
-    function renderPage(pdf, pageNumber, container, waterMark) {
-      pdf.getPage(pageNumber).then((page) => {
-        const viewport = page.getViewport({ scale: 1.5 });
+      // Get the container and initialize the viewer
+      const container = document.getElementById("viewerContainer");
 
-        // Create a canvas for each page
-        const canvas = document.createElement("canvas");
-        const context = canvas.getContext("2d");
+      const eventBus = new pdfjsViewer.EventBus();
 
-        // Set canvas dimensions
-        canvas.width = viewport.width;
-        canvas.height = viewport.height;
+      this.viewer = new pdfjsViewer.PDFViewer({
+        container,
+        eventBus,
+      });
 
-        // Append canvas to the container
-        container.appendChild(canvas);
+      // Load the PDF
+      this.pdfDocument = await pdfjsLib.getDocument(pdfPath).promise;
+      console.log(
+        "🚀 ~ initializeViewer ~ this.pdfDocument:",
+        this.pdfDocument
+      );
 
-        // Render the page into the canvas
-        const renderContext = {
-          canvasContext: context,
-          viewport: viewport,
-        };
+      // Set the document in the viewer
+      this.viewer.setDocument(this.pdfDocument);
 
-        page.render(renderContext).promise.then(() => {
-          context.font = "50px Arial";
-          context.fillStyle = "rgba(150, 150, 150, 0.5)";
+      // Optional: Enable text layer for selectable text
+      // Set total pages and enable selectable text
+      this.totalPages = this.pdfDocument.numPages;
+      this.viewer.textLayerMode = 2;
+
+      // Update the current page when the viewer changes pages
+      eventBus.on("pagechanging", () => {
+        this.currentPage = this.viewer.currentPageNumber;
+      });
+
+      console.log("eventBus :>> ", eventBus);
+      // eventBus.on("pagesinit", (PDFViewer) => {
+      //   console.log(" PDFViewer._pages :>> ", PDFViewer);
+      //   PDFViewer.source._pages.forEach((page) => {
+      //     console.log("🚀 ~ PDFViewer._pages.forEach ~ page:", page);
+
+      //     this.addWatermarkToCanvas(page.canvas);
+      //   });
+      // });
+      eventBus.on("pagerendered", (PDFViewer) => {
+        this.addWatermarkToCanvas(PDFViewer.source.canvas);
+      });
+
+      console.log(`PDF loaded with ${this.pdfDocument.numPages} pages.`);
+    },
+    addWatermarkToCanvas(canvas) {
+      console.log("canvas :>> ", canvas);
+      const context = canvas.getContext("2d");
+
+      // Add watermark text
+      context.save();
+      context.font = "48px Arial";
+      context.fillStyle = "rgba(255, 0, 0, 0.3)";
+      context.textAlign = "center";
+      context.translate(canvas.width / 2, canvas.height / 2);
+      context.rotate(-Math.PI / 6); // Rotate watermark
+      context.fillText(this.waterMark, 0, 0);
+      context.restore();
+    },
+    addWatermark(pageNumber) {
+      const pageDiv = this.$el.querySelector(
+        `.page[data-page-number="${pageNumber}"]`
+      );
+      if (pageDiv) {
+        const canvas = pageDiv.querySelector("canvas");
+        if (canvas) {
+          const context = canvas.getContext("2d");
+
+          // Add watermark text
+          context.save();
+          context.font = "48px Arial";
+          context.fillStyle = "rgba(255, 0, 0, 0.3)";
           context.textAlign = "center";
           context.translate(canvas.width / 2, canvas.height / 2);
-          context.rotate(-Math.PI / 6);
-          context.fillText(waterMark, 0, 0);
+          context.rotate(-Math.PI / 6); // Rotate watermark
+          context.fillText(this.waterMark, 0, 0);
+          context.restore();
+        }
+      }
+    },
+    prevPage() {
+      if (this.currentPage > 1) {
+        this.viewer.currentPageNumber -= 1;
+      }
+    },
+    nextPage() {
+      if (this.currentPage < this.totalPages) {
+        this.viewer.currentPageNumber += 1;
+      }
+    },
+    zoomIn() {
+      this.scale += 0.2;
+      this.viewer.currentScale = this.scale;
+    },
+    zoomOut() {
+      if (this.scale > 0.4) {
+        this.scale -= 0.2;
+        this.viewer.currentScale = this.scale;
+      }
+    },
+    async printPDF() {
+      if (!this.pdfDocument) {
+        alert("PDF not loaded!");
+        return;
+      }
+
+      // Fetch the original PDF data
+      const pdfBytes = await this.pdfDocument.getData();
+
+      // Modify the PDF to include the watermark
+      const pdfDoc = await PDFDocument.load(pdfBytes);
+      const pages = pdfDoc.getPages();
+
+      pages.forEach((page) => {
+        console.log("🚀 ~ pages.forEach ~ page:", page);
+        const { width, height } = page.getSize();
+        page.drawText(this.waterMark || "Confidential", {
+          x: width / 2,
+          y: height / 2,
+          size: 32,
+          color: rgb(1, 0, 0),
+          rotate: degrees(45),
+          opacity: 0.3,
         });
       });
-    }
 
-    // Load and render the PDF
-    const container = document.getElementById("pdf-render");
+      // Save the modified PDF
+      const watermarkedPdfBytes = await pdfDoc.save();
 
-    pdfjsLib.getDocument(pdfPath).promise.then((pdf) => {
-      console.log(`PDF loaded with ${pdf.numPages} pages`);
+      // Create a Blob and open it for printing
+      const blob = new Blob([watermarkedPdfBytes], { type: "application/pdf" });
+      const url = URL.createObjectURL(blob);
+      const printWindow = window.open(url);
 
-      // Loop through all pages
-      for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) {
-        renderPage(pdf, pageNumber, container, this.waterMark);
+      if (printWindow) {
+        printWindow.onload = () => {
+          printWindow.print();
+          URL.revokeObjectURL(url);
+        };
       }
-    });
-
-    // loadingTask.promise.then((pdf) => {
-    //   for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
-    //     pdf.getPage(pageNum).then((page) => {
-    //       const viewport = page.getViewport({ scale: 1.5 });
-    //       const canvas = document.createElement("canvas");
-    //       const ctx = canvas.getContext("2d");
-
-    //       document.body.appendChild(canvas); // Append canvas to body
-
-    //       canvas.width = viewport.width;
-    //       canvas.height = viewport.height;
-
-    //       const renderContext = {
-    //         canvasContext: ctx,
-    //         viewport: viewport,
-    //       };
-    //       page.render(renderContext).promise.then(() => {
-    //         ctx.font = "50px Arial";
-    //         ctx.fillStyle = "rgba(150, 150, 150, 0.5)";
-    //         ctx.textAlign = "center";
-    //         ctx.translate(canvas.width / 2, canvas.height / 2);
-    //         ctx.rotate(-Math.PI / 6);
-    //         ctx.fillText("Your Watermark", 0, 0);
-    //       });
-    //     });
-    //   }
-    // });
+    },
   },
 };
 </script>
 
 <style>
+@import url(pdfjs-dist/web/pdf_viewer.css);
 #webviewer {
   height: 100vh;
+}
+#viewerContainer {
+  overflow: auto;
+  position: absolute;
+  width: 100%;
+  height: 100%;
 }
 </style>
