@@ -56,9 +56,18 @@
         </v-data-table>
       </v-col>
     </v-row>
-    <v-row v-if="flagView">
-      <v-col cols="12">
-        <WebViewer :initialDoc="fileUrl" :waterMark="userInfo.name" />
+    <v-row v-if="flagView" justify="center" class="grey lighten-4">
+      <v-col cols="auto">
+        <WebViewer
+          v-show="fileType === 'pptx'"
+          :initialDoc="fileUrl"
+          :waterMark="userInfo.name"
+        />
+        <WebViewerPdf
+          v-show="fileType === 'pdf'"
+          :initialDoc="fileUrl"
+          :waterMark="userInfo.name"
+        />
       </v-col>
     </v-row>
   </v-container>
@@ -67,13 +76,16 @@
 <script>
 import { mapState } from "pinia";
 import { useAppStore } from "@/stores/app";
+
 import WebViewer from "@/components/WebViewer.vue";
+import WebViewerPdf from "@/components/WebViewerPdf.vue";
 import iconDocument from "@/assets/document.png";
 
 export default {
   name: "StudentMaterials",
   components: {
     WebViewer,
+    WebViewerPdf,
   },
   data() {
     return {
@@ -104,6 +116,7 @@ export default {
       ],
       items: [],
       fileUrl: "",
+      fileType: "",
     };
   },
   computed: {
@@ -137,8 +150,12 @@ export default {
     },
     openDoc(item) {
       this.flagView = false;
+      this.fileType = item.material.documentType;
 
-      if (["pptx", "pdf"].includes(item.material.documentType)) {
+      // this.fileUrl = "../sample-1.pdf";
+      if (["pptx"].includes(item.material.documentType)) {
+        this.fileUrl = `${this.baseUrl}${item.material.document}`;
+      } else if (["pdf"].includes(item.material.documentType)) {
         this.fileUrl = `${this.baseUrl}${item.material.document}`;
       } else if (["link"].includes(item.material.documentType)) {
         const canvaLink = item.material.link;

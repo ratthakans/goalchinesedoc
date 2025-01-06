@@ -11,6 +11,7 @@
     "@pdftron/webviewer": "^11.1.1",
     "axios": "0.20.0",
     "core-js": "^3.39.0",
+    "pdfjs-dist": "^4.10.38",
     "pdfmake": "^0.2.16",
     "pdfmake-unicode": "^0.0.1",
     "pinia": "^2.3.0",
