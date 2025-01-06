@@ -68,6 +68,23 @@
           :initialDoc="fileUrl"
           :waterMark="userInfo.name"
         />
+        <iframe
+          v-show="['canva', 'youtube'].includes(fileType)"
+          id="myIframe"
+          ref="myIframe"
+          :src="fileUrl"
+          width="100%"
+          height="600px"
+          frameborder="0"
+          allowfullscreen
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="strict-origin-when-cross-origin"
+          rel="noopener noreferrer"
+        ></iframe>
+        <video v-show="fileType === 'mp4'" width="1280" height="960" controls>
+          <source :src="fileUrl" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
       </v-col>
     </v-row>
   </v-container>

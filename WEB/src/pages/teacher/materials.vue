@@ -64,41 +64,47 @@
 
     <v-row v-if="showDocument">
       <v-col cols="12">
-        <div class="d-flex justify-end align-center">
-          <v-btn @click="toggleFullScreen" icon>
-            <v-icon>mdi-fullscreen</v-icon>
-          </v-btn>
-        </div>
-
-        <div style="position: relative">
-          <iframe
-            :class="{ 'full-screen-iframe': isFullScreen }"
-            id="myIframe"
-            ref="myIframe"
-            :src="fileUrl"
-            width="100%"
-            height="600px"
-            frameborder="0"
-            allowfullscreen
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            referrerpolicy="strict-origin-when-cross-origin"
-            rel="noopener noreferrer"
-          ></iframe>
-          <div
-            :style="{
-              position: isFullScreen ? 'fixed' : 'absolute',
-              bottom: 0,
-              left: 0,
-              width: '100%',
-              height: '30px',
-              'background-color': 'white',
-              'z-index': '10000',
-            }"
-            class="d-flex justify-center align-center"
-          >
-            <v-btn v-if="isFullScreen" @click="toggleFullScreen">
-              {{ isFullScreen ? "Exit Full Screen" : "Go Full Screen" }}
+        <video v-if="fileType === 'mp4'" width="1280" height="960" controls>
+          <source :src="fileUrl" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+        <div v-else>
+          <div class="d-flex justify-end align-center">
+            <v-btn @click="toggleFullScreen" icon>
+              <v-icon>mdi-fullscreen</v-icon>
             </v-btn>
+          </div>
+
+          <div style="position: relative">
+            <iframe
+              :class="{ 'full-screen-iframe': isFullScreen }"
+              id="myIframe"
+              ref="myIframe"
+              :src="fileUrl"
+              width="100%"
+              height="600px"
+              frameborder="0"
+              allowfullscreen
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerpolicy="strict-origin-when-cross-origin"
+              rel="noopener noreferrer"
+            ></iframe>
+            <div
+              :style="{
+                position: isFullScreen ? 'fixed' : 'absolute',
+                bottom: 0,
+                left: 0,
+                width: '100%',
+                height: '30px',
+                'background-color': 'white',
+                'z-index': '10000',
+              }"
+              class="d-flex justify-center align-center"
+            >
+              <v-btn v-if="isFullScreen" @click="toggleFullScreen">
+                {{ isFullScreen ? "Exit Full Screen" : "Go Full Screen" }}
+              </v-btn>
+            </div>
           </div>
         </div>
       </v-col>
@@ -136,6 +142,7 @@ export default {
       ],
       items: [],
       fileUrl: ``,
+      fileType: "",
       // "https://view.officeapps.live.com/op/embed.aspx?src=https://getsamplefiles.com/download/pptx/sample-2.pptx",
     };
   },
@@ -217,6 +224,7 @@ export default {
     },
     openDoc(item) {
       this.fileUrl = "";
+      this.fileType = item.material.documentType;
       this.showDocument = true;
       // if (process.env.NODE_ENV === "development") {
       //   this.fileUrl = `https://view.officeapps.live.com/op/embed.aspx?src=https://getsamplefiles.com/download/pptx/sample-2.pptx`;
