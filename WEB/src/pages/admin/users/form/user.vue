@@ -301,6 +301,16 @@ export default {
           flagCreate: true,
         },
         {
+          name: "Teacher For Class",
+          link: "/admin/classes/fee",
+          view: false,
+          edit: false,
+          create: false,
+          flagEdit: true,
+          flagDelete: true,
+          flagCreate: true,
+        },
+        {
           name: "Class Calendar",
           link: "/admin/classes/calendar",
           view: false,

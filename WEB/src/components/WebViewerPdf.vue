@@ -118,7 +118,7 @@ export default {
       // Add watermark text
       context.save();
       context.font = "48px Arial";
-      context.fillStyle = "rgba(255, 0, 0, 0.3)";
+      context.fillStyle = "#E0E0E0";
       context.textAlign = "center";
       context.translate(canvas.width / 2, canvas.height / 2);
       context.rotate(-Math.PI / 6); // Rotate watermark
@@ -137,7 +137,7 @@ export default {
           // Add watermark text
           context.save();
           context.font = "48px Arial";
-          context.fillStyle = "rgba(255, 0, 0, 0.3)";
+          context.fillStyle = "#E0E0E0";
           context.textAlign = "center";
           context.translate(canvas.width / 2, canvas.height / 2);
           context.rotate(-Math.PI / 6); // Rotate watermark
@@ -180,13 +180,12 @@ export default {
       const pages = pdfDoc.getPages();
 
       pages.forEach((page) => {
-        console.log("🚀 ~ pages.forEach ~ page:", page);
         const { width, height } = page.getSize();
         page.drawText(this.waterMark || "Confidential", {
           x: width / 2,
           y: height / 2,
           size: 32,
-          color: rgb(1, 0, 0),
+          color: rgb(0.8, 0.8, 0.8),
           rotate: degrees(45),
           opacity: 0.3,
         });

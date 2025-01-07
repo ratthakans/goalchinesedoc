@@ -584,7 +584,7 @@
       </v-col>
     </v-row>
 
-    <v-row>
+    <v-row v-if="feePermission?.create || (flagEdit && feePermission?.edit)">
       <v-col cols="12">
         <v-card outlined>
           <v-card-title primary-title> Teacher fee for the class </v-card-title>
@@ -899,6 +899,7 @@ export default {
         student: [],
         currency: [],
       },
+      feePermission: {},
     };
   },
   computed: {
@@ -969,6 +970,9 @@ export default {
   },
   mounted() {
     this.fetchOption();
+    this.feePermission = this.userInfo.permissions.find(
+      (it) => it.link === "/admin/classes/fee"
+    );
   },
   methods: {
     async fetchOption() {
