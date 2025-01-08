@@ -301,7 +301,7 @@ export default {
           flagCreate: true,
         },
         {
-          name: "Teacher For Class",
+          name: "Teacher Fee For Class",
           link: "/admin/classes/fee",
           view: false,
           edit: false,
