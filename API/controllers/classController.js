@@ -90,8 +90,9 @@ exports.findAll = async (req, res) => {
       where,
       order: [
         ["status", "ASC"],
-        ["createdAt", "DESC"],
+        ["no", "ASC"],
         ["attendance", "id", "ASC"],
+        ["classStudy", "id", "ASC"],
       ],
       include: [
         { model: ClassStudy, as: "classStudy" },

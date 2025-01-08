@@ -823,7 +823,6 @@ export default {
         this.$emit("fetchEvents");
         this.$refs.calendar.checkChange();
       } catch (error) {
-        console.log("🚀 ~ copyClassEvent ~ error:", error);
         this.$swal.fire({
           title: error.response.data.error,
           text: error.response.data.details,
@@ -922,7 +921,6 @@ export default {
         event.timed = true;
       }
       this.events = temp;
-      console.log("🚀 ~ getEvents ~ this.events:", this.events);
       this.$nextTick(() => {
         this.$refs.calendar.checkChange();
       });

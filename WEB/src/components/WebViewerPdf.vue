@@ -118,34 +118,14 @@ export default {
       // Add watermark text
       context.save();
       context.font = "48px Arial";
-      context.fillStyle = "#E0E0E0";
+      context.fillStyle = "rgba(178, 178, 178, 0.3)";
       context.textAlign = "center";
       context.translate(canvas.width / 2, canvas.height / 2);
       context.rotate(-Math.PI / 6); // Rotate watermark
       context.fillText(this.waterMark, 0, 0);
       context.restore();
     },
-    addWatermark(pageNumber) {
-      const pageDiv = this.$el.querySelector(
-        `.page[data-page-number="${pageNumber}"]`
-      );
-      if (pageDiv) {
-        const canvas = pageDiv.querySelector("canvas");
-        if (canvas) {
-          const context = canvas.getContext("2d");
 
-          // Add watermark text
-          context.save();
-          context.font = "48px Arial";
-          context.fillStyle = "#E0E0E0";
-          context.textAlign = "center";
-          context.translate(canvas.width / 2, canvas.height / 2);
-          context.rotate(-Math.PI / 6); // Rotate watermark
-          context.fillText(this.waterMark, 0, 0);
-          context.restore();
-        }
-      }
-    },
     prevPage() {
       if (this.currentPage > 1) {
         this.viewer.currentPageNumber -= 1;
@@ -185,7 +165,7 @@ export default {
           x: width / 2,
           y: height / 2,
           size: 32,
-          color: rgb(0.8, 0.8, 0.8),
+          color: rgb(0.7, 0.7, 0.7, 0.3),
           rotate: degrees(45),
           opacity: 0.3,
         });

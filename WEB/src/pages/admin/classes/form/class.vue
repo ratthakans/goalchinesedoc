@@ -162,7 +162,7 @@
                 <label class="v-label mb-2 text-subtitle-2"
                   ><span class="red--text mr-2">*</span>Teacher Name :
                 </label>
-                <v-select
+                <v-autocomplete
                   v-model="formInput.teacherID"
                   :items="itemsOptions.teacher"
                   :readonly="flagView"
@@ -181,7 +181,7 @@
                 <label class="v-label mb-2 text-subtitle-2"
                   ><span class="red--text mr-2">*</span>Student Name :
                 </label>
-                <v-select
+                <v-autocomplete
                   v-model="selectedStudent"
                   :readonly="flagView"
                   :items="itemsOptions.student"
@@ -584,7 +584,13 @@
       </v-col>
     </v-row>
 
-    <v-row v-if="feePermission?.create || (flagEdit && feePermission?.edit)">
+    <v-row
+      v-if="
+        userInfo?.role !== 'user' ||
+        feePermission?.create ||
+        (flagEdit && feePermission?.edit)
+      "
+    >
       <v-col cols="12">
         <v-card outlined>
           <v-card-title primary-title> Teacher fee for the class </v-card-title>

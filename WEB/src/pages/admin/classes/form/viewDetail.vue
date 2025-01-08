@@ -195,7 +195,7 @@
       </v-col>
     </v-row>
 
-    <div v-show="feePermission?.view">
+    <div v-show="userInfo?.role !== 'user' || feePermission?.view">
       <v-divider class="my-4"></v-divider>
 
       <h6 class="text-h6 mb-4">Teacher fee for the class</h6>
