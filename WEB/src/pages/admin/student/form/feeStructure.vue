@@ -67,7 +67,6 @@
                       </template>
                       <v-date-picker
                         v-model="item.payDate"
-                        :min="new Date().toISOString().substring(0, 10)"
                         @change="$refs.refUpdateDate[inx].save(item.payDate)"
                       ></v-date-picker>
                     </v-menu>

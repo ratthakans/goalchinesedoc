@@ -27,6 +27,8 @@ MyMaterial.associate = (models) => {
   MyMaterial.belongsTo(models.Materials, {
     foreignKey: "materialID",
     as: "material",
+    onDelete: "cascade",
+    hooks: true,
   });
 };
 

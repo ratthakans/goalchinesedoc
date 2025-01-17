@@ -69,6 +69,7 @@ exports.getSummaryBranch = async (req, res) => {
 				  c.registeredTimes - count(a.id) < 3 
 	  )
 				and c.branchID = b.id
+				and c.status = 'Active'
 			GROUP BY
 				  id,
 				  b.id

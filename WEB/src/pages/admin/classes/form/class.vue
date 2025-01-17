@@ -327,7 +327,6 @@
                   </template>
                   <v-date-picker
                     v-model="formInput.startDate"
-                    :min="new Date().toISOString().substring(0, 10)"
                     @change="$refs.refStartDate.save(formInput.startDate)"
                   ></v-date-picker>
                 </v-menu>

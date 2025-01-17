@@ -330,7 +330,7 @@
 
                 <span class="subtitle-2 mx-2">Class No :</span>
 
-                <v-select
+                <v-autocomplete
                   :items="itemsOptions.class"
                   v-model="selectedClass"
                   item-text="name"
@@ -341,7 +341,7 @@
                   single-line
                   hide-details="auto"
                   :rules="[(v) => !!v || 'Class is required']"
-                ></v-select>
+                />
               </v-col>
               <v-col cols="12" class="d-flex align-center">
                 <v-icon color="primary">mdi-calendar</v-icon>
