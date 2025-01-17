@@ -17,7 +17,7 @@ const genarateTable = (data) => {
       { text: inx + 1, alignment: "center" },
       { text: dateFormat(it.studyDate), alignment: "center" },
       {
-        text: `${data[it?.status] || 0} ${data?.currency?.name} x1`,
+        text: `${data[it?.status] || 0} ${data?.currency?.name || "-"} x1`,
         alignment: "center",
       },
       { text: data[it?.status], alignment: "center" },
@@ -25,7 +25,7 @@ const genarateTable = (data) => {
     ]);
   });
 
-  for (let index = 0; index < 20 - data.attendance.length; index++) {
+  for (let index = 0; index < 17 - data.attendance.length; index++) {
     result.push([
       { text: " ", alignment: "center" },
       { text: "", alignment: "center" },
@@ -79,7 +79,7 @@ export async function exportPdf(data) {
             text: `                 Teacher Name:  `,
             style: "subheader",
           },
-          it.teacher?.name,
+          { text: it.teacher?.name, font: "NotoSansSC" },
         ],
       },
       {
@@ -339,14 +339,7 @@ export async function exportPdf(data) {
           },
           it.note,
         ],
-        pageBreak:
-          data.length > 1
-            ? i === 0
-              ? "after"
-              : ""
-            : i === 0 || i === data.length - 1
-            ? ""
-            : "after",
+        pageBreak: i === data.length - 1 ? null : "after",
       },
     ];
     content.push(...result);
@@ -360,9 +353,11 @@ export async function exportPdf(data) {
       style: "header",
     },
     content: content,
+
     defaultStyle: {
+      font: "NotoSans",
       fontSize: 12,
-      lineHeight: 2,
+      lineHeight: 1.5,
     },
     styles: {
       header: {

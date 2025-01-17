@@ -1,7 +1,18 @@
 import pdfMake from "pdfmake/build/pdfmake";
-import "pdfmake/build/vfs_fonts";
+import pdfFonts from "./vfs_fonts.js";
+console.log("🚀 ~ pdfFonts:", pdfFonts);
 
-// pdfMake.vfs = pdfFonts.pdfMake.vfs;
+pdfMake.vfs = pdfFonts;
+pdfMake.fonts = {
+  NotoSans: {
+    normal: "NotoSansThai-Regular.ttf",
+    bold: "NotoSansThai-Bold.ttf",
+  },
+  NotoSansSC: {
+    normal: "NotoSansSC-Regular.ttf",
+    bold: "NotoSansSC-Bold.ttf",
+  },
+};
 
 const pdfPrintPreview = (content) => {
   const pdfDocGenerator = pdfMake.createPdf(content);
