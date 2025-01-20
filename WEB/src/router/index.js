@@ -12,6 +12,7 @@ import classesCalenday from "../pages/admin/classes/calendar.vue";
 import classesAll from "../pages/admin/classes/all.vue";
 import classesCreate from "../pages/admin/classes/create.vue";
 import classesEdit from "../pages/admin/classes/edit.vue";
+import classesCopy from "../pages/admin/classes/copy.vue";
 import classesView from "../pages/admin/classes/view.vue";
 import classesAttendance from "../pages/admin/classes/attendance.vue";
 
@@ -116,6 +117,17 @@ const routes = [
       },
     },
     component: classesEdit,
+  },
+  {
+    path: "/admin/classes/copy/:id",
+    name: "classesCopy",
+    meta: {
+      layout: DefaultLayout, // we add new meta layout here to use it later
+      auth: {
+        roles: ["user", "admin", "superadmin"],
+      },
+    },
+    component: classesCopy,
   },
   {
     path: "/admin/classes/view/:id",

@@ -62,53 +62,57 @@
       </v-col>
     </v-row>
 
-    <v-row v-if="showDocument">
-      <v-col cols="12">
-        <video v-if="fileType === 'mp4'" width="1280" height="960" controls>
-          <source :src="fileUrl" type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
-        <div v-else>
-          <div class="d-flex justify-end align-center">
-            <v-btn @click="toggleFullScreen" icon>
-              <v-icon>mdi-fullscreen</v-icon>
-            </v-btn>
-          </div>
+    <v-dialog v-model="dialog" max-width="90%">
+      <v-card min-height="700px">
+        <v-row>
+          <v-col cols="12">
+            <video v-if="fileType === 'mp4'" width="1280" height="960" controls>
+              <source :src="fileUrl" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+            <div v-else>
+              <div class="d-flex justify-end align-center">
+                <v-btn @click="toggleFullScreen" icon>
+                  <v-icon>mdi-fullscreen</v-icon>
+                </v-btn>
+              </div>
 
-          <div style="position: relative">
-            <iframe
-              :class="{ 'full-screen-iframe': isFullScreen }"
-              id="myIframe"
-              ref="myIframe"
-              :src="fileUrl"
-              width="100%"
-              height="600px"
-              frameborder="0"
-              allowfullscreen
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              referrerpolicy="strict-origin-when-cross-origin"
-              rel="noopener noreferrer"
-            ></iframe>
-            <div
-              :style="{
-                position: isFullScreen ? 'fixed' : 'absolute',
-                bottom: 0,
-                left: 0,
-                width: '100%',
-                height: '30px',
-                'background-color': 'white',
-                'z-index': '10000',
-              }"
-              class="d-flex justify-center align-center"
-            >
-              <v-btn v-if="isFullScreen" @click="toggleFullScreen">
-                {{ isFullScreen ? "Exit Full Screen" : "Go Full Screen" }}
-              </v-btn>
+              <div style="position: relative">
+                <iframe
+                  :class="{ 'full-screen-iframe': isFullScreen }"
+                  id="myIframe"
+                  ref="myIframe"
+                  :src="fileUrl"
+                  width="100%"
+                  height="650px"
+                  frameborder="0"
+                  allowfullscreen
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  referrerpolicy="strict-origin-when-cross-origin"
+                  rel="noopener noreferrer"
+                ></iframe>
+                <div
+                  :style="{
+                    position: isFullScreen ? 'fixed' : 'absolute',
+                    bottom: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '30px',
+                    'background-color': 'white',
+                    'z-index': '10000',
+                  }"
+                  class="d-flex justify-center align-center"
+                >
+                  <v-btn v-if="isFullScreen" @click="toggleFullScreen">
+                    {{ isFullScreen ? "Exit Full Screen" : "Go Full Screen" }}
+                  </v-btn>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-      </v-col>
-    </v-row>
+          </v-col>
+        </v-row>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -122,7 +126,7 @@ export default {
     return {
       iconDocument,
       isFullScreen: false,
-      showDocument: false,
+      dialog: false,
       search: "",
       headers: [
         {
@@ -225,7 +229,7 @@ export default {
     openDoc(item) {
       this.fileUrl = "";
       this.fileType = item.material.documentType;
-      this.showDocument = true;
+      this.dialog = true;
       // if (process.env.NODE_ENV === "development") {
       //   this.fileUrl = `https://view.officeapps.live.com/op/embed.aspx?src=https://getsamplefiles.com/download/pptx/sample-2.pptx`;
       // } else {

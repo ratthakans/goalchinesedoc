@@ -1,63 +1,66 @@
 <template>
-  <v-container>
-    <v-row>
-      <v-col cols="12">
-        <v-sheet
-          rounded="lg"
-          color="info"
-          class="mx-auto d-flex justify-center align-center"
-          height="50"
-          width="100%"
-        >
-          <h4 class="text-h4 white--text font-weight-bold">Materials</h4>
-        </v-sheet>
-      </v-col>
-    </v-row>
+  <div>
+    <v-container>
+      <v-row>
+        <v-col cols="12">
+          <v-sheet
+            rounded="lg"
+            color="info"
+            class="mx-auto d-flex justify-center align-center"
+            height="50"
+            width="100%"
+          >
+            <h4 class="text-h4 white--text font-weight-bold">Materials</h4>
+          </v-sheet>
+        </v-col>
+      </v-row>
 
-    <v-row justify="end">
-      <v-col cols="4">
-        <v-text-field
-          v-model="search"
-          placeholder="Search..."
-          dense
-          hide-details="auto"
-          background-color="grey lighten-4"
-          solo
-          flat
-        />
-      </v-col>
-    </v-row>
-    <v-row dense>
-      <v-col cols="12">
-        <v-data-table
-          :headers="headers"
-          :filter-keys="['title', 'category', 'type']"
-          :items="items"
-          mobile-breakpoint="0"
-        >
-          <template #item.photo="{ item }">
-            <v-avatar size="64" rounded color="grey lighten-4" class="my-2">
-              <v-img
-                height="64"
-                width="64"
-                cover
-                v-if="item.photo"
-                :src="`${baseUrl}${item.photo}`"
-              />
-              <v-img v-else :src="iconDocument" />
-            </v-avatar>
-          </template>
+      <v-row justify="end">
+        <v-col cols="4">
+          <v-text-field
+            v-model="search"
+            placeholder="Search..."
+            dense
+            hide-details="auto"
+            background-color="grey lighten-4"
+            solo
+            flat
+          />
+        </v-col>
+      </v-row>
+      <v-row dense>
+        <v-col cols="12">
+          <v-data-table
+            :headers="headers"
+            :filter-keys="['title', 'category', 'type']"
+            :items="items"
+            mobile-breakpoint="0"
+          >
+            <template #item.photo="{ item }">
+              <v-avatar size="64" rounded color="grey lighten-4" class="my-2">
+                <v-img
+                  height="64"
+                  width="64"
+                  cover
+                  v-if="item.photo"
+                  :src="`${baseUrl}${item.photo}`"
+                />
+                <v-img v-else :src="iconDocument" />
+              </v-avatar>
+            </template>
 
-          <template #item.action="{ item }">
-            <v-btn color="info" class="text-none" @click="openDoc(item)">
-              view
-            </v-btn>
-          </template>
-        </v-data-table>
-      </v-col>
-    </v-row>
-    <v-row v-if="flagView" justify="center">
-      <v-col cols="12">
+            <template #item.action="{ item }">
+              <v-btn color="info" class="text-none" @click="openDoc(item)">
+                view
+              </v-btn>
+            </template>
+          </v-data-table>
+        </v-col>
+      </v-row>
+    </v-container>
+
+    <v-dialog v-model="dialog" max-width="90%">
+      <v-card min-height="720px">
         <WebViewer
           v-show="fileType === 'pptx'"
           :initialDoc="fileUrl"
@@ -73,9 +76,9 @@
           id="myIframe"
           ref="myIframe"
           :src="fileUrl"
-          width="100%"
-          height="600px"
           frameborder="0"
+          width="100%"
+          height="720px"
           allowfullscreen
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           referrerpolicy="strict-origin-when-cross-origin"
@@ -85,9 +88,9 @@
           <source :src="fileUrl" type="video/mp4" />
           Your browser does not support the video tag.
         </video>
-      </v-col>
-    </v-row>
-  </v-container>
+      </v-card>
+    </v-dialog>
+  </div>
 </template>
 
 <script>
@@ -108,7 +111,7 @@ export default {
     return {
       iconDocument,
       isFullScreen: false,
-      flagView: false,
+      dialog: false,
       search: "",
       headers: [
         {
@@ -166,28 +169,28 @@ export default {
       }
     },
     openDoc(item) {
-      this.flagView = false;
+      this.dialog = false;
       this.fileType = item.material.documentType;
 
-      // this.fileUrl = "../sample-1.pdf";
-      if (["pptx"].includes(item.material.documentType)) {
-        this.fileUrl = `${this.baseUrl}${item.material.document}`;
-      } else if (["pdf"].includes(item.material.documentType)) {
-        this.fileUrl = `${this.baseUrl}${item.material.document}`;
-      } else if (["link"].includes(item.material.documentType)) {
-        const canvaLink = item.material.link;
-        window.open(canvaLink, "_blank"); // Open in a new tab
-      } else if (["canva"].includes(item.material.documentType)) {
-        this.fileUrl = item.material.link + "?embed";
-      } else if (["youtube"].includes(item.material.documentType)) {
-        this.fileUrl = item.material.link;
-      } else if (item.material.documentType === "mp4") {
-        this.fileUrl = `${this.baseUrl}${item.material.document}`;
-      }
+      this.fileUrl = "../sample-1.pdf";
+      // if (["pptx"].includes(item.material.documentType)) {
+      //   this.fileUrl = `${this.baseUrl}${item.material.document}`;
+      // } else if (["pdf"].includes(item.material.documentType)) {
+      //   this.fileUrl = `${this.baseUrl}${item.material.document}`;
+      // } else if (["link"].includes(item.material.documentType)) {
+      //   const canvaLink = item.material.link;
+      //   window.open(canvaLink, "_blank"); // Open in a new tab
+      // } else if (["canva"].includes(item.material.documentType)) {
+      //   this.fileUrl = item.material.link + "?embed";
+      // } else if (["youtube"].includes(item.material.documentType)) {
+      //   this.fileUrl = item.material.link;
+      // } else if (item.material.documentType === "mp4") {
+      //   this.fileUrl = `${this.baseUrl}${item.material.document}`;
+      // }
       // console.log("🚀 ~ openDoc ~  this.fileUrl:", this.fileUrl);
 
       setTimeout(() => {
-        this.flagView = true;
+        this.dialog = true;
       }, 200);
     },
   },

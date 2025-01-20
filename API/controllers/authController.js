@@ -52,7 +52,7 @@ exports.login = async (req, res) => {
         role: user.role,
       },
       process.env.JWT_SECRET || "your_jwt_secret", // Use a secure secret in production
-      { expiresIn: "6h" }
+      { expiresIn: "1d" }
     );
 
     res.status(200).json({

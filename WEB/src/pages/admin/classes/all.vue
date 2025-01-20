@@ -121,11 +121,13 @@
                 <template
                   v-for="(menu, i) in [
                     { title: 'View', to: `./view/${item.id}`, show: true },
+
                     {
                       title: 'Edit',
                       to: `./edit/${item.id}`,
                       show: userInfo?.role !== 'user' || permission?.edit,
                     },
+                    { title: 'Copy', to: `./copy/${item.id}`, show: true },
                     { title: 'Attendance', to: `./attendance`, show: true },
                   ]"
                 >

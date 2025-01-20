@@ -38,53 +38,60 @@
       </v-col>
     </v-row>
 
-    <v-row v-show="showDocument">
-      <v-col cols="12" v-if="fileType === 'pdf'">
-        <WebViewer
-          :initialDoc="fileUrl"
-          :hideHeader="true"
-          :waterMark="userInfo.name"
-        />
-      </v-col>
-      <v-col cols="12" v-else>
-        <div class="d-flex justify-end align-center">
-          <v-btn @click="isFullScreen = !isFullScreen" icon>
-            <v-icon>mdi-fullscreen</v-icon>
-          </v-btn>
-        </div>
+    <v-dialog v-model="dialog" max-width="90%">
+      <v-card min-height="700px">
+        <v-row no-gutters>
+          <v-col cols="12" v-if="fileType === 'pdf'">
+            <WebViewer
+              :initialDoc="fileUrl"
+              :hideHeader="true"
+              :waterMark="userInfo.name"
+            />
+          </v-col>
+          <v-col cols="12" v-else>
+            <div class="d-flex justify-end align-center">
+              <v-btn @click="isFullScreen = !isFullScreen" icon>
+                <v-icon>mdi-fullscreen</v-icon>
+              </v-btn>
+            </div>
 
-        <div style="position: relative">
-          <iframe
-            :class="{ 'full-screen-iframe': isFullScreen }"
-            id="myIframe"
-            ref="myIframe"
-            :src="fileUrl"
-            width="100%"
-            height="600px"
-            frameborder="0"
-            allowfullscreen
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            referrerpolicy="strict-origin-when-cross-origin"
-          ></iframe>
-          <div
-            :style="{
-              position: isFullScreen ? 'fixed' : 'absolute',
-              bottom: 0,
-              left: 0,
-              width: '100%',
-              height: '30px',
-              'background-color': 'white',
-              'z-index': '10000',
-            }"
-            class="d-flex justify-center align-center"
-          >
-            <v-btn v-if="isFullScreen" @click="isFullScreen = !isFullScreen">
-              {{ isFullScreen ? "Exit Full Screen" : "Go Full Screen" }}
-            </v-btn>
-          </div>
-        </div>
-      </v-col>
-    </v-row>
+            <div style="position: relative">
+              <iframe
+                :class="{ 'full-screen-iframe': isFullScreen }"
+                id="myIframe"
+                ref="myIframe"
+                :src="fileUrl"
+                width="100%"
+                height="650px"
+                frameborder="0"
+                allowfullscreen
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerpolicy="strict-origin-when-cross-origin"
+              ></iframe>
+              <div
+                :style="{
+                  position: isFullScreen ? 'fixed' : 'absolute',
+                  bottom: 0,
+                  left: 0,
+                  width: '100%',
+                  height: '25px',
+                  'background-color': 'white',
+                  'z-index': '10000',
+                }"
+                class="d-flex justify-center align-center"
+              >
+                <v-btn
+                  v-if="isFullScreen"
+                  @click="isFullScreen = !isFullScreen"
+                >
+                  {{ isFullScreen ? "Exit Full Screen" : "Go Full Screen" }}
+                </v-btn>
+              </div>
+            </div>
+          </v-col>
+        </v-row>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -104,7 +111,7 @@ export default {
       fileUrl: "",
       iconDocument,
       isFullScreen: false,
-      showDocument: false,
+      dialog: false,
       itemsLibrary: [],
       fileType: null,
     };
@@ -171,7 +178,7 @@ export default {
     openDoc(item) {
       this.fileUrl = "";
       this.fileType = "";
-      this.showDocument = true;
+      this.dialog = true;
       // if (process.env.NODE_ENV === "development") {
       //   this.fileUrl = `https://view.officeapps.live.com/op/embed.aspx?src=https://getsamplefiles.com/download/pptx/sample-2.pptx`;
       // } else {

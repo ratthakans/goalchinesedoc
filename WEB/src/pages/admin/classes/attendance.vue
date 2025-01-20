@@ -1,11 +1,23 @@
 <template>
   <v-container>
     <v-row>
-      <v-col cols="12" class="d-flex ga-2 align-center">
+      <v-col cols="6" class="d-flex ga-2 align-center">
         <v-btn variant="text" icon to="/admin/classes/all" class="mr-2">
           <v-icon>mdi-arrow-left</v-icon>
         </v-btn>
         <h5 class="text-h5">Attendance</h5>
+      </v-col>
+      <v-col cols="6" md="4" class="ml-auto">
+        <v-text-field
+          v-model="search"
+          placeholder="Search..."
+          dense
+          hide-details="auto"
+          background-color="grey lighten-4"
+          solo
+          flat
+          clearable
+        />
       </v-col>
     </v-row>
 
@@ -275,13 +287,20 @@ export default {
       },
     };
   },
+  watch: {
+    search() {
+      this.fetchData();
+    },
+  },
   mounted() {
     this.fetchData();
   },
   methods: {
     async fetchData() {
       try {
-        const { data } = await this.axios.get(`/classes`);
+        const { data } = await this.axios.get(
+          `/classes${this.search ? `?search=${this.search}` : ""}`
+        );
         this.items = data || [];
       } catch (error) {
         this.$swal.fire({

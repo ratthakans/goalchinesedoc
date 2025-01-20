@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Toolbar -->
-    <v-row dense justify="space-between">
+    <v-row dense justify="space-between" no-gutters>
       <v-col>
         <v-btn icon @click="prevPage"><v-icon>mdi-chevron-left</v-icon></v-btn>
         <v-btn icon @click="nextPage"><v-icon>mdi-chevron-right</v-icon></v-btn>
@@ -25,7 +25,7 @@
     <div
       id="viewerContainer"
       class="grey lighten-4 mt-4"
-      style="width: 92%; height: 100vh; overflow: auto"
+      style="width: 100%; height: 650px; overflow: auto"
     >
       <div id="viewer" class="pdfViewer"></div>
     </div>
