@@ -60,7 +60,7 @@
     </v-container>
 
     <v-dialog v-model="dialog" max-width="90%">
-      <v-card min-height="720px">
+      <v-card min-height="720px" v-if="dialog">
         <WebViewer
           v-show="fileType === 'pptx'"
           :initialDoc="fileUrl"
