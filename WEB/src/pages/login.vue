@@ -1,12 +1,13 @@
 <template>
   <div class="fill-height background-div d-flex justify-center align-center">
     <v-card
-      class="align-center mx-auto"
+      class="align-center mx-6"
+      min-width="250"
       max-width="500"
       rounded="xxl"
       elevation="6"
     >
-      <v-card-text>
+      <v-card-text class="pa-sm-2 pa-md-6">
         <v-img
           class="mb-4"
           height="170"
@@ -25,7 +26,7 @@
         <div class="py-2" />
 
         <v-row justify="center">
-          <v-col cols="10">
+          <v-col cols="12">
             <v-text-field
               v-model="username"
               label="Username"
@@ -37,7 +38,7 @@
           </v-col>
         </v-row>
         <v-row justify="center">
-          <v-col cols="10">
+          <v-col cols="12">
             <v-text-field
               v-model="password"
               label="Password"
@@ -52,7 +53,7 @@
           </v-col>
         </v-row>
         <v-row justify="center">
-          <v-col cols="10">
+          <v-col cols="12">
             <v-checkbox
               class="mt-0"
               v-model="rememberMe"
@@ -62,7 +63,7 @@
           </v-col>
         </v-row>
         <v-row justify="center" v-if="error">
-          <v-col cols="10">
+          <v-col cols="12">
             <v-alert
               dense
               outlined
@@ -75,7 +76,7 @@
           </v-col>
         </v-row>
         <v-row justify="center">
-          <v-col cols="4">
+          <v-col cols="6" md="4">
             <v-btn color="primary" block depressed @click="loginUser">
               LogIn
             </v-btn>
