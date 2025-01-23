@@ -96,16 +96,18 @@
 <script>
 import { mapState } from "pinia";
 import { useAppStore } from "@/stores/app";
-
-import WebViewer from "@/components/WebViewer.vue";
-import WebViewerPdf from "@/components/WebViewerPdf.vue";
+import { defineAsyncComponent } from "vue";
+// import WebViewer from "@/components/WebViewer.vue";
+// import WebViewerPdf from "@/components/WebViewerPdf.vue";
 import iconDocument from "@/assets/document.png";
 
 export default {
   name: "StudentMaterials",
   components: {
-    WebViewer,
-    WebViewerPdf,
+    WebViewer: defineAsyncComponent(() => import("@/components/WebViewer.vue")),
+    WebViewerPdf: defineAsyncComponent(() =>
+      import("@/components/WebViewerPdf.vue")
+    ),
   },
   data() {
     return {
