@@ -151,17 +151,17 @@ export default {
         const { data } = await this.axios.get(
           `/classes/student/${this.userInfo.accountID}`
         );
-        this.dataClass = data;
-        this.totalClassTimes = data.reduce((acc, cur) => {
+        this.dataClass = data.filter((item) => item.status === "Active");
+        this.totalClassTimes = this.dataClass.reduce((acc, cur) => {
           return acc + cur.registeredTimes;
         }, 0);
-        this.totalAttendTimes = data.reduce((acc, cur) => {
+        this.totalAttendTimes = this.dataClass.reduce((acc, cur) => {
           return acc + cur.attendance.length;
         }, 0);
-        this.totalLeaveTimes = data.reduce((acc, cur) => {
+        this.totalLeaveTimes = this.dataClass.reduce((acc, cur) => {
           return acc + cur.studentLeave;
         }, 0);
-        this.studentLeaveTimes = data.reduce((acc, cur) => {
+        this.studentLeaveTimes = this.dataClass.reduce((acc, cur) => {
           return acc + cur.inputStudentLeave;
         }, 0);
       } catch (error) {

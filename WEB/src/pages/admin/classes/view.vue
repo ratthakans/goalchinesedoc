@@ -5,7 +5,7 @@
         <v-btn variant="text" icon to="/admin/classes/all" class="mr-2">
           <v-icon>mdi-arrow-left</v-icon>
         </v-btn>
-        <h5 class="text-h5">Class {{ $route.params?.id }}</h5>
+        <h5 class="text-h5">Class {{ editItems?.no }}</h5>
       </v-col>
     </v-row>
 

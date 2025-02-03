@@ -40,7 +40,7 @@ import * as pdfjsViewer from "pdfjs-dist/web/pdf_viewer";
 
 import "pdfjs-dist/web/pdf_viewer.css";
 
-import { PDFDocument, rgb, degrees } from "pdf-lib";
+import { PDFDocument, rgb, degrees, StandardFonts } from "pdf-lib";
 
 export default {
   name: "WebViewer",
@@ -158,12 +158,20 @@ export default {
       // Modify the PDF to include the watermark
       const pdfDoc = await PDFDocument.load(pdfBytes);
       const pages = pdfDoc.getPages();
+      const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
 
       pages.forEach((page) => {
         const { width, height } = page.getSize();
+
+        let originX = width / 2;
+        let originY = height / 3;
+
+        const textWidth = helveticaFont.widthOfTextAtSize(this.waterMark, 32);
+        // const textHeight = helveticaFont.heightAtSize(32);
+
         page.drawText(this.waterMark || "Confidential", {
-          x: width / 2,
-          y: height / 2,
+          x: originX - textWidth / 3,
+          y: originY,
           size: 32,
           color: rgb(0.7, 0.7, 0.7, 0.3),
           rotate: degrees(45),

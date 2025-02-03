@@ -1,6 +1,5 @@
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "./vfs_fonts.js";
-console.log("🚀 ~ pdfFonts:", pdfFonts);
 
 pdfMake.vfs = pdfFonts;
 pdfMake.fonts = {
