@@ -395,3 +395,9 @@ To serve both the frontend and backend from the same domain, you may need to con
 
 You have successfully deployed the Vue.js frontend and Node.js backend on cPanel!
 
+
+
+การใช้งาน
+make cert-init - ใช้ครั้งแรกเมื่อยังไม่มี cert (สร้าง dummy → start nginx → ขอ cert จริง)
+make cert - ขอ cert ใหม่ (เมื่อ nginx ทำงานอยู่แล้ว)
+make cert-renew - Renew cert
