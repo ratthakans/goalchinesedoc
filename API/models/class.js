@@ -145,6 +145,12 @@ const Class = sequelize.define(
   },
   {
     freezeTableName: true,
+    indexes: [
+      { fields: ["branchID"] },
+      { fields: ["teacherID"] },
+      { fields: ["status"] },
+      { fields: ["branchID", "status"] },
+    ],
   }
 );
 

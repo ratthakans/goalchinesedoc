@@ -89,21 +89,24 @@ exports.findAll = async (req, res) => {
 
     const events = await ClassEvents.findAll({
       where,
+      attributes: ["id", "classId", "title", "link", "color", "note", "startDate", "endDate", "updateBy"],
       include: [
         { model: Account, as: "updatedBy", attributes: ["id", "name"] },
         {
           model: Class,
           as: "class",
+          attributes: ["id", "name", "branchId", "teacherId"],
           include: [
             { model: Account, as: "teacher", attributes: ["id", "name"] },
             {
               model: ClassStudent,
               as: "classStudent",
+              attributes: ["id", "accountID"],
               include: [
                 { model: Account, as: "account", attributes: ["id", "name"] },
               ],
             },
-            { model: Branch, as: "branch" },
+            { model: Branch, as: "branch", attributes: ["id", "name"] },
           ],
         },
       ],

@@ -36,6 +36,11 @@ const ClassEvents = sequelize.define(
   },
   {
     freezeTableName: true,
+    indexes: [
+      { fields: ["classId"] },
+      { fields: ["updateBy"] },
+      { fields: ["startDate", "endDate"] },
+    ],
   }
 );
 

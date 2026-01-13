@@ -24,6 +24,9 @@ const Attendance = sequelize.define(
   },
   {
     freezeTableName: true,
+    indexes: [
+      { fields: ["classId"] },
+    ],
   }
 );
 

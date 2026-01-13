@@ -44,6 +44,10 @@ const FeeStructure = sequelize.define(
   },
   {
     freezeTableName: true,
+    indexes: [
+      { fields: ["accountID"] },
+      { fields: ["payDate"] },
+    ],
   }
 );
 
