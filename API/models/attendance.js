@@ -8,7 +8,7 @@ const Attendance = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: "Class", // Name of the related table
+        model: "Class", 
         key: "id",
       },
     },

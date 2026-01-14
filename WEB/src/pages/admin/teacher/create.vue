@@ -27,7 +27,7 @@
           depressed
           class="text-none"
           @click="create"
-          v-if="userInfo?.role !== 'user' || permissionq?.create"
+          v-if="userInfo?.role !== 'user' || permission?.create"
         >
           <v-icon left> mdi-content-save </v-icon>
           Save

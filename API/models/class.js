@@ -18,7 +18,7 @@ const Class = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: "Branch", // Name of the related table
+        model: "Branch", 
         key: "id",
       },
     },
@@ -26,7 +26,7 @@ const Class = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: "ClassType", // Name of the related table
+        model: "ClassType", 
         key: "id",
       },
     },
@@ -54,7 +54,7 @@ const Class = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: "Account", // Name of the related table
+        model: "Account", 
         key: "id",
       },
     },
@@ -65,7 +65,7 @@ const Class = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: "MaterialType", // Name of the related table
+        model: "MaterialType", 
         key: "id",
       },
     },
@@ -109,7 +109,7 @@ const Class = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: true,
       references: {
-        model: "Account", // Name of the related table
+        model: "Account", 
         key: "id",
       },
     },
@@ -122,7 +122,7 @@ const Class = sequelize.define(
     currencyID: {
       type: DataTypes.INTEGER,
       references: {
-        model: "Currency", // Name of the related table
+        model: "Currency", 
         key: "id",
       },
     },
