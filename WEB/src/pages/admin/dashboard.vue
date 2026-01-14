@@ -1,5 +1,17 @@
 <template>
   <v-container class="fill-height">
+    <!-- Loading Overlay -->
+    <v-overlay :value="isLoading" z-index="999">
+      <div class="text-center">
+        <v-progress-circular
+          indeterminate
+          size="80"
+          width="8"
+          color="primary"
+        ></v-progress-circular>
+        <div class="mt-4 white--text text-h6">Loading Dashboard...</div>
+      </div>
+    </v-overlay>
     <v-row>
       <v-col cols="12" md="4">
         <v-card class="mx-auto" max-width="400">
@@ -151,6 +163,7 @@ export default {
       ],
       summaryList: [],
       totalIncome: 0,
+      isLoading: true,
     };
   },
   computed: {
@@ -158,13 +171,18 @@ export default {
       userInfo: "getUserinfo",
     }),
   },
-  mounted() {
+  async mounted() {
     // Load all data in parallel for faster page load
-    Promise.all([
-      this.fetchSetting(),
-      this.onFetchEvents(),
-      this.fetchDashboardData(), // Combined API call instead of 3 separate calls
-    ]);
+    this.isLoading = true;
+    try {
+      await Promise.all([
+        this.fetchSetting(),
+        this.onFetchEvents(),
+        this.fetchDashboardData(), // Combined API call instead of 3 separate calls
+      ]);
+    } finally {
+      this.isLoading = false;
+    }
 
     this.permission = this.userInfo.permissions.find(
       (it) => it.link === this.$route.path
