@@ -79,25 +79,11 @@
               dense
               outlined
               hide-details="auto"
-              placeholder="No file chosen"
+              :placeholder="currentPhotoName || 'No file chosen'"
               persistent-placeholder
               accept="image/*"
             >
             </v-file-input>
-            <div
-              v-if="flagEdit && currentPhoto"
-              class="mt-2 d-flex align-center"
-            >
-              <v-img
-                :src="photoUrl"
-                max-width="100"
-                max-height="60"
-                class="mr-2"
-              ></v-img>
-              <v-btn color="error" icon small @click="deletePhoto">
-                <v-icon small>mdi-trash-can</v-icon>
-              </v-btn>
-            </div>
           </v-col>
         </v-row>
       </v-col>
@@ -131,28 +117,10 @@
           dense
           outlined
           hide-details="auto"
-          placeholder="No file chosen"
+          :placeholder="currentDocumentName || 'No file chosen'"
           persistent-placeholder
         >
         </v-file-input>
-        <div
-          v-if="flagEdit && currentDocument"
-          class="mt-2 d-flex align-center"
-        >
-          <v-icon small class="mr-1">mdi-file-document</v-icon>
-          <a :href="documentUrl" target="_blank" class="text-decoration-none">
-            {{ currentDocumentName }}
-          </a>
-          <v-btn
-            icon
-            x-small
-            color="error"
-            class="ml-2"
-            @click="deleteDocument"
-          >
-            <v-icon small>mdi-trash-can</v-icon>
-          </v-btn>
-        </div>
       </v-col>
       <v-col cols="12" md="6">
         <label class="v-label mb-2 text-subtitle-2">
@@ -271,6 +239,10 @@ export default {
         this.currentPhoto
       }`;
     },
+    currentPhotoName() {
+      if (!this.currentPhoto) return "";
+      return this.currentPhoto.split("/").pop();
+    },
   },
   mounted() {
     this.fetchData("materialType", "materialType");
@@ -285,55 +257,6 @@ export default {
         this.items[items] = data;
       } catch (error) {
         console.log(error);
-      }
-    },
-    async deletePhoto() {
-      const { isDismissed } = await this.$swal({
-        title: "Are you sure?",
-        text: "Once deleted, you will not be able to recover this data!",
-        icon: "warning",
-        buttons: true,
-      });
-
-      if (isDismissed) return;
-
-      //delete data from api
-      try {
-        const { data } = await this.axios.delete(
-          `/materials/image/${this.$route.params.id}`
-        );
-        this.$swal(data?.message, "", "success");
-        this.currentPhoto = null;
-      } catch (error) {
-        this.$swal.fire({
-          title: error.response.data.error,
-          text: error.response.data.details,
-          icon: "error",
-        });
-      }
-    },
-    async deleteDocument() {
-      const { isDismissed } = await this.$swal({
-        title: "Are you sure?",
-        text: "Once deleted, you will not be able to recover this document!",
-        icon: "warning",
-        buttons: true,
-      });
-
-      if (isDismissed) return;
-
-      try {
-        const { data } = await this.axios.delete(
-          `/materials/document/${this.$route.params.id}`
-        );
-        this.$swal(data?.message, "", "success");
-        this.currentDocument = null;
-      } catch (error) {
-        this.$swal.fire({
-          title: error.response.data.error,
-          text: error.response.data.details,
-          icon: "error",
-        });
       }
     },
   },
