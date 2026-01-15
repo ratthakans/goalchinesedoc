@@ -214,7 +214,8 @@ export default {
     editItems: {
       handler() {
         if (this.editItems) {
-          this.currentDocument = this.editItems.documentName || this.editItems.document;
+          this.currentDocument =
+            this.editItems.documentName || this.editItems.document;
           this.currentPhoto = this.editItems.photoName || this.editItems.photo;
           this.formInput = {
             ...this.editItems,
@@ -264,7 +265,7 @@ export default {
     this.fetchData("materialCategory", "materialCategory");
   },
   methods: {
-    async fetchData(uri, items) {  
+    async fetchData(uri, items) {
       try {
         const { data } = await this.axios.get(`/${uri}`);
         this.items[items] = data;
