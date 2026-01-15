@@ -41,7 +41,17 @@ export default {
       try {
         let formData = new FormData();
         for (let key in this.formInput) {
-          if (this.formInput[key]) {
+          if (key === "newDocument" && this.formInput[key]) {
+            formData.append("document", this.formInput[key]);
+          } else if (key === "newPhoto" && this.formInput[key]) {
+            formData.append("photo", this.formInput[key]);
+          } else if (
+            key !== "document" &&
+            key !== "newDocument" &&
+            key !== "photo" &&
+            key !== "newPhoto" &&
+            this.formInput[key]
+          ) {
             formData.append(key, this.formInput[key]);
           }
         }
