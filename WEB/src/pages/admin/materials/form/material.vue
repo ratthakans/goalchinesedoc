@@ -75,7 +75,7 @@
           <v-col cols="">
             <label class="v-label mb-2 text-subtitle-2"> Upload Photo : </label>
             <v-file-input
-              v-model="formInput.newPhoto"
+              v-model="formInput.photo"
               dense
               outlined
               hide-details="auto"
@@ -83,10 +83,12 @@
               persistent-placeholder
               accept="image/*"
             >
-              <template v-slot:selection="{ text }">
-                {{ text || currentPhotoName }}
-              </template>
             </v-file-input>
+          </v-col>
+          <v-col cols="auto" v-if="flagEdit && formInput.photo">
+            <v-btn color="error" icon @click="deletePhoto">
+              <v-icon>mdi-trash-can</v-icon>
+            </v-btn>
           </v-col>
         </v-row>
       </v-col>
@@ -116,16 +118,13 @@
           Materials Document :
         </label>
         <v-file-input
-          v-model="formInput.newDocument"
+          v-model="formInput.document"
           dense
           outlined
           hide-details="auto"
           placeholder="No file chosen"
           persistent-placeholder
         >
-          <template v-slot:selection="{ text }">
-            {{ text || currentDocumentName }}
-          </template>
         </v-file-input>
       </v-col>
       <v-col cols="12" md="6">
@@ -188,15 +187,11 @@ export default {
         materialTypeID: "",
         no: "",
         document: null,
-        newDocument: null,
         description: "",
         link: "",
         photo: null,
-        newPhoto: null,
         documentType: "",
       },
-      currentDocument: null,
-      currentPhoto: null,
       items: {
         materialType: [],
         materialFor: [],
@@ -214,48 +209,10 @@ export default {
     editItems: {
       handler() {
         if (this.editItems) {
-          this.currentDocument =
-            this.editItems.documentName || this.editItems.document;
-          this.currentPhoto = this.editItems.photoName || this.editItems.photo;
-          this.formInput = {
-            ...this.editItems,
-            document: null,
-            newDocument: null,
-            photo: null,
-            newPhoto: null,
-          };
+          this.formInput = { ...this.editItems };
         }
       },
       deep: true,
-    },
-  },
-  computed: {
-    documentUrl() {
-      if (!this.currentDocument) return "";
-      return `${this.axios.defaults.baseURL?.replace("/api", "")}/${
-        this.currentDocument
-      }`;
-    },
-    currentDocumentName() {
-      if (!this.currentDocument) return "";
-
-      return this.currentDocument.includes("/")
-        ? this.currentDocument.split("/").pop()
-        : this.currentDocument;
-    },
-    photoUrl() {
-      if (!this.currentPhoto) return "";
-      return `${this.axios.defaults.baseURL?.replace("/api", "")}/${
-        this.currentPhoto
-      }`;
-    },
-    currentPhotoName() {
-      if (!this.currentPhoto) return "";
-      // If it's already a filename (from photoName), return as is
-      // If it's a path (from photo), extract filename
-      return this.currentPhoto.includes("/")
-        ? this.currentPhoto.split("/").pop()
-        : this.currentPhoto;
     },
   },
   mounted() {
@@ -265,11 +222,37 @@ export default {
   },
   methods: {
     async fetchData(uri, items) {
+      // fetch data from api
       try {
         const { data } = await this.axios.get(`/${uri}`);
         this.items[items] = data;
       } catch (error) {
         console.log(error);
+      }
+    },
+    async deletePhoto() {
+      const { isDismissed } = await this.$swal({
+        title: "Are you sure?",
+        text: "Once deleted, you will not be able to recover this data!",
+        icon: "warning",
+        buttons: true,
+      });
+
+      if (isDismissed) return;
+
+      //delete data from api
+      try {
+        const { data } = await this.axios.delete(
+          `/materials/image/${this.$route.params.id}`
+        );
+        this.$swal(data?.message, "", "success");
+        this.fetchData();
+      } catch (error) {
+        this.$swal.fire({
+          title: error.response.data.error,
+          text: error.response.data.details,
+          icon: "error",
+        });
       }
     },
   },
