@@ -4,6 +4,14 @@ const fs = require("fs");
 const path = require("path");
 const { Op } = require("sequelize");
 
+// Decode UTF-8 filename from multipart/form-data
+const decodeFilename = (filename) => {
+  try {
+    return Buffer.from(filename, "latin1").toString("utf8");
+  } catch (e) {
+    return filename;
+  }
+};
 
 exports.create = async (req, res) => {
   try {
@@ -18,11 +26,13 @@ exports.create = async (req, res) => {
       documentType,
     } = req.body;
 
-    const photo = req.files?.photo ? req.files.photo[0].path : null; 
-    const photoName = req.files?.photo ? req.files.photo[0].originalname : null; 
-    const document = req.files?.document ? req.files.document[0].path : null; 
+    const photo = req.files?.photo ? req.files.photo[0].path : null;
+    const photoName = req.files?.photo
+      ? decodeFilename(req.files.photo[0].originalname)
+      : null;
+    const document = req.files?.document ? req.files.document[0].path : null;
     const documentName = req.files?.document
-      ? req.files.document[0].originalname
+      ? decodeFilename(req.files.document[0].originalname)
       : null; 
 
     const material = await Materials.create({
@@ -71,15 +81,15 @@ exports.update = async (req, res, next) => {
       return res.status(404).json({ error: "Material not found" });
     }
 
-    const photo = req.files?.photo ? req.files.photo[0].path : material.photo;  
+    const photo = req.files?.photo ? req.files.photo[0].path : material.photo;
     const photoName = req.files?.photo
-      ? req.files.photo[0].originalname
-      : material.photoName; 
+      ? decodeFilename(req.files.photo[0].originalname)
+      : material.photoName;
     const document = req.files?.document
       ? req.files.document[0].path
-      : material.document;  
+      : material.document;
     const documentName = req.files?.document
-      ? req.files.document[0].originalname
+      ? decodeFilename(req.files.document[0].originalname)
       : material.documentName; 
 
     material.title = title || material.title;
