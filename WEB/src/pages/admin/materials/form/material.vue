@@ -75,7 +75,7 @@
           <v-col cols="">
             <label class="v-label mb-2 text-subtitle-2"> Upload Photo : </label>
             <v-file-input
-              v-model="formInput.photo"
+              v-model="formInput.newPhoto"
               dense
               outlined
               hide-details="auto"
@@ -84,11 +84,20 @@
               accept="image/*"
             >
             </v-file-input>
-          </v-col>
-          <v-col cols="auto" v-if="flagEdit && formInput.photo">
-            <v-btn color="error" icon @click="deletePhoto">
-              <v-icon>mdi-trash-can</v-icon>
-            </v-btn>
+            <div
+              v-if="flagEdit && currentPhoto"
+              class="mt-2 d-flex align-center"
+            >
+              <v-img
+                :src="photoUrl"
+                max-width="100"
+                max-height="60"
+                class="mr-2"
+              ></v-img>
+              <v-btn color="error" icon small @click="deletePhoto">
+                <v-icon small>mdi-trash-can</v-icon>
+              </v-btn>
+            </div>
           </v-col>
         </v-row>
       </v-col>
@@ -118,7 +127,7 @@
           Materials Document :
         </label>
         <v-file-input
-          v-model="formInput.document"
+          v-model="formInput.newDocument"
           dense
           outlined
           hide-details="auto"
@@ -126,6 +135,24 @@
           persistent-placeholder
         >
         </v-file-input>
+        <div
+          v-if="flagEdit && currentDocument"
+          class="mt-2 d-flex align-center"
+        >
+          <v-icon small class="mr-1">mdi-file-document</v-icon>
+          <a :href="documentUrl" target="_blank" class="text-decoration-none">
+            {{ currentDocumentName }}
+          </a>
+          <v-btn
+            icon
+            x-small
+            color="error"
+            class="ml-2"
+            @click="deleteDocument"
+          >
+            <v-icon small>mdi-trash-can</v-icon>
+          </v-btn>
+        </div>
       </v-col>
       <v-col cols="12" md="6">
         <label class="v-label mb-2 text-subtitle-2">
@@ -187,11 +214,15 @@ export default {
         materialTypeID: "",
         no: "",
         document: null,
+        newDocument: null,
         description: "",
         link: "",
         photo: null,
+        newPhoto: null,
         documentType: "",
       },
+      currentDocument: null,
+      currentPhoto: null,
       items: {
         materialType: [],
         materialFor: [],
@@ -209,10 +240,36 @@ export default {
     editItems: {
       handler() {
         if (this.editItems) {
-          this.formInput = { ...this.editItems };
+          this.currentDocument = this.editItems.document;
+          this.currentPhoto = this.editItems.photo;
+          this.formInput = {
+            ...this.editItems,
+            document: null,
+            newDocument: null,
+            photo: null,
+            newPhoto: null,
+          };
         }
       },
       deep: true,
+    },
+  },
+  computed: {
+    documentUrl() {
+      if (!this.currentDocument) return "";
+      return `${this.axios.defaults.baseURL?.replace("/api", "")}/${
+        this.currentDocument
+      }`;
+    },
+    currentDocumentName() {
+      if (!this.currentDocument) return "";
+      return this.currentDocument.split("/").pop();
+    },
+    photoUrl() {
+      if (!this.currentPhoto) return "";
+      return `${this.axios.defaults.baseURL?.replace("/api", "")}/${
+        this.currentPhoto
+      }`;
     },
   },
   mounted() {
@@ -246,7 +303,31 @@ export default {
           `/materials/image/${this.$route.params.id}`
         );
         this.$swal(data?.message, "", "success");
-        this.fetchData();
+        this.currentPhoto = null;
+      } catch (error) {
+        this.$swal.fire({
+          title: error.response.data.error,
+          text: error.response.data.details,
+          icon: "error",
+        });
+      }
+    },
+    async deleteDocument() {
+      const { isDismissed } = await this.$swal({
+        title: "Are you sure?",
+        text: "Once deleted, you will not be able to recover this document!",
+        icon: "warning",
+        buttons: true,
+      });
+
+      if (isDismissed) return;
+
+      try {
+        const { data } = await this.axios.delete(
+          `/materials/document/${this.$route.params.id}`
+        );
+        this.$swal(data?.message, "", "success");
+        this.currentDocument = null;
       } catch (error) {
         this.$swal.fire({
           title: error.response.data.error,
