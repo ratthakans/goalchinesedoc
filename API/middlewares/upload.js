@@ -2,16 +2,6 @@ const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 
-// Decode UTF-8 filename from multipart/form-data
-const decodeFilename = (filename) => {
-  try {
-    // Try to decode as UTF-8 if it looks encoded
-    return Buffer.from(filename, "latin1").toString("utf8");
-  } catch (e) {
-    return filename;
-  }
-};
-
 // Ensure directory existence
 const ensureDirectoryExistence = (dir) => {
   if (!fs.existsSync(dir)) {
