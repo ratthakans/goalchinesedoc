@@ -19,13 +19,19 @@ exports.create = async (req, res) => {
     } = req.body;
 
     const photo = req.files?.photo ? req.files.photo[0].path : null; // Handle optional photo
+    const photoName = req.files?.photo ? req.files.photo[0].originalname : null; // Original filename
     const document = req.files?.document ? req.files.document[0].path : null; // Handle optional document
+    const documentName = req.files?.document
+      ? req.files.document[0].originalname
+      : null; // Original filename
 
     const material = await Materials.create({
       title,
       description,
       photo,
+      photoName,
       document,
+      documentName,
       categoryID,
       materialForID,
       materialTypeID,
@@ -67,14 +73,22 @@ exports.update = async (req, res, next) => {
     }
 
     const photo = req.files?.photo ? req.files.photo[0].path : material.photo; // Use existing or new photo
+    const photoName = req.files?.photo
+      ? req.files.photo[0].originalname
+      : material.photoName; // Use existing or new original filename
     const document = req.files?.document
       ? req.files.document[0].path
       : material.document; // Use existing or new document
+    const documentName = req.files?.document
+      ? req.files.document[0].originalname
+      : material.documentName; // Use existing or new original filename
 
     material.title = title || material.title;
     material.description = description || material.description;
     material.photo = photo;
+    material.photoName = photoName;
     material.document = document;
+    material.documentName = documentName;
     material.categoryID = categoryID || material.categoryID;
     material.materialForID = materialForID || material.materialForID;
     material.materialTypeID = materialTypeID || material.materialTypeID;

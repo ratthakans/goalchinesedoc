@@ -79,10 +79,13 @@
               dense
               outlined
               hide-details="auto"
-              :placeholder="currentPhotoName || 'No file chosen'"
+              placeholder="No file chosen"
               persistent-placeholder
               accept="image/*"
             >
+              <template v-slot:selection="{ text }">
+                {{ text || currentPhotoName }}
+              </template>
             </v-file-input>
           </v-col>
         </v-row>
@@ -117,9 +120,12 @@
           dense
           outlined
           hide-details="auto"
-          :placeholder="currentDocumentName || 'No file chosen'"
+          placeholder="No file chosen"
           persistent-placeholder
         >
+          <template v-slot:selection="{ text }">
+            {{ text || currentDocumentName }}
+          </template>
         </v-file-input>
       </v-col>
       <v-col cols="12" md="6">
@@ -208,8 +214,8 @@ export default {
     editItems: {
       handler() {
         if (this.editItems) {
-          this.currentDocument = this.editItems.document;
-          this.currentPhoto = this.editItems.photo;
+          this.currentDocument = this.editItems.documentName || this.editItems.document;
+          this.currentPhoto = this.editItems.photoName || this.editItems.photo;
           this.formInput = {
             ...this.editItems,
             document: null,
@@ -231,7 +237,11 @@ export default {
     },
     currentDocumentName() {
       if (!this.currentDocument) return "";
-      return this.currentDocument.split("/").pop();
+      // If it's already a filename (from documentName), return as is
+      // If it's a path (from document), extract filename
+      return this.currentDocument.includes("/")
+        ? this.currentDocument.split("/").pop()
+        : this.currentDocument;
     },
     photoUrl() {
       if (!this.currentPhoto) return "";
@@ -241,7 +251,11 @@ export default {
     },
     currentPhotoName() {
       if (!this.currentPhoto) return "";
-      return this.currentPhoto.split("/").pop();
+      // If it's already a filename (from photoName), return as is
+      // If it's a path (from photo), extract filename
+      return this.currentPhoto.includes("/")
+        ? this.currentPhoto.split("/").pop()
+        : this.currentPhoto;
     },
   },
   mounted() {
@@ -250,8 +264,7 @@ export default {
     this.fetchData("materialCategory", "materialCategory");
   },
   methods: {
-    async fetchData(uri, items) {
-      // fetch data from api
+    async fetchData(uri, items) {  
       try {
         const { data } = await this.axios.get(`/${uri}`);
         this.items[items] = data;
