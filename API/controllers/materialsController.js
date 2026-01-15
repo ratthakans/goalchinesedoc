@@ -1,10 +1,10 @@
 const logger = require("../logger");
-const { Materials } = require("../models"); // Ensure the path to your models is correct
+const { Materials } = require("../models"); 
 const fs = require("fs");
 const path = require("path");
 const { Op } = require("sequelize");
 
-// Create a new Material with optional photo and document upload
+
 exports.create = async (req, res) => {
   try {
     const {
@@ -18,12 +18,12 @@ exports.create = async (req, res) => {
       documentType,
     } = req.body;
 
-    const photo = req.files?.photo ? req.files.photo[0].path : null; // Handle optional photo
-    const photoName = req.files?.photo ? req.files.photo[0].originalname : null; // Original filename
-    const document = req.files?.document ? req.files.document[0].path : null; // Handle optional document
+    const photo = req.files?.photo ? req.files.photo[0].path : null; 
+    const photoName = req.files?.photo ? req.files.photo[0].originalname : null; 
+    const document = req.files?.document ? req.files.document[0].path : null; 
     const documentName = req.files?.document
       ? req.files.document[0].originalname
-      : null; // Original filename
+      : null; 
 
     const material = await Materials.create({
       title,
@@ -48,11 +48,10 @@ exports.create = async (req, res) => {
       `Material created: ${material.id} by [${req.user.id}] ${req.user.username}`
     );
   } catch (error) {
-    next(error); // Pass the error to the centralized error handler
+    next(error); 
   }
 };
 
-// Update a Material by ID with optional photo and document upload
 exports.update = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -72,16 +71,16 @@ exports.update = async (req, res, next) => {
       return res.status(404).json({ error: "Material not found" });
     }
 
-    const photo = req.files?.photo ? req.files.photo[0].path : material.photo; // Use existing or new photo
+    const photo = req.files?.photo ? req.files.photo[0].path : material.photo;  
     const photoName = req.files?.photo
       ? req.files.photo[0].originalname
-      : material.photoName; // Use existing or new original filename
+      : material.photoName; 
     const document = req.files?.document
       ? req.files.document[0].path
-      : material.document; // Use existing or new document
+      : material.document;  
     const documentName = req.files?.document
       ? req.files.document[0].originalname
-      : material.documentName; // Use existing or new original filename
+      : material.documentName; 
 
     material.title = title || material.title;
     material.description = description || material.description;
@@ -106,11 +105,10 @@ exports.update = async (req, res, next) => {
       `Material updated: ${material.id} by [${req.user.id}] ${req.user.username}`
     );
   } catch (error) {
-    next(error); // Pass the error to the centralized error handler
+    next(error); 
   }
 };
 
-// Get all Materials
 exports.findAll = async (req, res, next) => {
   try {
     const { materialFor, search } = req.query;
@@ -150,11 +148,10 @@ exports.findAll = async (req, res, next) => {
     });
     res.status(200).json(materials);
   } catch (error) {
-    next(error); // Pass the error to the centralized error handler
+    next(error); 
   }
 };
 
-// Get a specific Material by ID
 exports.findOne = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -164,11 +161,10 @@ exports.findOne = async (req, res, next) => {
     }
     res.status(200).json(material);
   } catch (error) {
-    next(error); // Pass the error to the centralized error handler
+    next(error); 
   }
 };
 
-// Delete a Material by ID
 exports.delete = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -180,7 +176,6 @@ exports.delete = async (req, res, next) => {
 
     if (material.photo) {
       const imagePath = path.resolve(material.photo);
-      // Remove the image file
       fs.unlink(imagePath, (err) => {
         if (err) {
           console.error(err);
@@ -190,7 +185,7 @@ exports.delete = async (req, res, next) => {
 
     if (material.document) {
       const documentPath = path.resolve(material.document);
-      // Remove the document file
+    
       fs.unlink(documentPath, (err) => {
         if (err) {
           console.error(err);
@@ -208,11 +203,10 @@ exports.delete = async (req, res, next) => {
       `Material deleted: ${id} by [${req.user.id}] ${req.user.username}`
     );
   } catch (error) {
-    next(error); // Pass the error to the centralized error handler
+    next(error); 
   }
 };
 
-// Delete image from an Account by ID
 exports.deleteImage = async (req, res) => {
   try {
     const { id } = req.params;
@@ -224,7 +218,6 @@ exports.deleteImage = async (req, res) => {
 
     if (material.photo) {
       const imagePath = path.resolve(material.photo);
-      // Remove the image file
       fs.unlink(imagePath, (err) => {
         if (err) {
           console.error(err);
@@ -232,7 +225,7 @@ exports.deleteImage = async (req, res) => {
       });
     }
 
-    // Update the Account with the filtered data
+      
     await material.update({ photo: null });
     res.status(200).json({ message: "Image deleted successfully" });
 

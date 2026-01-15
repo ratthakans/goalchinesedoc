@@ -238,8 +238,7 @@ export default {
     },
     currentDocumentName() {
       if (!this.currentDocument) return "";
-      // If it's already a filename (from documentName), return as is
-      // If it's a path (from document), extract filename
+
       return this.currentDocument.includes("/")
         ? this.currentDocument.split("/").pop()
         : this.currentDocument;
