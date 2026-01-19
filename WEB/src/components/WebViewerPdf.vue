@@ -33,9 +33,7 @@
 </template>
 
 <script>
-import * as pdfjsLib from "pdfjs-dist/webpack.mjs";
-// import * as pdfjsViewer from "pdfjs-dist/web/pdf_viewer.mjs";
-// import { getDocument } from "pdfjs-dist";
+import * as pdfjsLib from "pdfjs-dist/webpack";
 import * as pdfjsViewer from "pdfjs-dist/web/pdf_viewer";
 
 import "pdfjs-dist/web/pdf_viewer.css";
