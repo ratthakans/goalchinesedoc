@@ -58,14 +58,33 @@ export default {
   },
 
   mounted() {
-    this.initializeViewer(this.initialDoc);
+    if (this.initialDoc) {
+      this.initializeViewer(this.initialDoc);
+    }
+  },
+  watch: {
+    initialDoc(newDoc) {
+      if (newDoc) {
+        this.initializeViewer(newDoc);
+      }
+    }
   },
   methods: {
     async initializeViewer(pdfUrl) {
+      if (!pdfUrl) {
+        console.error("PDF URL is missing");
+        return;
+      }
+      
       const pdfPath = pdfUrl;
+      console.log("🚀 ~ initializeViewer ~ pdfPath:", pdfPath);
 
       // Get the container and initialize the viewer
       const container = document.getElementById("viewerContainer");
+      if (!container) {
+        console.error("Viewer container not found");
+        return;
+      }
 
       const eventBus = new pdfjsViewer.EventBus();
 
