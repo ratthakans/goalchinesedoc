@@ -157,11 +157,15 @@ export default {
     },
     async fetchDataMaterials() {
       try {
+        console.log("🚀 ~ fetchDataMaterials ~ userInfo.id:", this.userInfo.id);
         const { data } = await this.axios.get(
           `/myMaterial/account/${this.userInfo.id}?type=student`
         );
+        console.log("🚀 ~ fetchDataMaterials ~ raw data:", data);
         this.items = data.map((item) => item.material);
+        console.log("🚀 ~ fetchDataMaterials ~ mapped items:", this.items);
       } catch (error) {
+        console.error("❌ fetchDataMaterials error:", error);
         if (error.response?.status !== 404)
           this.$swal.fire({
             title: error.response?.data?.error || "Error",
