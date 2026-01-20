@@ -67,7 +67,7 @@ export default {
       if (newDoc) {
         this.initializeViewer(newDoc);
       }
-    }
+    },
   },
   methods: {
     async initializeViewer(pdfUrl) {
@@ -75,7 +75,7 @@ export default {
         console.error("PDF URL is missing");
         return;
       }
-      
+
       const pdfPath = pdfUrl;
       console.log("🚀 ~ initializeViewer ~ pdfPath:", pdfPath);
 
