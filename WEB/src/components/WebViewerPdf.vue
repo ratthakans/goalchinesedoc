@@ -93,40 +93,47 @@ export default {
         eventBus,
       });
 
-      // Load the PDF
-      this.pdfDocument = await pdfjsLib.getDocument(pdfPath).promise;
-      console.log(
-        "🚀 ~ initializeViewer ~ this.pdfDocument:",
-        this.pdfDocument
-      );
+      try {
+        // Load the PDF
+        console.log("🚀 Starting to load PDF from:", pdfPath);
+        this.pdfDocument = await pdfjsLib.getDocument(pdfPath).promise;
+        console.log(
+          "🚀 ~ initializeViewer ~ this.pdfDocument:",
+          this.pdfDocument
+        );
 
-      // Set the document in the viewer
-      this.viewer.setDocument(this.pdfDocument);
+        // Set the document in the viewer
+        this.viewer.setDocument(this.pdfDocument);
 
-      // Optional: Enable text layer for selectable text
-      // Set total pages and enable selectable text
-      this.totalPages = this.pdfDocument.numPages;
-      this.viewer.textLayerMode = 2;
+        // Optional: Enable text layer for selectable text
+        // Set total pages and enable selectable text
+        this.totalPages = this.pdfDocument.numPages;
+        this.viewer.textLayerMode = 2;
 
-      // Update the current page when the viewer changes pages
-      eventBus.on("pagechanging", () => {
-        this.currentPage = this.viewer.currentPageNumber;
-      });
+        // Update the current page when the viewer changes pages
+        eventBus.on("pagechanging", () => {
+          this.currentPage = this.viewer.currentPageNumber;
+        });
 
-      console.log("eventBus :>> ", eventBus);
-      // eventBus.on("pagesinit", (PDFViewer) => {
-      //   console.log(" PDFViewer._pages :>> ", PDFViewer);
-      //   PDFViewer.source._pages.forEach((page) => {
-      //     console.log("🚀 ~ PDFViewer._pages.forEach ~ page:", page);
+        console.log("eventBus :>> ", eventBus);
+        // eventBus.on("pagesinit", (PDFViewer) => {
+        //   console.log(" PDFViewer._pages :>> ", PDFViewer);
+        //   PDFViewer.source._pages.forEach((page) => {
+        //     console.log("🚀 ~ PDFViewer._pages.forEach ~ page:", page);
 
-      //     this.addWatermarkToCanvas(page.canvas);
-      //   });
-      // });
-      eventBus.on("pagerendered", (PDFViewer) => {
-        this.addWatermarkToCanvas(PDFViewer.source.canvas);
-      });
+        //     this.addWatermarkToCanvas(page.canvas);
+        //   });
+        // });
+        eventBus.on("pagerendered", (PDFViewer) => {
+          this.addWatermarkToCanvas(PDFViewer.source.canvas);
+        });
 
-      console.log(`PDF loaded with ${this.pdfDocument.numPages} pages.`);
+        console.log(`PDF loaded with ${this.pdfDocument.numPages} pages.`);
+      } catch (error) {
+        console.error("❌ Error loading PDF:", error);
+        console.error("❌ PDF URL was:", pdfPath);
+        throw error;
+      }
     },
     addWatermarkToCanvas(canvas) {
       console.log("canvas :>> ", canvas);
