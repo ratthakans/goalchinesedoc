@@ -157,15 +157,11 @@ export default {
     },
     async fetchDataMaterials() {
       try {
-        console.log("🚀 ~ fetchDataMaterials ~ userInfo.id:", this.userInfo.id);
         const { data } = await this.axios.get(
           `/myMaterial/account/${this.userInfo.id}?type=student`
         );
-        console.log("🚀 ~ fetchDataMaterials ~ raw data:", data);
-        this.items = data;
-        console.log("🚀 ~ fetchDataMaterials ~ items:", this.items);
+        this.items = data.map((item) => item.material);
       } catch (error) {
-        console.error("❌ fetchDataMaterials error:", error);
         if (error.response?.status !== 404)
           this.$swal.fire({
             title: error.response?.data?.error || "Error",
@@ -180,20 +176,20 @@ export default {
 
       // this.fileUrl = "../sample-1.pdf";
       if (["pptx"].includes(item.documentType)) {
-        this.fileUrl = `${this.baseUrl}${item.material.document}`;
+        this.fileUrl = `${this.baseUrl}${item.document}`;
       } else if (["pdf"].includes(item.documentType)) {
-        this.fileUrl = `${this.baseUrl}${item.material.document}`;
+        this.fileUrl = `${this.baseUrl}${item.document}`;
       } else if (["link"].includes(item.documentType)) {
-        const canvaLink = item.material.link;
+        const canvaLink = item.link;
         window.open(canvaLink, "_blank"); // Open in a new tab
       } else if (["canva"].includes(item.documentType)) {
-        this.fileUrl = item.material.link + "?embed";
+        this.fileUrl = item.link + "?embed";
       } else if (["youtube"].includes(item.documentType)) {
-        this.fileUrl = item.material.link;
+        this.fileUrl = item.link;
       } else if (item.documentType === "mp4") {
-        this.fileUrl = `${this.baseUrl}${item.material.document}`;
+        this.fileUrl = `${this.baseUrl}${item.document}`;
       }
-      console.log("🚀 ~ openDoc ~ this.fileUrl:", this.fileUrl);
+      // console.log("🚀 ~ openDoc ~  this.fileUrl:", this.fileUrl);
 
       setTimeout(() => {
         this.dialog = true;
