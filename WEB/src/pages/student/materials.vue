@@ -185,7 +185,7 @@ export default {
         this.fileUrl = `${this.baseUrl}${item.document}`;
       } else if (["link"].includes(item.documentType)) {
         const canvaLink = item.link;
-        window.open(canvaLink, "_blank"); // Open in a new tab
+        window.open(canvaLink, "_blank");
       } else if (["canva"].includes(item.documentType)) {
         this.fileUrl = item.link + "?embed";
       } else if (["youtube"].includes(item.documentType)) {
