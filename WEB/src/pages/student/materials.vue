@@ -162,8 +162,8 @@ export default {
           `/myMaterial/account/${this.userInfo.id}?type=student`
         );
         console.log("🚀 ~ fetchDataMaterials ~ raw data:", data);
-        this.items = data.map((item) => item.material);
-        console.log("🚀 ~ fetchDataMaterials ~ mapped items:", this.items);
+        this.items = data;
+        console.log("🚀 ~ fetchDataMaterials ~ items:", this.items);
       } catch (error) {
         console.error("❌ fetchDataMaterials error:", error);
         if (error.response?.status !== 404)
