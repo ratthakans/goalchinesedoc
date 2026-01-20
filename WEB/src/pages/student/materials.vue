@@ -160,7 +160,7 @@ export default {
         const { data } = await this.axios.get(
           `/myMaterial/account/${this.userInfo.id}?type=student`
         );
-        this.items = data.map((item) => item.material);
+        this.items = data;
       } catch (error) {
         if (error.response?.status !== 404)
           this.$swal.fire({
@@ -172,22 +172,22 @@ export default {
     },
     openDoc(item) {
       this.dialog = false;
-      this.fileType = item.documentType;
+      this.fileType = item.material.documentType;
 
       // this.fileUrl = "../sample-1.pdf";
-      if (["pptx"].includes(item.documentType)) {
-        this.fileUrl = `${this.baseUrl}${item.document}`;
-      } else if (["pdf"].includes(item.documentType)) {
-        this.fileUrl = `${this.baseUrl}${item.document}`;
-      } else if (["link"].includes(item.documentType)) {
-        const canvaLink = item.link;
+      if (["pptx"].includes(item.material.documentType)) {
+        this.fileUrl = `${this.baseUrl}${item.material.document}`;
+      } else if (["pdf"].includes(item.material.documentType)) {
+        this.fileUrl = `${this.baseUrl}${item.material.document}`;
+      } else if (["link"].includes(item.material.documentType)) {
+        const canvaLink = item.material.link;
         window.open(canvaLink, "_blank"); // Open in a new tab
-      } else if (["canva"].includes(item.documentType)) {
-        this.fileUrl = item.link + "?embed";
-      } else if (["youtube"].includes(item.documentType)) {
-        this.fileUrl = item.link;
-      } else if (item.documentType === "mp4") {
-        this.fileUrl = `${this.baseUrl}${item.document}`;
+      } else if (["canva"].includes(item.material.documentType)) {
+        this.fileUrl = item.material.link + "?embed";
+      } else if (["youtube"].includes(item.material.documentType)) {
+        this.fileUrl = item.material.link;
+      } else if (item.material.documentType === "mp4") {
+        this.fileUrl = `${this.baseUrl}${item.material.document}`;
       }
       // console.log("🚀 ~ openDoc ~  this.fileUrl:", this.fileUrl);
 
