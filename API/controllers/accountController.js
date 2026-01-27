@@ -269,6 +269,12 @@ exports.update = async (req, res) => {
 exports.delete = async (req, res, next) => {
   try {
     const { id } = req.params;
+    
+    // First, delete related FeeStructure records
+    const FeeStructure = require("../models/feeStructure");
+    await FeeStructure.destroy({ where: { accountID: id } });
+    
+    // Then delete the Account
     const deleted = await Account.destroy({ where: { id } });
     if (!deleted) {
       return res.status(404).json({ error: "Account not found" });
