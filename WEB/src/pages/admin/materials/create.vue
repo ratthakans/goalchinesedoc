@@ -9,7 +9,7 @@
       </v-col>
     </v-row>
     <v-form ref="form" lazy-validation>
-      <FormMaterial v-model="formInput" />
+      <FormMaterial v-model="formInput" :flagEdit="false" />
     </v-form>
 
     <v-row justify="end">
@@ -32,7 +32,18 @@ export default {
   },
   data() {
     return {
-      formInput: null,
+      formInput: {
+        title: "",
+        categoryID: "",
+        materialForID: "",
+        materialTypeID: "",
+        no: "",
+        document: null,
+        description: "",
+        link: "",
+        photo: null,
+        documentType: "",
+      },
     };
   },
   methods: {
@@ -40,10 +51,11 @@ export default {
       if (!this.$refs.form.validate()) return;
       try {
         let formData = new FormData();
+        // Ensure formInput is an object, even if null
+        this.formInput = this.formInput || {};
         for (let key in this.formInput) {
-          if (this.formInput[key]) {
-            formData.append(key, this.formInput[key]);
-          }
+          // Always include all fields, even if null/empty
+          formData.append(key, this.formInput[key] || "");
         }
         const { data } = await this.axios.post(`/materials`, formData);
 
