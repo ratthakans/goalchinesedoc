@@ -63,9 +63,8 @@ export default {
       try {
         let formData = new FormData();
         for (let key in this.formInput) {
-          if (this.formInput[key]) {
-            formData.append(key, this.formInput[key]);
-          }
+          // Always include all fields, even if null/empty
+          formData.append(key, this.formInput[key] || '');
         }
         const { data } = await this.axios.put(
           `/materials/${this.$route.params.id}`,
