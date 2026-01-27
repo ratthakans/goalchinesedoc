@@ -213,7 +213,10 @@ export default {
           this.formInput = { ...this.editItems };
           // Convert document path to file name for display
           if (this.editItems.document && !this.formInput.document) {
-            this.formInput.document = new File([], this.getDocumentName(this.editItems.document));
+            this.formInput.document = new File(
+              [],
+              this.getDocumentName(this.editItems.document)
+            );
           }
         }
       },
@@ -227,8 +230,8 @@ export default {
   },
   methods: {
     getDocumentName(documentPath) {
-      if (!documentPath) return '';
-      return documentPath.split('/').pop() || documentPath;
+      if (!documentPath) return "";
+      return documentPath.split("/").pop() || documentPath;
     },
     async fetchData(uri, items) {
       // fetch data from api
