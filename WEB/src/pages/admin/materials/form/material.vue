@@ -122,8 +122,9 @@
           dense
           outlined
           hide-details="auto"
-          placeholder="No file chosen"
+          :placeholder="flagEdit && editItems && editItems.document ? getDocumentName(editItems.document) : 'No file chosen'"
           persistent-placeholder
+          :show-size="false"
         >
         </v-file-input>
       </v-col>
@@ -221,6 +222,10 @@ export default {
     this.fetchData("materialCategory", "materialCategory");
   },
   methods: {
+    getDocumentName(documentPath) {
+      if (!documentPath) return '';
+      return documentPath.split('/').pop() || documentPath;
+    },
     async fetchData(uri, items) {
       // fetch data from api
       try {
