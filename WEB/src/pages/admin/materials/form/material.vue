@@ -122,7 +122,7 @@
           dense
           outlined
           hide-details="auto"
-          :placeholder="flagEdit && editItems && editItems.document ? getDocumentName(editItems.document) : 'No file chosen'"
+          placeholder="No file chosen"
           persistent-placeholder
           :show-size="false"
         >
@@ -211,6 +211,10 @@ export default {
       handler() {
         if (this.editItems) {
           this.formInput = { ...this.editItems };
+          // Convert document path to file name for display
+          if (this.editItems.document && !this.formInput.document) {
+            this.formInput.document = new File([], this.getDocumentName(this.editItems.document));
+          }
         }
       },
       deep: true,
