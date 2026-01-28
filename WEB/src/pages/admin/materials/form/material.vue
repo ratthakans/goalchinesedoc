@@ -275,7 +275,13 @@ export default {
       if (!documentPath) return "";
       const filename = documentPath.split("/").pop() || documentPath;
       // Remove timestamp suffix if present (e.g., "filename-1234567890-123456789.pdf" -> "filename.pdf")
-      return filename.replace(/-\d+-\d+(\.[^.]+)$/, "$1");
+      const cleanName = filename.replace(/-\d+-\d+(\.[^.]+)$/, "$1");
+      // Decode Unicode characters if needed
+      try {
+        return decodeURIComponent(cleanName);
+      } catch (e) {
+        return cleanName;
+      }
     },
     onPhotoChange(file) {
       this.formInput.photo = file;
