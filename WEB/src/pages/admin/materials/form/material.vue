@@ -88,7 +88,11 @@
             </v-file-input>
             <v-text-field
               v-else
-              :value="photoFile ? photoFile.name : getDocumentName(formInput.photo)"
+              :value="
+                photoFile
+                  ? photoFile.name
+                  : getDocumentName(formInput.photo)
+              "
               dense
               outlined
               hide-details="auto"
@@ -146,7 +150,11 @@
         </v-file-input>
         <v-text-field
           v-else
-          :value="documentFile ? documentFile.name : getDocumentName(formInput.document)"
+          :value="
+            documentFile
+              ? documentFile.name
+              : getDocumentName(formInput.document)
+          "
           dense
           outlined
           hide-details="auto"
