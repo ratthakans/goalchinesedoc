@@ -149,7 +149,9 @@
         <v-text-field
           v-else
           :value="
-            documentFile ? documentFile.name : getDocumentName(formInput.document)
+            documentFile
+              ? documentFile.name
+              : getDocumentName(formInput.document)
           "
           dense
           outlined
