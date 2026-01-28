@@ -135,7 +135,7 @@
           Materials Document :
         </label>
         <v-file-input
-          v-if="!formInput.document || (flagEdit && !documentFile)"
+          v-if="!formInput.document || (flagEdit && documentFile)"
           v-model="documentFile"
           dense
           outlined
@@ -148,11 +148,7 @@
         </v-file-input>
         <v-text-field
           v-else
-          :value="
-            documentFile && documentFile.name
-              ? documentFile.name
-              : getDocumentName(formInput.document)
-          "
+          :value="getDocumentName(formInput.document)"
           dense
           outlined
           hide-details="auto"
