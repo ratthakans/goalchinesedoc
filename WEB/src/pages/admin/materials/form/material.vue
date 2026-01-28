@@ -89,9 +89,7 @@
             <v-text-field
               v-else
               :value="
-                photoFile
-                  ? photoFile.name
-                  : getDocumentName(formInput.photo)
+                photoFile ? photoFile.name : getDocumentName(formInput.photo)
               "
               dense
               outlined
@@ -151,9 +149,7 @@
         <v-text-field
           v-else
           :value="
-            documentFile
-              ? documentFile.name
-              : getDocumentName(formInput.document)
+            documentFile ? documentFile.name : getDocumentName(formInput.document)
           "
           dense
           outlined
