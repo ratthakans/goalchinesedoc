@@ -149,7 +149,7 @@
         <v-text-field
           v-else
           :value="
-            documentFile
+            documentFile && documentFile.name
               ? documentFile.name
               : getDocumentName(formInput.document)
           "
