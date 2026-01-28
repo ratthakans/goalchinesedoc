@@ -135,7 +135,7 @@
           Materials Document :
         </label>
         <v-file-input
-          v-if="!formInput.document || (flagEdit && documentFile)"
+          v-if="!formInput.document || documentFile"
           v-model="documentFile"
           dense
           outlined
@@ -154,6 +154,7 @@
           hide-details="auto"
           readonly
           append-icon="mdi-paperclip"
+          @click="clearDocument"
         >
           <template v-slot:append>
             <v-icon>mdi-paperclip</v-icon>
@@ -281,6 +282,10 @@ export default {
     },
     onDocumentChange(file) {
       this.formInput.document = file;
+    },
+    clearDocument() {
+      this.documentFile = null;
+      this.formInput.document = null;
     },
     async fetchData(uri, items) {
       // fetch data from api
