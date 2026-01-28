@@ -75,6 +75,7 @@
           <v-col cols="">
             <label class="v-label mb-2 text-subtitle-2"> Upload Photo : </label>
             <v-file-input
+              v-if="!formInput.photo || (flagEdit && !photoFile)"
               v-model="photoFile"
               dense
               outlined
@@ -85,6 +86,19 @@
               @change="onPhotoChange"
             >
             </v-file-input>
+            <v-text-field
+              v-else
+              :value="photoFile ? photoFile.name : getDocumentName(formInput.photo)"
+              dense
+              outlined
+              hide-details="auto"
+              readonly
+              append-icon="mdi-paperclip"
+            >
+              <template v-slot:append>
+                <v-icon>mdi-paperclip</v-icon>
+              </template>
+            </v-text-field>
           </v-col>
           <v-col cols="auto" v-if="flagEdit && formInput.photo">
             <v-btn color="error" icon @click="deletePhoto">
@@ -119,6 +133,7 @@
           Materials Document :
         </label>
         <v-file-input
+          v-if="!formInput.document || (flagEdit && !documentFile)"
           v-model="documentFile"
           dense
           outlined
@@ -129,6 +144,19 @@
           @change="onDocumentChange"
         >
         </v-file-input>
+        <v-text-field
+          v-else
+          :value="documentFile ? documentFile.name : getDocumentName(formInput.document)"
+          dense
+          outlined
+          hide-details="auto"
+          readonly
+          append-icon="mdi-paperclip"
+        >
+          <template v-slot:append>
+            <v-icon>mdi-paperclip</v-icon>
+          </template>
+        </v-text-field>
       </v-col>
       <v-col cols="12" md="6">
         <label class="v-label mb-2 text-subtitle-2">
