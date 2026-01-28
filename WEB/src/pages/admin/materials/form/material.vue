@@ -75,13 +75,14 @@
           <v-col cols="">
             <label class="v-label mb-2 text-subtitle-2"> Upload Photo : </label>
             <v-file-input
-              v-model="formInput.photo"
+              v-model="photoFile"
               dense
               outlined
               hide-details="auto"
-              placeholder="No file chosen"
+              :placeholder="photoPlaceholder"
               persistent-placeholder
               accept="image/*"
+              @change="onPhotoChange"
             >
             </v-file-input>
           </v-col>
@@ -118,13 +119,14 @@
           Materials Document :
         </label>
         <v-file-input
-          v-model="formInput.document"
+          v-model="documentFile"
           dense
           outlined
           hide-details="auto"
-          placeholder="No file chosen"
+          :placeholder="documentPlaceholder"
           persistent-placeholder
           :show-size="false"
+          @change="onDocumentChange"
         >
         </v-file-input>
       </v-col>
@@ -193,12 +195,28 @@ export default {
         photo: null,
         documentType: "",
       },
+      photoFile: null,
+      documentFile: null,
       items: {
         materialType: [],
         materialFor: [],
         materialCategory: [],
       },
     };
+  },
+  computed: {
+    photoPlaceholder() {
+      if (this.flagEdit && this.editItems && this.editItems.photo) {
+        return this.getDocumentName(this.editItems.photo);
+      }
+      return "No file chosen";
+    },
+    documentPlaceholder() {
+      if (this.flagEdit && this.editItems && this.editItems.document) {
+        return this.getDocumentName(this.editItems.document);
+      }
+      return "No file chosen";
+    },
   },
   watch: {
     formInput: {
@@ -211,13 +229,6 @@ export default {
       handler() {
         if (this.editItems) {
           this.formInput = { ...this.editItems };
-          // Convert document path to file name for display
-          if (this.editItems.document && !this.formInput.document) {
-            this.formInput.document = new File(
-              [],
-              this.getDocumentName(this.editItems.document)
-            );
-          }
         }
       },
       deep: true,
@@ -232,6 +243,12 @@ export default {
     getDocumentName(documentPath) {
       if (!documentPath) return "";
       return documentPath.split("/").pop() || documentPath;
+    },
+    onPhotoChange(file) {
+      this.formInput.photo = file;
+    },
+    onDocumentChange(file) {
+      this.formInput.document = file;
     },
     async fetchData(uri, items) {
       // fetch data from api
