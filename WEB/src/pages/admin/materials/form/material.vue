@@ -135,7 +135,7 @@
           Materials Document :
         </label>
         <v-file-input
-          v-if="!formInput.document || (flagEdit && documentFile)"
+          v-if="!formInput.document || (flagEdit && !documentFile)"
           v-model="documentFile"
           dense
           outlined
