@@ -147,7 +147,7 @@ export default {
       userInfo: "getUserinfo",
     }),
     baseUrl() {
-      return process.env.VUE_APP_API_URL || "";
+      return process.env.VUE_APP_API_IMAGE || "";
     },
   },
   watch: {
