@@ -148,7 +148,11 @@
         </v-file-input>
         <v-text-field
           v-else
-          :value="documentFile ? documentFile.name : getOriginalDocumentName(editItems)"
+          :value="
+            documentFile
+              ? documentFile.name
+              : getOriginalDocumentName(editItems)
+          "
           dense
           outlined
           hide-details="auto"
