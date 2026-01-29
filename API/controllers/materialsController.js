@@ -20,7 +20,7 @@ exports.create = async (req, res) => {
 
     const photo = req.files?.photo ? req.files.photo[0].path : null; // Handle optional photo
     const document = req.files?.document ? req.files.document[0].path : null; // Handle optional document
-    const originalDocumentName = req.files?.document ? req.files.document[0].originalname : null;
+    const originalDocumentName = req.files?.document ? Buffer.from(req.files.document[0].originalname, 'latin1').toString('utf8') : null;
 
     const material = await Materials.create({
       title,
@@ -73,7 +73,7 @@ exports.update = async (req, res, next) => {
       ? req.files.document[0].path
       : material.document; // Use existing or new document
     const originalDocumentName = req.files?.document 
-      ? req.files.document[0].originalname 
+      ? Buffer.from(req.files.document[0].originalname, 'latin1').toString('utf8')
       : material.originalDocumentName; // Use existing or new original name
 
     material.title = title || material.title;
