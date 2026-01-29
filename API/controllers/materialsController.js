@@ -20,12 +20,14 @@ exports.create = async (req, res) => {
 
     const photo = req.files?.photo ? req.files.photo[0].path : null; // Handle optional photo
     const document = req.files?.document ? req.files.document[0].path : null; // Handle optional document
+    const originalDocumentName = req.files?.document ? req.files.document[0].originalname : null;
 
     const material = await Materials.create({
       title,
       description,
       photo,
       document,
+      originalDocumentName,
       categoryID,
       materialForID,
       materialTypeID,
@@ -70,11 +72,15 @@ exports.update = async (req, res, next) => {
     const document = req.files?.document
       ? req.files.document[0].path
       : material.document; // Use existing or new document
+    const originalDocumentName = req.files?.document 
+      ? req.files.document[0].originalname 
+      : material.originalDocumentName; // Use existing or new original name
 
     material.title = title || material.title;
     material.description = description || material.description;
     material.photo = photo;
     material.document = document;
+    material.originalDocumentName = originalDocumentName;
     material.categoryID = categoryID || material.categoryID;
     material.materialForID = materialForID || material.materialForID;
     material.materialTypeID = materialTypeID || material.materialTypeID;

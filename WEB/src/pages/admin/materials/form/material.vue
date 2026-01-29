@@ -140,7 +140,7 @@
           dense
           outlined
           hide-details="auto"
-          :placeholder="documentPlaceholder"
+          placeholder="No file chosen"
           persistent-placeholder
           :show-size="false"
           @change="onDocumentChange"
@@ -148,7 +148,7 @@
         </v-file-input>
         <v-text-field
           v-else
-          :value="getDocumentName(formInput.document)"
+          :value="documentFile ? documentFile.name : getOriginalDocumentName(editItems)"
           dense
           outlined
           hide-details="auto"
@@ -282,6 +282,12 @@ export default {
       } catch (e) {
         return cleanName;
       }
+    },
+    getOriginalDocumentName(material) {
+      if (material && material.originalDocumentName) {
+        return material.originalDocumentName;
+      }
+      return this.getDocumentName(material ? material.document : "");
     },
     onPhotoChange(file) {
       this.formInput.photo = file;

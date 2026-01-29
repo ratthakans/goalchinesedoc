@@ -39,6 +39,9 @@ const Materials = sequelize.define(
     document: {
       type: DataTypes.STRING,
     },
+    originalDocumentName: {
+      type: DataTypes.STRING,
+    },
     description: {
       type: DataTypes.STRING,
     },
