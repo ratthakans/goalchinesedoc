@@ -134,40 +134,32 @@
         <label class="v-label mb-2 text-subtitle-2">
           Materials Document :
         </label>
-        <v-row align="center">
-          <v-col cols="">
-            <v-file-input
-              v-if="!formInput.document || documentFile"
-              v-model="documentFile"
-              dense
-              outlined
-              hide-details="auto"
-              :placeholder="documentPlaceholder"
-              persistent-placeholder
-              :show-size="false"
-              @change="onDocumentChange"
-            >
-            </v-file-input>
-            <v-text-field
-              v-else
-              :value="getDocumentName(formInput.document)"
-              dense
-              outlined
-              hide-details="auto"
-              readonly
-              append-icon="mdi-paperclip"
-            >
-              <template v-slot:append>
-                <v-icon>mdi-paperclip</v-icon>
-              </template>
-            </v-text-field>
-          </v-col>
-          <v-col cols="auto" v-if="flagEdit && formInput.document">
-            <v-btn color="primary" icon @click="clearDocument">
-              <v-icon>mdi-pencil</v-icon>
-            </v-btn>
-          </v-col>
-        </v-row>
+        <v-file-input
+          v-if="!formInput.document || (flagEdit && documentFile)"
+          v-model="documentFile"
+          dense
+          outlined
+          hide-details="auto"
+          :placeholder="documentPlaceholder"
+          persistent-placeholder
+          :show-size="false"
+          @change="onDocumentChange"
+        >
+        </v-file-input>
+        <v-text-field
+          v-else
+          :value="getDocumentName(formInput.document)"
+          dense
+          outlined
+          hide-details="auto"
+          readonly
+          append-icon="mdi-paperclip"
+          @click="clearDocument"
+        >
+          <template v-slot:append>
+            <v-icon>mdi-paperclip</v-icon>
+          </template>
+        </v-text-field>
       </v-col>
       <v-col cols="12" md="6">
         <label class="v-label mb-2 text-subtitle-2">
