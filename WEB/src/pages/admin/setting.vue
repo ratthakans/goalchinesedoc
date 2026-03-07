@@ -162,14 +162,15 @@
         </v-row>
       </v-col>
       <v-col cols="10">
-        <v-btn
-          color="info"
-          class="text-none"
-          @click="openLogInNewTab"
-          @click.middle="openLogInNewTab"
+        <a
+          :href="baseUrl + `logs/app-${new Date().toISOString().split('T')[0]}.log`"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--default info text-none"
+          style="text-decoration: none; color: white;"
         >
           view history details
-        </v-btn>
+        </a>
       </v-col>
     </v-row>
   </v-container>
@@ -321,30 +322,6 @@ export default {
           text: error.response.data.details,
           icon: "error",
         });
-      }
-    },
-    openLogInNewTab(event) {
-      // Prevent default behavior
-      if (event) {
-        event.preventDefault();
-        event.stopPropagation();
-      }
-      
-      const logUrl = this.baseUrl + `logs/app-${new Date().toISOString().split('T')[0]}.log`;
-      
-      // Try to open in new tab
-      const newWindow = window.open(logUrl, '_blank', 'noopener,noreferrer,width=1200,height=800');
-      
-      // If popup blocker blocked it, try alternative method
-      if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
-        // Fallback: create a temporary link and click it
-        const link = document.createElement('a');
-        link.href = logUrl;
-        link.target = '_blank';
-        link.rel = 'noopener noreferrer';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
       }
     },
     async fetchData(uri, items) {
