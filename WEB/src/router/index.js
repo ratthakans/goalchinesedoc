@@ -38,6 +38,7 @@ import MaterialsEdit from "../pages/admin/materials/edit.vue";
 
 import Library from "../pages/admin/library.vue";
 import Setting from "../pages/admin/setting.vue";
+import Logs from "../pages/admin/logs.vue";
 
 // Student pages
 import StudentClass from "../pages/student/class.vue";
@@ -348,6 +349,17 @@ const routes = [
       },
     },
     component: Setting,
+  },
+  {
+    path: "/admin/logs",
+    name: "logs",
+    meta: {
+      layout: DefaultLayout,
+      auth: {
+        roles: ["user", "admin", "superadmin"],
+      },
+    },
+    component: Logs,
   },
 
   // Student pages

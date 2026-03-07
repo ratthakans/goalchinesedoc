@@ -162,15 +162,13 @@
         </v-row>
       </v-col>
       <v-col cols="10">
-        <a
-          :href="baseUrl + `logs/app-${new Date().toISOString().split('T')[0]}.log`"
-          target="_blank"
-          rel="noopener noreferrer"
+        <router-link
+          to="/admin/logs"
           class="v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--default info text-none"
           style="text-decoration: none; color: white;"
         >
           view history details
-        </a>
+        </router-link>
       </v-col>
     </v-row>
   </v-container>
