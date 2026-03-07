@@ -237,6 +237,9 @@ export default {
     ...mapState(useAppStore, {
       userInfo: "getUserinfo",
     }),
+    baseUrl() {
+      return process.env.VUE_APP_API_IMAGE?.replace(/\/$/, "") || "";
+    },
   },
   watch: {
     "formInput.file": function (val) {
