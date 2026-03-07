@@ -165,11 +165,7 @@
         <v-btn
           color="info"
           class="text-none"
-          target="_blank"
-          rel="noopener noreferrer"
-          :href="
-            baseUrl + `logs/app-${new Date().toISOString().split('T')[0]}.log`
-          "
+          @click="openLogInNewTab"
         >
           view history details
         </v-btn>
@@ -325,6 +321,10 @@ export default {
           icon: "error",
         });
       }
+    },
+    openLogInNewTab() {
+      const logUrl = this.baseUrl + `logs/app-${new Date().toISOString().split('T')[0]}.log`;
+      window.open(logUrl, '_blank', 'noopener,noreferrer');
     },
     async fetchData(uri, items) {
       // fetch data from api
