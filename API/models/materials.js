@@ -12,7 +12,7 @@ const Materials = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: "MaterialCategory", // Name of the related table
+        model: "MaterialCategory", 
         key: "id",
       },
     },
@@ -20,7 +20,7 @@ const Materials = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: "MaterialFor", // Name of the related table
+        model: "MaterialFor", 
         key: "id",
       },
     },
@@ -28,7 +28,7 @@ const Materials = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: "MaterialType", // Name of the related table
+        model: "MaterialType", 
         key: "id",
       },
     },
