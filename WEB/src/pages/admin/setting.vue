@@ -166,6 +166,7 @@
           color="info"
           class="text-none"
           @click="openLogInNewTab"
+          @click.middle="openLogInNewTab"
         >
           view history details
         </v-btn>
@@ -322,9 +323,29 @@ export default {
         });
       }
     },
-    openLogInNewTab() {
+    openLogInNewTab(event) {
+      // Prevent default behavior
+      if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+      
       const logUrl = this.baseUrl + `logs/app-${new Date().toISOString().split('T')[0]}.log`;
-      window.open(logUrl, '_blank', 'noopener,noreferrer');
+      
+      // Try to open in new tab
+      const newWindow = window.open(logUrl, '_blank', 'noopener,noreferrer,width=1200,height=800');
+      
+      // If popup blocker blocked it, try alternative method
+      if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
+        // Fallback: create a temporary link and click it
+        const link = document.createElement('a');
+        link.href = logUrl;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
     },
     async fetchData(uri, items) {
       // fetch data from api
