@@ -166,6 +166,7 @@
           color="info"
           class="text-none"
           target="_blank"
+          rel="noopener noreferrer"
           :href="
             baseUrl + `logs/app-${new Date().toISOString().split('T')[0]}.log`
           "
