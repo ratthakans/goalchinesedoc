@@ -23,7 +23,12 @@ app.use(bodyParser.json());
 app.use("/uploads", express.static("uploads")); // Serve uploaded files as static
 app.use("/logs", express.static("logs")); // Serve uploaded files as static
 
-// Health check endpoint (ต้องอยู่ก่อน routes อื่นๆ และไม่ต้อง auth)
+// Root route — Railway default healthcheck hits GET /
+app.get("/", (req, res) => {
+  res.status(200).json({ status: "ok", service: "goalchinese-api" });
+});
+
+// Health check endpoint
 app.get("/api/health", (req, res) => {
   res.status(200).json({ status: "ok", timestamp: new Date().toISOString() });
 });
