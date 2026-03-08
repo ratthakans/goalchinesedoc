@@ -165,7 +165,7 @@
         <router-link
           to="/admin/logs"
           class="v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--default info text-none"
-          style="text-decoration: none; color: white;"
+          style="text-decoration: none; color: white"
         >
           view history details
         </router-link>

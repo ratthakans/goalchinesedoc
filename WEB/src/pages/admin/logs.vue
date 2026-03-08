@@ -22,12 +22,7 @@
               <v-icon class="mr-2">mdi-file-document-outline</v-icon>
               {{ logFileName }}
             </div>
-            <v-btn
-              color="primary"
-              icon
-              @click="refreshLogs"
-              :loading="loading"
-            >
+            <v-btn color="primary" icon @click="refreshLogs" :loading="loading">
               <v-icon>mdi-refresh</v-icon>
             </v-btn>
           </v-card-title>
@@ -36,14 +31,19 @@
 
           <v-card-text class="pa-0">
             <div v-if="loading" class="text-center pa-4">
-              <v-progress-circular indeterminate color="primary"></v-progress-circular>
+              <v-progress-circular
+                indeterminate
+                color="primary"
+              ></v-progress-circular>
               <div class="mt-2">Loading logs...</div>
             </div>
 
             <div v-else-if="error" class="text-center pa-4">
               <v-icon color="error" size="48">mdi-alert-circle</v-icon>
               <div class="mt-2 error--text">{{ error }}</div>
-              <v-btn color="primary" class="mt-2" @click="refreshLogs">Retry</v-btn>
+              <v-btn color="primary" class="mt-2" @click="refreshLogs"
+                >Retry</v-btn
+              >
             </div>
 
             <div v-else class="log-container">
@@ -79,24 +79,23 @@ export default {
     async loadLogs() {
       this.loading = true;
       this.error = null;
-      
+
       try {
-        const today = new Date().toISOString().split('T')[0];
+        const today = new Date().toISOString().split("T")[0];
         const logFileName = `app-${today}.log`;
         this.logFileName = logFileName;
-        
+
         const response = await fetch(`${this.baseUrl}/logs/${logFileName}`);
-        
+
         if (!response.ok) {
           throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
-        
+
         this.logContent = await response.text();
-        
+
         if (!this.logContent.trim()) {
           this.logContent = "No logs available for today.";
         }
-        
       } catch (error) {
         console.error("Error loading logs:", error);
         this.error = `Failed to load logs: ${error.message}`;
@@ -104,7 +103,7 @@ export default {
         this.loading = false;
       }
     },
-    
+
     refreshLogs() {
       this.loadLogs();
     },
@@ -122,7 +121,7 @@ export default {
 
 .log-content {
   color: #00ff00;
-  font-family: 'Courier New', monospace;
+  font-family: "Courier New", monospace;
   font-size: 12px;
   line-height: 1.4;
   margin: 0;

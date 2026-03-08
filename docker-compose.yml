@@ -14,13 +14,14 @@ services:
       - ./API/logs:/usr/src/app/logs    
     environment:
       - NODE_ENV=production
-      - DB_HOST=db
+      - DB_HOST=metro.proxy.rlwy.net
       - DB_USER=root
-      - DB_PASSWORD=@numberoneOFschool01
-      - DB_NAME=dailychineseclass
+      - DB_PASSWORD=ZNfNBEoudeyzZfebELvNIVZupBcvkMWB
+      - DB_NAME=railway
       - JWT_SECRET=your_jwt_secret
-    depends_on:
-      - db
+      - DB_PORT=48242
+    # depends_on:
+    #   - db
 
   frontend:
     container_name: web-frontend

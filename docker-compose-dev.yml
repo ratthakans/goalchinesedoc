@@ -24,12 +24,13 @@ api:
     dockerfile: Dockerfile
     ports:
       - "3000:3000"
-      depends_on:
-        - db
+    depends_on:
+      - db
     volumes:
       - ./API:/usr/src/app
     environment:
       - NODE_ENV=development
+      - JWT_SECRET=your-secret-key-here
     restart: always
 
   db:
