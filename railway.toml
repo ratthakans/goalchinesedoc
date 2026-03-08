@@ -1,10 +1,6 @@
-[build]
-builder = "dockerfile"
-dockerfilePath = "API/Dockerfile"
-
-[deploy]
-startCommand = "node app.js"
-healthcheckPath = "/api"
-healthcheckTimeout = 300
-restartPolicyType = "on_failure"
-restartPolicyMaxRetries = 10
+# ROOT railway.toml - ไม่ได้ใช้ build จาก root
+# ดู API/railway.toml และ WEB/railway.toml แทน
+#
+# วิธีตั้งค่าใน Railway Dashboard:
+# - Service API  → Settings → Root Directory = "API"
+# - Service WEB  → Settings → Root Directory = "WEB"
