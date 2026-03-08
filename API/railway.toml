@@ -3,7 +3,7 @@ builder = "dockerfile"
 dockerfilePath = "Dockerfile"
 
 [deploy]
-startCommand = "npm start"
+startCommand = "node app.js"
 healthcheckPath = "/api"
 healthcheckTimeout = 300
 restartPolicyType = "on_failure"
@@ -17,4 +17,3 @@ restartPolicyMaxRetries = 10
 # DB_NAME      = railway
 # JWT_SECRET   = <your-secure-secret-key>
 # NODE_ENV     = production
-# PORT         = 3000 (Railway sets this automatically)

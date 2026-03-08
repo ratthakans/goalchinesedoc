@@ -1,13 +1,10 @@
-# Railway Configuration
-# This project has 2 services: API (backend) and WEB (frontend)
-# Each service is configured via its own railway.toml inside its directory.
-#
-# Setup Instructions:
-# 1. In Railway dashboard, create a new project
-# 2. Add Service → point to this GitHub repo, set "Root Directory" to "API"
-# 3. Add another Service → point to this GitHub repo, set "Root Directory" to "WEB"
-# 4. Set environment variables for API service (see API/railway.toml)
-# 5. Set environment variables for WEB service (see WEB/railway.toml)
-
 [build]
-builder = "nixpacks"
+builder = "dockerfile"
+dockerfilePath = "API/Dockerfile"
+
+[deploy]
+startCommand = "node app.js"
+healthcheckPath = "/api"
+healthcheckTimeout = 300
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 10
