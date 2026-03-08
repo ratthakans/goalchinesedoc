@@ -3,10 +3,8 @@ builder = "nixpacks"
 
 [deploy]
 startCommand = "node app.js"
-healthcheckPath = "/api/health"
-healthcheckTimeout = 300
 restartPolicyType = "on_failure"
-restartPolicyMaxRetries = 10
+restartPolicyMaxRetries = 3
 
 # Required Environment Variables (set in Railway dashboard):
 # DB_HOST      = <your-railway-mysql-host>
