@@ -57,16 +57,13 @@ services:
 
   db:
     container_name: mysql-db
-    image: mysql:latest
+    image: mysql:5.7
     restart: always
     ports:
       - "3306:3306"
     environment:
       - MYSQL_ROOT_PASSWORD=@numberoneOFschool01
       - MYSQL_DATABASE=dailychineseclass
-      - MYSQL_INNODB_BUFFER_POOL_SIZE=256M
-      - MYSQL_INNODB_LOG_FILE_SIZE=64M
-    command: --innodb-fast-shutdown=0
     volumes:
       - ./db_data:/var/lib/mysql
 
