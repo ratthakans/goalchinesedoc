@@ -1,1 +1,41 @@
-db_data
+# Database data directory
+db_data/
+
+# Node modules (in subdirectories)
+**/node_modules/
+
+# Build output
+**/dist/
+
+# Environment files with secrets
+# (Set environment variables directly in Railway dashboard instead)
+WEB/.env.local
+WEB/.env.*.local
+# Note: WEB/.env and WEB/.env.production are committed (no secrets)
+# API env files contain DB credentials - set via Railway dashboard
+API/.env
+API/.env.local
+API/.env.*.local
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V7
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Certbot certificates (sensitive)
+certbot/
+
+# Editor directories
+.vscode/
+.idea/
+
+# Uploaded user files
+# API/uploads/  ← Keep this committed or use Railway volumes

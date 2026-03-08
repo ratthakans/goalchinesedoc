@@ -1,0 +1,16 @@
+[build]
+builder = "dockerfile"
+dockerfilePath = "Dockerfile"
+
+[deploy]
+healthcheckPath = "/"
+healthcheckTimeout = 300
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 10
+
+# Required Environment Variables (set in Railway dashboard):
+# VUE_APP_API_URL    = https://<your-api-service-domain>/api
+# VUE_APP_API_IMAGE  = https://<your-api-service-domain>/
+# NODE_ENV           = production
+#
+# Note: VUE_APP_PDF_LICENSE is already set in .env.production

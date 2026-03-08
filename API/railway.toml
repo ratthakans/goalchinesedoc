@@ -1,0 +1,20 @@
+[build]
+builder = "dockerfile"
+dockerfilePath = "Dockerfile"
+
+[deploy]
+startCommand = "npm start"
+healthcheckPath = "/api"
+healthcheckTimeout = 300
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 10
+
+# Required Environment Variables (set in Railway dashboard):
+# DB_HOST      = <your-railway-mysql-host>
+# DB_PORT      = <your-railway-mysql-port>
+# DB_USER      = root
+# DB_PASSWORD  = <your-railway-mysql-password>
+# DB_NAME      = railway
+# JWT_SECRET   = <your-secure-secret-key>
+# NODE_ENV     = production
+# PORT         = 3000 (Railway sets this automatically)
